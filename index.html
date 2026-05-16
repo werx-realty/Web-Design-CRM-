@@ -500,7 +500,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
     <div class="nav-item" data-page="leads">
       <span class="nav-icon">🎯</span><span class="nav-label">Leads</span>
-      <span class="nav-badge">12</span>
+      <span class="nav-badge" id="badge-leads">12</span>
     </div>
     <div class="nav-item" data-page="phonebook">
       <span class="nav-icon">📞</span><span class="nav-label">Phonebook</span>
@@ -511,7 +511,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
     <div class="nav-item" data-page="tasks">
       <span class="nav-icon">✅</span><span class="nav-label">Tasks</span>
-      <span class="nav-badge">7</span>
+      <span class="nav-badge" id="badge-tasks">7</span>
     </div>
     <div class="nav-item" data-page="calendar">
       <span class="nav-icon">📅</span><span class="nav-label">Calendar</span>
@@ -2867,6 +2867,17 @@ function saveData(){
   }catch(e){console.warn('saveData:',e);}
   // refresh dashboard stats whenever any data changes
   if(typeof renderDashboard==='function')renderDashboard();
+  updateNavBadges();
+}
+function updateNavBadges(){
+  // Leads: count only active (not Closed Won / Closed Lost)
+  var activeLeads=(leadsData||[]).filter(function(l){return l.stage!=='Closed Won'&&l.stage!=='Closed Lost';}).length;
+  var lb=document.getElementById('badge-leads');
+  if(lb){lb.textContent=activeLeads;lb.style.display=activeLeads>0?'':'none';}
+  // Tasks: count open tasks (not Done)
+  var openTasks=(tasksData||[]).filter(function(t){return t.stage!=='Done';}).length;
+  var tb=document.getElementById('badge-tasks');
+  if(tb){tb.textContent=openTasks;tb.style.display=openTasks>0?'':'none';}
 }
 function loadData(){
   function tryParse(key,fallback){try{var v=localStorage.getItem(key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
@@ -5589,6 +5600,7 @@ document.addEventListener('DOMContentLoaded',function(){
   renderClients();
   setTimeout(initDashboardCharts,200);
   setTimeout(renderDashboard,300);
+  updateNavBadges();
   // populate project client select
   var ps=document.getElementById('proj-client');
   if(ps){clientsData.forEach(function(c){var o=document.createElement('option');o.textContent=c.company;ps.appendChild(o);});}
