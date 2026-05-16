@@ -15,9 +15,9 @@
   --bg-input:#1f1f24;
   --border:#32323a;
   --border-light:#28282f;
-  --text-1:#f0f0f3;
-  --text-2:#9a9aaa;
-  --text-3:#5f5f72;
+  --text-1:#ffffff;
+  --text-2:#c8c8d8;
+  --text-3:#8888a0;
   --accent:#8b5cf6;
   --accent-rgb:139,92,246;
   --accent-soft:rgba(139,92,246,.12);
@@ -294,13 +294,13 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
 .notif-time{font-size:11px;color:var(--text-3);margin-top:3px}
 /* CALENDAR */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.cal-day-header{text-align:center;font-size:11px;font-weight:600;color:var(--text-3);padding:8px 0;letter-spacing:.5px;text-transform:uppercase}
-.cal-day{min-height:80px;background:var(--bg-elevated);border-radius:var(--radius-sm);padding:6px;display:flex;flex-direction:column;gap:2px;cursor:pointer;transition:all var(--transition);border:1px solid transparent}
+.cal-day-header{text-align:center;font-size:10px;font-weight:600;color:var(--text-3);padding:5px 0;letter-spacing:.5px;text-transform:uppercase}
+.cal-day{aspect-ratio:1/1;background:var(--bg-elevated);border-radius:var(--radius-sm);padding:4px;display:flex;flex-direction:column;gap:2px;cursor:pointer;transition:all var(--transition);border:1px solid transparent;overflow:hidden}
 .cal-day:hover{border-color:var(--border)}
 .cal-day.today{border-color:var(--accent)!important}
 .cal-day.other-month{opacity:.35}
-.cal-date{font-size:12px;font-weight:600}
-.cal-event{font-size:10px;padding:2px 4px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-date{font-size:11px;font-weight:600}
+.cal-event{font-size:9px;padding:1px 3px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* CHAT */
 .chat-layout{display:flex;height:100%;gap:0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border-light)}
 .chat-sidebar{width:220px;background:var(--bg-card);border-right:1px solid var(--border-light);display:flex;flex-direction:column}
@@ -393,6 +393,28 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
 .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:all var(--transition)}
 .toggle input:checked+.toggle-slider{background:var(--accent)}
 .toggle input:checked+.toggle-slider::before{transform:translateX(16px)}
+/* CALENDAR WEEK / DAY VIEW */
+.cal-time-grid{display:flex;gap:0;overflow-y:auto;max-height:calc(100vh - 260px)}
+.cal-time-col{width:52px;min-width:52px;flex-shrink:0;padding-top:2px}
+.cal-time-label{height:52px;display:flex;align-items:flex-start;justify-content:flex-end;padding-right:8px;font-size:10px;color:var(--text-3);font-weight:600;padding-top:4px}
+.cal-days-wrap{flex:1;display:flex;gap:1px;min-width:0}
+.cal-day-col{flex:1;min-width:0;display:flex;flex-direction:column;border-left:1px solid var(--border-light)}
+.cal-day-col-header{padding:8px 6px;text-align:center;border-bottom:1px solid var(--border-light);flex-shrink:0}
+.cal-day-col-hdate{font-size:18px;font-weight:800;line-height:1}
+.cal-day-col-hwday{font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.cal-day-col-header.is-today .cal-day-col-hdate{color:var(--accent)}
+.cal-day-col-header.is-today{background:var(--accent-soft)}
+.cal-hour-cell{height:52px;border-bottom:1px solid var(--border-light);position:relative;padding:2px 4px;transition:background var(--transition)}
+.cal-hour-cell:hover{background:var(--bg-hover)}
+.cal-hour-cell .cal-ev-block{background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:600;padding:2px 5px;border-radius:4px;border-left:2px solid var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;cursor:pointer}
+.cal-allday-strip{background:var(--bg-elevated);border-bottom:1px solid var(--border-light);padding:4px 6px;min-height:28px;display:flex;flex-wrap:wrap;gap:3px}
+/* PHONEBOOK FILTERS */
+.pb-alpha-btn{background:none;border:none;font-size:13px;font-weight:600;color:var(--text-3);cursor:pointer;padding:4px 7px;border-radius:6px;transition:all var(--transition);font-family:inherit;line-height:1}
+.pb-alpha-btn:hover{background:var(--bg-hover);color:var(--text-1)}
+.pb-alpha-btn.active{background:var(--accent);color:#fff;box-shadow:0 0 10px var(--accent-glow)}
+.pb-status-btn{background:var(--bg-elevated);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-2);cursor:pointer;padding:6px 14px;border-radius:20px;transition:all var(--transition);font-family:inherit;white-space:nowrap}
+.pb-status-btn:hover{background:var(--bg-hover);color:var(--text-1);border-color:var(--border)}
+.pb-status-btn.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft)}
 /* KPI gauge shimmer pulse */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .live-pulse{animation:pulse 2s infinite}
@@ -503,9 +525,6 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       <span class="nav-icon">💬</span><span class="nav-label">Team Chat</span>
       <span class="nav-badge">3</span>
     </div>
-    <div class="nav-item" data-page="seo">
-      <span class="nav-icon">🔍</span><span class="nav-label">SEO & Marketing</span>
-    </div>
     <div class="nav-item" data-page="findleads">
       <span class="nav-icon">🔎</span><span class="nav-label">Find Leads</span>
     </div>
@@ -580,94 +599,94 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
 <div class="page active" id="page-dashboard">
   <div class="page-header">
     <div>
-      <div class="page-title">Good morning, Akoni 👋</div>
+      <div class="page-title" id="dash-greeting">Good morning, Akoni 👋</div>
       <div class="page-subtitle">Here's what's happening with your agency today.</div>
     </div>
     <div class="page-actions">
       <button class="btn btn-secondary btn-sm">📥 Export</button>
-      <button class="btn btn-primary btn-sm" onclick="openModal('add-client-modal')">+ Quick Add</button>
+      <button class="btn btn-primary btn-sm" onclick="openAddClientPanel()">+ Quick Add</button>
     </div>
   </div>
   <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('invoices')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--accent-soft)">💰</div>
-        <span class="stat-trend trend-up">+18%</span>
+        <span class="stat-trend trend-up" id="dash-trend-ytd">—</span>
       </div>
-      <div class="stat-value">$284.5K</div>
+      <div class="stat-value" id="dash-revenue-ytd">$0</div>
       <div class="stat-label">Total Revenue (YTD)</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('invoices')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--success-soft)">📅</div>
-        <span class="stat-trend trend-up">+12%</span>
+        <span class="stat-trend trend-up" id="dash-trend-month">—</span>
       </div>
-      <div class="stat-value">$42.8K</div>
+      <div class="stat-value" id="dash-revenue-month">$0</div>
       <div class="stat-label">Revenue This Month</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('clients')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--info-soft)">👥</div>
-        <span class="stat-trend trend-up">+5</span>
+        <span class="stat-trend trend-up" id="dash-trend-clients">—</span>
       </div>
-      <div class="stat-value">47</div>
+      <div class="stat-value" id="dash-active-clients">0</div>
       <div class="stat-label">Active Clients</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('clients')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--success-soft)">✅</div>
-        <span class="stat-trend trend-up">+3</span>
+        <span class="stat-trend" id="dash-trend-closed">—</span>
       </div>
-      <div class="stat-value">23</div>
+      <div class="stat-value" id="dash-closed-clients">0</div>
       <div class="stat-label">Closed Clients</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('leads')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--warning-soft)">🎯</div>
-        <span class="stat-trend trend-up">+8</span>
+        <span class="stat-trend trend-up" id="dash-trend-leads">—</span>
       </div>
-      <div class="stat-value">31</div>
+      <div class="stat-value" id="dash-leads-pipeline">0</div>
       <div class="stat-label">Leads in Pipeline</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('projects')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--accent-soft)">🗂️</div>
-        <span class="stat-trend trend-up">+2</span>
+        <span class="stat-trend trend-up" id="dash-trend-projects">—</span>
       </div>
-      <div class="stat-value">18</div>
+      <div class="stat-value" id="dash-projects-active">0</div>
       <div class="stat-label">Projects in Production</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('tasks')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--success-soft)">☑️</div>
-        <span class="stat-trend trend-up">+47</span>
+        <span class="stat-trend trend-up" id="dash-trend-tasks-done">—</span>
       </div>
-      <div class="stat-value">284</div>
+      <div class="stat-value" id="dash-tasks-completed">0</div>
       <div class="stat-label">Tasks Completed</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('tasks')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--danger-soft)">⚠️</div>
-        <span class="stat-trend trend-down">7</span>
+        <span class="stat-trend trend-down" id="dash-trend-overdue">0</span>
       </div>
-      <div class="stat-value">7</div>
+      <div class="stat-value" id="dash-tasks-overdue">0</div>
       <div class="stat-label">Tasks Overdue</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('invoices')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--warning-soft)">💳</div>
-        <span class="stat-trend trend-down">-$4K</span>
+        <span class="stat-trend trend-down" id="dash-trend-owed">—</span>
       </div>
-      <div class="stat-value">$48.2K</div>
+      <div class="stat-value" id="dash-amount-owed">$0</div>
       <div class="stat-label">Amount Owed</div>
     </div>
-    <div class="stat-card card-accent-hover">
+    <div class="stat-card card-accent-hover" onclick="navigate('invoices')" style="cursor:pointer">
       <div class="stat-card-header">
         <div class="stat-icon" style="background:var(--success-soft)">💵</div>
-        <span class="stat-trend trend-up">+$12K</span>
+        <span class="stat-trend trend-up" id="dash-trend-paid">—</span>
       </div>
-      <div class="stat-value">$236.3K</div>
+      <div class="stat-value" id="dash-amount-paid">$0</div>
       <div class="stat-label">Amount Paid</div>
     </div>
   </div>
@@ -703,10 +722,10 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       </div>
       <div class="chart-wrap chart-wrap-sm"><canvas id="productionChart"></canvas></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#8b5cf6;flex-shrink:0"></span>In Progress <strong>8</strong></div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;flex-shrink:0"></span>Completed <strong>5</strong></div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#3b82f6;flex-shrink:0"></span>Not Started <strong>3</strong></div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;flex-shrink:0"></span>Waiting <strong>2</strong></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#8b5cf6;flex-shrink:0"></span>In Progress <strong id="dash-prod-inprogress">0</strong></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;flex-shrink:0"></span>Completed <strong id="dash-prod-completed">0</strong></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#3b82f6;flex-shrink:0"></span>Not Started <strong id="dash-prod-notstarted">0</strong></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;flex-shrink:0"></span>Waiting <strong id="dash-prod-waiting">0</strong></div>
       </div>
     </div>
     <div class="card">
@@ -738,7 +757,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
         <div style="font-size:14px;font-weight:700">Upcoming Meetings</div>
         <button class="btn btn-ghost btn-sm" onclick="navigate('calendar')">Calendar</button>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <div id="dash-meetings" style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-sm)">
           <div style="background:var(--accent-soft);color:var(--accent);padding:6px 10px;border-radius:var(--radius-sm);text-align:center;min-width:44px"><div style="font-size:18px;font-weight:800;line-height:1">10</div><div style="font-size:9px;letter-spacing:.5px">MAY</div></div>
           <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;truncate">Discovery Call — Apex Digital</div><div style="font-size:12px;color:var(--text-2)">10:00 AM · Zoom · 45 min</div></div>
@@ -774,7 +793,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
         <div class="tab" onclick="switchTab(this,'clients')">Leads</div>
         <div class="tab" onclick="switchTab(this,'clients')">Archived</div>
       </div>
-      <button class="btn btn-primary" onclick="openModal('add-client-modal')">+ Add Client</button>
+      <button class="btn btn-primary" onclick="openAddClientPanel()">+ Add Client</button>
     </div>
   </div>
   <div class="card" style="padding:16px">
@@ -813,7 +832,15 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     <div><div class="page-title">Lead Pipeline</div><div class="page-subtitle">Track and convert your leads</div></div>
     <div class="page-actions">
       <span class="badge badge-success">62% Conversion Rate</span>
-      <button class="btn btn-primary" onclick="openModal('add-lead-modal')">+ Add Lead</button>
+      <div class="dropdown">
+        <button class="btn btn-secondary" onclick="toggleKanbanColMenu('lead-col-menu',this)">⚙ Columns ▾</button>
+        <div class="dropdown-menu" id="lead-col-menu">
+          <div class="dropdown-item" onclick="addKanbanCol('lead');closeAllDropdowns()">➕ Add Column</div>
+          <div class="dropdown-divider"></div>
+          <div id="lead-col-delete-list"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddLeadPanel()">+ Add Lead</button>
     </div>
   </div>
   <div class="kanban-board" id="leads-board"></div>
@@ -827,6 +854,14 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
         <div class="tab active" onclick="switchTab(this,'projects')">Kanban</div>
         <div class="tab" onclick="switchTab(this,'projects')">List</div>
         <div class="tab" onclick="switchTab(this,'projects')">Gantt</div>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-secondary" onclick="toggleKanbanColMenu('proj-col-menu',this)">⚙ Columns ▾</button>
+        <div class="dropdown-menu" id="proj-col-menu">
+          <div class="dropdown-item" onclick="addKanbanCol('project');closeAllDropdowns()">➕ Add Column</div>
+          <div class="dropdown-divider"></div>
+          <div id="proj-col-delete-list"></div>
+        </div>
       </div>
       <button class="btn btn-primary" onclick="openModal('add-project-modal')">+ New Project</button>
     </div>
@@ -850,31 +885,20 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
 <!-- ===== TASKS PAGE ===== -->
 <div class="page" id="page-tasks">
   <div class="page-header">
-    <div><div class="page-title">Tasks</div><div class="page-subtitle">Stay on top of your workload</div></div>
+    <div><div class="page-title">Tasks</div><div class="page-subtitle">Your client workflow board</div></div>
     <div class="page-actions">
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab(this,'tasks')">All Tasks</div>
-        <div class="tab" onclick="switchTab(this,'tasks')">My Tasks</div>
-        <div class="tab" onclick="switchTab(this,'tasks')">Overdue</div>
-        <div class="tab" onclick="switchTab(this,'tasks')">Kanban</div>
+      <div class="dropdown">
+        <button class="btn btn-secondary" onclick="toggleKanbanColMenu('task-col-menu',this)">⚙ Columns ▾</button>
+        <div class="dropdown-menu" id="task-col-menu">
+          <div class="dropdown-item" onclick="addKanbanCol('task');closeAllDropdowns()">➕ Add Column</div>
+          <div class="dropdown-divider"></div>
+          <div id="task-col-delete-list"></div>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="openModal('add-task-modal')">+ Add Task</button>
+      <button class="btn btn-primary" onclick="openAddTaskPanel()">+ Add Task</button>
     </div>
   </div>
-  <div class="card" style="padding:16px">
-    <div class="flex items-center gap-2 mb-3" style="flex-wrap:wrap">
-      <div class="search-bar" style="flex:1;min-width:200px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input placeholder="Search tasks..."/>
-      </div>
-      <select class="form-control" style="width:auto"><option>All Priority</option><option>🔴 High</option><option>🟡 Medium</option><option>🟢 Low</option></select>
-      <select class="form-control" style="width:auto"><option>All Status</option><option>To Do</option><option>In Progress</option><option>Review</option><option>Done</option></select>
-    </div>
-    <div class="table-wrap">
-      <table><thead><tr><th>Task</th><th>Project</th><th>Priority</th><th>Assigned</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody id="tasks-tbody"></tbody></table>
-    </div>
-  </div>
+  <div class="kanban-board" id="tasks-board"></div>
 </div>
 <!-- ===== INVOICES PAGE ===== -->
 <div class="page" id="page-invoices">
@@ -982,24 +1006,33 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   <div class="page-header">
     <div><div class="page-title">Calendar</div><div class="page-subtitle">Schedule and manage your time</div></div>
     <div class="page-actions">
-      <div class="tabs">
-        <div class="tab active">Month</div>
-        <div class="tab">Week</div>
-        <div class="tab">Day</div>
+      <div class="tabs" id="cal-view-tabs">
+        <div class="tab active" onclick="setCalView('month',this)">Month</div>
+        <div class="tab" onclick="setCalView('week',this)">Week</div>
+        <div class="tab" onclick="setCalView('day',this)">Day</div>
       </div>
       <button class="btn btn-primary" onclick="openModal('add-event-modal')">+ New Event</button>
     </div>
   </div>
-  <div class="card">
-    <div class="flex items-center justify-between mb-3">
-      <div class="flex items-center gap-2">
-        <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)">‹</button>
-        <div style="font-size:16px;font-weight:700;min-width:160px;text-align:center" id="cal-title">May 2026</div>
-        <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">›</button>
+  <div style="display:flex;gap:16px;align-items:flex-start">
+    <div class="card" style="flex:0 0 64%;min-width:0">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <button class="btn btn-secondary btn-sm" onclick="calNav(-1)">‹</button>
+          <div style="font-size:15px;font-weight:700;min-width:160px;text-align:center" id="cal-title">May 2026</div>
+          <button class="btn btn-secondary btn-sm" onclick="calNav(1)">›</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goToday()">Today</button>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="goToday()">Today</button>
+      <div id="cal-grid"></div>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
+    <div class="card" style="flex:1;min-width:0;max-height:600px;overflow-y:auto">
+      <div style="font-weight:700;font-size:14px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
+        <span>📅 All Events</span>
+        <span id="cal-events-count" style="font-size:11px;font-weight:500;color:var(--text-3)"></span>
+      </div>
+      <div id="cal-events-list"></div>
+    </div>
   </div>
 </div>
 <!-- ===== PHONEBOOK PAGE ===== -->
@@ -1007,59 +1040,62 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   <div class="page-header">
     <div><div class="page-title">Phonebook</div><div class="page-subtitle">All your contacts in one place</div></div>
     <div class="page-actions">
-      <button class="btn btn-primary" onclick="openModal('add-client-modal')">+ Add Contact</button>
+      <button class="btn btn-primary" onclick="openAddClientPanel()">+ Add Contact</button>
     </div>
   </div>
+
+  <!-- ALPHABET BAR -->
+  <div style="display:flex;flex-wrap:wrap;gap:3px;align-items:center;background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);padding:10px 12px">
+    <button class="pb-alpha-btn active" onclick="pbSetAlpha('ALL',this)">ALL</button>
+    <div style="width:1px;height:18px;background:var(--border-light);margin:0 4px"></div>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('A',this)">A</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('B',this)">B</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('C',this)">C</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('D',this)">D</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('E',this)">E</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('F',this)">F</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('G',this)">G</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('H',this)">H</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('I',this)">I</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('J',this)">J</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('K',this)">K</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('L',this)">L</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('M',this)">M</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('N',this)">N</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('O',this)">O</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('P',this)">P</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('Q',this)">Q</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('R',this)">R</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('S',this)">S</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('T',this)">T</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('U',this)">U</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('V',this)">V</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('W',this)">W</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('X',this)">X</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('Y',this)">Y</button>
+    <button class="pb-alpha-btn" onclick="pbSetAlpha('Z',this)">Z</button>
+  </div>
+
+  <!-- STATUS FILTER BAR -->
+  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <button class="pb-status-btn active" onclick="pbSetStatus('All',this)">All</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Active',this)">Active</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Lead',this)">Lead</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Contacted',this)">Contacted</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Working On It',this)">Working On It</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Closed',this)">Closed</button>
+    <button class="pb-status-btn" onclick="pbSetStatus('Archived',this)">Archived</button>
+  </div>
+
+  <!-- SEARCH BAR -->
   <div class="flex gap-3" style="flex-wrap:wrap">
     <div class="search-bar" style="flex:1;min-width:240px">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input placeholder="Search contacts by name, email, phone..."/>
+      <input placeholder="Search contacts by name, email, phone..." oninput="filterPhonebook(this.value)"/>
     </div>
-    <select class="form-control" style="width:auto"><option>All Groups</option><option>Clients</option><option>Leads</option><option>Team</option></select>
   </div>
+
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px" id="phonebook-grid"></div>
-</div>
-<!-- ===== SEO PAGE ===== -->
-<div class="page" id="page-seo">
-  <div class="page-header">
-    <div><div class="page-title">SEO & Marketing</div><div class="page-subtitle">Track campaigns and performance</div></div>
-    <div class="page-actions">
-      <button class="btn btn-secondary">📊 Monthly Report</button>
-      <button class="btn btn-primary">+ New Campaign</button>
-    </div>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:var(--success-soft)">🌐</div><span class="stat-trend trend-up">+23%</span></div><div class="stat-value">142K</div><div class="stat-label">Organic Traffic</div></div>
-    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:var(--accent-soft)">🔑</div><span class="stat-trend trend-up">+47</span></div><div class="stat-value">284</div><div class="stat-label">Keywords Ranking</div></div>
-    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:var(--warning-soft)">💰</div><span class="stat-trend trend-down">-5%</span></div><div class="stat-value">$18.4K</div><div class="stat-label">Ad Spend</div></div>
-    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:var(--info-soft)">📈</div><span class="stat-trend trend-up">+31%</span></div><div class="stat-value">342%</div><div class="stat-label">Average ROI</div></div>
-  </div>
-  <div class="grid-2">
-    <div class="card">
-      <div style="font-size:14px;font-weight:700;margin-bottom:12px">Traffic Overview</div>
-      <div class="chart-wrap"><canvas id="seoChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div style="font-size:14px;font-weight:700;margin-bottom:12px">Active Campaigns</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-sm)">
-          <div class="flex items-center justify-between mb-2"><span style="font-size:13px;font-weight:600">Google Ads — TechFlow</span><span class="badge badge-success">Active</span></div>
-          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">$3,200/mo · 1,842 clicks · 4.2% CTR</div>
-          <div class="progress"><div class="progress-bar success" style="width:72%"></div></div>
-        </div>
-        <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-sm)">
-          <div class="flex items-center justify-between mb-2"><span style="font-size:13px;font-weight:600">Meta Ads — Nexus Brand</span><span class="badge badge-success">Active</span></div>
-          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">$2,100/mo · 4,210 impressions</div>
-          <div class="progress"><div class="progress-bar" style="width:58%"></div></div>
-        </div>
-        <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-sm)">
-          <div class="flex items-center justify-between mb-2"><span style="font-size:13px;font-weight:600">SEO Campaign — Luxe Interior</span><span class="badge badge-warning">In Review</span></div>
-          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">Organic · 89 keywords tracked</div>
-          <div class="progress"><div class="progress-bar warning" style="width:43%"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 <!-- ===== ANALYTICS PAGE ===== -->
 <div class="page" id="page-analytics">
@@ -1127,7 +1163,6 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
         <span style="font-size:20px">🔎</span>
         <input class="findleads-search-input" id="fl-search" placeholder="Search businesses… e.g. 'donut shops in Fresno CA'" onkeydown="if(event.key==='Enter')searchFLMap()"/>
         <button class="btn btn-primary" onclick="searchFLMap()" style="padding:10px 22px;font-weight:700">Search</button>
-        <button class="btn btn-secondary" onclick="openProspectPanel()" style="padding:10px 16px;white-space:nowrap">➕ Add Prospect</button>
       </div>
 
       <!-- API KEY BAR -->
@@ -1146,6 +1181,23 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-overlay" id="confirm-delete-overlay" style="z-index:9999">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-body" style="padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+      <div style="width:60px;height:60px;border-radius:50%;background:var(--danger-soft);display:flex;align-items:center;justify-content:center;font-size:28px">🗑️</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text-1)">Confirm Delete</div>
+        <div id="cd-msg" style="font-size:13px;color:var(--text-2);line-height:1.6">Are you sure? This cannot be undone.</div>
+      </div>
+      <div style="display:flex;gap:10px;width:100%;margin-top:4px">
+        <button class="btn btn-secondary" style="flex:1;padding:10px" onclick="confirmDeleteCancel()">Cancel</button>
+        <button class="btn btn-danger" style="flex:1;padding:10px;background:var(--danger);color:#fff;border-color:var(--danger);font-weight:700" onclick="confirmDeleteOk()">Yes, Delete</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1511,7 +1563,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
         </div>
         <div class="form-group"><label class="form-label">Estimated Value ($)</label><input class="form-control" type="number" placeholder="5000" id="lead-value"/></div>
         <div class="form-group"><label class="form-label">Stage</label>
-          <select class="form-control" id="lead-stage"><option>New Lead</option><option>Contacted</option><option>Proposal Sent</option><option>Follow Up</option><option>Negotiation</option></select>
+          <select class="form-control" id="lead-stage"><option>Prospects</option><option>New Lead</option><option>Contacted</option><option>Proposal Sent</option><option>Follow Up</option><option>Negotiation</option></select>
         </div>
         <div class="form-group"><label class="form-label">Assigned To</label>
           <select class="form-control"><option>Akoni Kessler</option><option>Marcus James</option><option>Dev Kumar</option><option>Sofia Lopez</option></select>
@@ -1688,8 +1740,8 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('add-proposal-modal')">Cancel</button>
-      <button class="btn btn-secondary" onclick="closeModal('add-proposal-modal');showToast('Proposal saved as draft','success')">Save as Draft</button>
-      <button class="btn btn-primary" onclick="closeModal('add-proposal-modal');showToast('Proposal sent to client!','success')">📤 Send Proposal</button>
+      <button class="btn btn-secondary" onclick="saveProposalDraft()">Save as Draft</button>
+      <button class="btn btn-primary" onclick="sendProposal()">📤 Send Proposal</button>
     </div>
   </div>
 </div>
@@ -1698,18 +1750,45 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   <div class="modal">
     <div class="modal-header"><div class="modal-title">New Event</div><button class="icon-btn" onclick="closeModal('add-event-modal')">✕</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">Event Title *</label><input class="form-control" placeholder="Meeting title"/></div>
+      <div class="form-group"><label class="form-label">Event Title *</label><input class="form-control" id="aem-title" placeholder="Meeting title"/></div>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Date</label><input class="form-control" type="date"/></div>
-        <div class="form-group"><label class="form-label">Time</label><input class="form-control" type="time"/></div>
-        <div class="form-group"><label class="form-label">Duration</label><select class="form-control"><option>30 min</option><option>45 min</option><option>1 hour</option><option>1.5 hours</option><option>2 hours</option></select></div>
-        <div class="form-group"><label class="form-label">Type</label><select class="form-control"><option>Client Meeting</option><option>Team Meeting</option><option>Deadline</option><option>Other</option></select></div>
+        <div class="form-group"><label class="form-label">Date</label><input class="form-control" type="date" id="aem-date"/></div>
+        <div class="form-group"><label class="form-label">Time</label><input class="form-control" type="time" id="aem-time"/></div>
+        <div class="form-group"><label class="form-label">Duration</label><select class="form-control" id="aem-duration"><option>30 min</option><option>45 min</option><option selected>1 hour</option><option>1.5 hours</option><option>2 hours</option></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-control" id="aem-type"><option>Client Meeting</option><option>Team Meeting</option><option>Deadline</option><option>Other</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" rows="2"></textarea></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" id="aem-notes" rows="2"></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('add-event-modal')">Cancel</button>
-      <button class="btn btn-primary">Create Event</button>
+      <button class="btn btn-primary" onclick="addCalEvent()">Create Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT EVENT MODAL -->
+<div class="modal-overlay" id="edit-event-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Event</div>
+      <button class="icon-btn" onclick="closeModal('edit-event-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Event Title *</label><input class="form-control" id="eem-title" placeholder="Meeting title"/></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-control" type="date" id="eem-date"/></div>
+        <div class="form-group"><label class="form-label">Time</label><input class="form-control" type="time" id="eem-time"/></div>
+        <div class="form-group"><label class="form-label">Duration</label><select class="form-control" id="eem-duration"><option>30 min</option><option>45 min</option><option>1 hour</option><option>1.5 hours</option><option>2 hours</option></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-control" id="eem-type"><option>Client Meeting</option><option>Team Meeting</option><option>Deadline</option><option>Other</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" id="eem-notes" rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-danger" onclick="deleteCalEvent()">🗑️ Delete</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onclick="closeModal('edit-event-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEditEvent()">💾 Save Changes</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1770,20 +1849,34 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
           <input type="text" id="cdp-website" class="detail-edit-input" placeholder="https://..."/>
         </div>
         <div class="detail-info-item">
-          <div class="detail-info-label">🏢 Industry</div>
+          <div class="detail-info-label">🏭 Industry</div>
           <select id="cdp-industry" class="detail-edit-input">
             <option>E-Commerce</option><option>Real Estate</option><option>Tech</option>
             <option>Hospitality</option><option>Healthcare</option><option>Finance</option>
             <option>Education</option><option>Other</option>
           </select>
         </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📍 Address</div>
+          <input type="text" id="cdp-address" class="detail-edit-input" placeholder="123 Main St, City, State"/>
+        </div>
       </div>
     </div>
 
-    <!-- FINANCIALS -->
+    <!-- STATUS & FINANCIALS -->
     <div class="detail-section">
-      <div class="detail-section-title">Financials</div>
+      <div class="detail-section-title">Status &amp; Financials</div>
       <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🔖 Status</div>
+          <select id="cdp-status-body" class="detail-edit-input">
+            <option value="Lead">Lead</option>
+            <option value="Active">Active</option>
+            <option value="Working On It">Working On It</option>
+            <option value="Closed">Closed</option>
+            <option value="Archived">Archived</option>
+          </select>
+        </div>
         <div class="detail-info-item">
           <div class="detail-info-label">💼 Project Value ($)</div>
           <input type="number" id="cdp-value" class="detail-edit-input" placeholder="0" oninput="recalcOwed()"/>
@@ -1799,6 +1892,15 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       </div>
     </div>
 
+    <!-- TAGS -->
+    <div class="detail-section">
+      <div class="detail-section-title">Tags</div>
+      <div class="detail-info-item" style="background:var(--bg-elevated);border-radius:var(--radius-sm);padding:10px 12px">
+        <div class="detail-info-label" style="font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--text-3);margin-bottom:5px">🏷️ Tags (comma separated)</div>
+        <input type="text" id="cdp-tags" class="detail-edit-input" placeholder="web design, branding, SEO"/>
+      </div>
+    </div>
+
     <!-- SAVE BAR -->
     <div class="detail-save-bar">
       <button class="btn btn-primary btn-sm" onclick="saveClientDetail()">💾 Save Changes</button>
@@ -1806,7 +1908,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
 
     <!-- TASK CHECKLIST -->
-    <div class="detail-section" style="margin-top:20px">
+    <div class="detail-section" style="margin-top:4px">
       <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
         <span>Task Checklist</span>
         <span id="cdp-task-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
@@ -1834,14 +1936,14 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
 
     <!-- ALL PROJECTS BUILT -->
-    <div class="detail-section" style="margin-top:20px">
+    <div class="detail-section" style="margin-top:4px">
       <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
-        <span>🏗️ ALL PROJECTS BUILT</span>
+        <span>🏗️ All Projects Built</span>
         <span id="cdp-proj-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
       </div>
       <div class="task-checklist" id="cdp-proj-list"></div>
       <div class="task-add-row">
-        <input class="task-add-input" id="cdp-proj-input" placeholder="Project name and press Enter or +"/>
+        <input class="task-add-input" id="cdp-proj-input" placeholder="Project name and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();addClientProject();}"/>
         <select class="task-status-select" id="cdp-proj-status">
           <option value="Active">Active</option>
           <option value="Started">Started</option>
@@ -1854,7 +1956,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
 
     <!-- NOTES -->
-    <div class="detail-section" style="margin-top:20px">
+    <div class="detail-section" style="margin-top:4px">
       <div class="detail-section-title">📝 Notes</div>
       <textarea id="cdp-notes" class="note-box" placeholder="Add internal notes, follow-up reminders, or anything about this client…"></textarea>
       <div class="detail-save-bar" style="border-top:none;padding-top:6px">
@@ -1869,7 +1971,280 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   </div>
 </div>
 
+<!-- ADD CLIENT SLIDE PANEL -->
+<div class="detail-panel" id="add-client-panel">
+  <div class="detail-panel-header">
+    <div class="avatar avatar-lg" style="background:linear-gradient(135deg,var(--accent),#7c3aed);font-size:18px">+</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">New Client</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px">Fill in the details below to add a client</div>
+    </div>
+    <button class="icon-btn" onclick="closeAddClientPanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+
+    <!-- CONTACT INFO -->
+    <div class="detail-section">
+      <div class="detail-section-title">Contact Info</div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">First Name *</label><input class="form-control" placeholder="John" id="acp-fname"/></div>
+        <div class="form-group"><label class="form-label">Last Name *</label><input class="form-control" placeholder="Doe" id="acp-lname"/></div>
+      </div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🏢 Company</div>
+          <input class="detail-edit-input" placeholder="Acme Corp" id="acp-company"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📧 Email *</div>
+          <input type="email" class="detail-edit-input" placeholder="john@acme.com" id="acp-email"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📞 Phone</div>
+          <input type="tel" class="detail-edit-input" placeholder="+1 (555) 000-0000" id="acp-phone"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🌐 Website</div>
+          <input type="text" class="detail-edit-input" placeholder="https://acme.com" id="acp-website"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🏭 Industry</div>
+          <select class="detail-edit-input" id="acp-industry">
+            <option>E-Commerce</option><option>Real Estate</option><option>Tech</option>
+            <option>Hospitality</option><option>Healthcare</option><option>Finance</option>
+            <option>Education</option><option>Other</option>
+          </select>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📍 Address</div>
+          <input class="detail-edit-input" placeholder="123 Main St, City, State" id="acp-address"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS & FINANCIALS -->
+    <div class="detail-section">
+      <div class="detail-section-title">Status &amp; Financials</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🔖 Status</div>
+          <select class="detail-edit-input" id="acp-status">
+            <option>Lead</option><option>Active</option><option>Working On It</option><option>Closed</option>
+          </select>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">💼 Project Value ($)</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="acp-value" oninput="acpRecalcOwed()"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">💵 Amount Paid ($)</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="acp-paid" oninput="acpRecalcOwed()"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1;background:var(--danger-soft);border-color:transparent">
+          <div class="detail-info-label">⏳ Amount Owed</div>
+          <div id="acp-owed" style="font-size:15px;font-weight:800;color:var(--warning)">$0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="detail-section">
+      <div class="detail-section-title">Tags</div>
+      <div class="form-group">
+        <input class="form-control" placeholder="web design, branding, SEO (comma separated)" id="acp-tags"/>
+      </div>
+    </div>
+
+    <!-- TASK CHECKLIST -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Task Checklist</span>
+        <span id="acp-task-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-filter-bar" id="acp-task-filters">
+        <div class="tf-chip active" onclick="filterAcpTasks('all',this)">All</div>
+        <div class="tf-chip" onclick="filterAcpTasks('Active',this)">Active</div>
+        <div class="tf-chip" onclick="filterAcpTasks('Started',this)">Started</div>
+        <div class="tf-chip" onclick="filterAcpTasks('Doing',this)">Doing</div>
+        <div class="tf-chip" onclick="filterAcpTasks('Done',this)">Done</div>
+        <div class="tf-chip" onclick="filterAcpTasks('On',this)">On Hold</div>
+      </div>
+      <div class="task-checklist" id="acp-task-list"></div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="acp-task-input" placeholder="Type a task and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();acpAddTask();}"/>
+        <select class="task-status-select" id="acp-task-status">
+          <option value="Active">Active</option>
+          <option value="Started">Started</option>
+          <option value="Doing">Doing</option>
+          <option value="Done">Done</option>
+          <option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="acpAddTask()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- ALL PROJECTS BUILT -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>🏗️ All Projects Built</span>
+        <span id="acp-proj-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-checklist" id="acp-proj-list"></div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="acp-proj-input" placeholder="Project name and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();acpAddProject();}"/>
+        <select class="task-status-select" id="acp-proj-status">
+          <option value="Active">Active</option>
+          <option value="Started">Started</option>
+          <option value="Doing">Doing</option>
+          <option value="Done">Done</option>
+          <option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="acpAddProject()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title">📝 Notes</div>
+      <textarea id="acp-notes" class="note-box" placeholder="Add internal notes, follow-up reminders, or anything about this client…"></textarea>
+    </div>
+
+    <!-- FOOTER ACTIONS -->
+    <div style="display:flex;gap:8px;padding-top:12px;padding-bottom:20px">
+      <button class="btn btn-secondary" onclick="closeAddClientPanel()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="addClient()">💾 Save Client</button>
+    </div>
+
+  </div>
+</div>
+
 <!-- LEAD DETAIL PANEL -->
+<!-- ADD LEAD SLIDE PANEL -->
+<div class="detail-panel" id="add-lead-panel">
+  <div class="detail-panel-header">
+    <div class="avatar avatar-lg" style="background:linear-gradient(135deg,#f59e0b,#d97706);font-size:18px">🎯</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">New Lead</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px">Fill in the details below to add a lead</div>
+    </div>
+    <button class="icon-btn" onclick="closeAddLeadPanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+
+    <!-- CONTACT INFO -->
+    <div class="detail-section">
+      <div class="detail-section-title">Contact Info</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">👤 Lead Name *</div>
+          <input class="detail-edit-input" placeholder="Full name" id="alp-name"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🏢 Company</div>
+          <input class="detail-edit-input" placeholder="Company name" id="alp-company"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📧 Email</div>
+          <input type="email" class="detail-edit-input" placeholder="email@company.com" id="alp-email"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📞 Phone</div>
+          <input type="tel" class="detail-edit-input" placeholder="+1 (555) 000-0000" id="alp-phone"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🔗 Lead Source</div>
+          <select class="detail-edit-input" id="alp-source">
+            <option>Website</option><option>Referral</option><option>Social Media</option>
+            <option>Cold Outreach</option><option>Event</option><option>Other</option>
+          </select>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">👤 Assigned To</div>
+          <select class="detail-edit-input" id="alp-assigned">
+            <option value="AK">Akoni Kessler</option>
+            <option value="MJ">Marcus James</option>
+            <option value="DK">Dev Kumar</option>
+            <option value="SL">Sofia Lopez</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="detail-section">
+      <div class="detail-section-title">Pipeline &amp; Value</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📊 Pipeline Stage</div>
+          <select class="detail-edit-input" id="alp-stage">
+            <option>Prospects</option><option>New Lead</option><option>Contacted</option>
+            <option>Proposal Sent</option><option>Follow Up</option><option>Negotiation</option><option>Closed Lost</option>
+          </select>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">💰 Estimated Value ($)</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="alp-value"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK CHECKLIST -->
+    <div class="detail-section">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Task Checklist</span>
+        <span id="alp-task-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-filter-bar" id="alp-task-filters">
+        <div class="tf-chip active" onclick="filterAlpTasks('all',this)">All</div>
+        <div class="tf-chip" onclick="filterAlpTasks('Active',this)">Active</div>
+        <div class="tf-chip" onclick="filterAlpTasks('Started',this)">Started</div>
+        <div class="tf-chip" onclick="filterAlpTasks('Doing',this)">Doing</div>
+        <div class="tf-chip" onclick="filterAlpTasks('Done',this)">Done</div>
+        <div class="tf-chip" onclick="filterAlpTasks('On',this)">On Hold</div>
+      </div>
+      <div class="task-checklist" id="alp-task-list"></div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="alp-task-input" placeholder="Type a task and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();alpAddTask();}"/>
+        <select class="task-status-select" id="alp-task-status">
+          <option value="Active">Active</option><option value="Started">Started</option>
+          <option value="Doing">Doing</option><option value="Done">Done</option><option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="alpAddTask()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- ALL PROJECTS BUILT -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>🏗️ All Projects Built</span>
+        <span id="alp-proj-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-checklist" id="alp-proj-list"></div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="alp-proj-input" placeholder="Project name and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();alpAddProject();}"/>
+        <select class="task-status-select" id="alp-proj-status">
+          <option value="Active">Active</option><option value="Started">Started</option>
+          <option value="Doing">Doing</option><option value="Done">Done</option><option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="alpAddProject()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title">📝 Notes</div>
+      <textarea id="alp-notes" class="note-box" placeholder="Add notes, follow-up reminders, or anything about this lead…"></textarea>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="display:flex;gap:8px;padding-top:12px;padding-bottom:20px">
+      <button class="btn btn-secondary" onclick="closeAddLeadPanel()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="addLead()">🎯 Save Lead</button>
+    </div>
+
+  </div>
+</div>
+
 <div class="detail-panel" id="lead-detail-panel">
   <div class="detail-panel-header">
     <div class="avatar avatar-lg" id="ldp-avatar" style="background:linear-gradient(135deg,var(--accent),#7c3aed)">?</div>
@@ -1999,6 +2374,154 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   </div>
 </div>
 
+<!-- ADD TASK SLIDE PANEL -->
+<div class="detail-panel" id="add-task-panel">
+  <div class="detail-panel-header">
+    <div class="avatar avatar-lg" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);font-size:18px">✅</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">New Task</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px">Fill in the details below to add a task</div>
+    </div>
+    <button class="icon-btn" onclick="closeAddTaskPanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+
+    <!-- TASK INFO -->
+    <div class="detail-section">
+      <div class="detail-section-title">Task Info</div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">Task Title *</label><input class="form-control" placeholder="What needs to be done?" id="atp-title"/></div>
+        <div class="form-group"><label class="form-label">Client / Project *</label><input class="form-control" placeholder="Client or project name" id="atp-client"/></div>
+      </div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📧 Assigned To</div>
+          <select class="detail-edit-input" id="atp-assigned">
+            <option value="AK">Akoni Kessler</option>
+            <option value="MJ">Marcus James</option>
+            <option value="DK">Dev Kumar</option>
+            <option value="SL">Sofia Lopez</option>
+          </select>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🚦 Priority</div>
+          <select class="detail-edit-input" id="atp-priority">
+            <option value="🔴 High">🔴 High</option>
+            <option value="🟡 Medium" selected>🟡 Medium</option>
+            <option value="🟢 Low">🟢 Low</option>
+          </select>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📅 Due Date</div>
+          <input type="date" class="detail-edit-input" id="atp-due"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🏁 Stage</div>
+          <select class="detail-edit-input" id="atp-stage"></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="detail-section">
+      <div class="detail-section-title">Status</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🔖 Status</div>
+          <select class="detail-edit-input" id="atp-status">
+            <option>Active</option><option>Started</option><option>Doing</option><option>Done</option><option>On Hold</option>
+          </select>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">⏱️ Est. Hours</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="atp-hours"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">📆 Start Date</div>
+          <input type="date" class="detail-edit-input" id="atp-start"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1;background:var(--accent-soft);border-color:transparent">
+          <div class="detail-info-label">🎯 Completion</div>
+          <div style="font-size:15px;font-weight:800;color:var(--accent)">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="detail-section">
+      <div class="detail-section-title">Tags</div>
+      <div class="form-group">
+        <input class="form-control" placeholder="design, urgent, revisions (comma separated)" id="atp-tags"/>
+      </div>
+    </div>
+
+    <!-- TASK CHECKLIST -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Task Checklist</span>
+        <span id="atp-subtask-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-filter-bar" id="atp-subtask-filters">
+        <div class="tf-chip active" onclick="filterAtpSubtasks('all',this)">All</div>
+        <div class="tf-chip" onclick="filterAtpSubtasks('Active',this)">Active</div>
+        <div class="tf-chip" onclick="filterAtpSubtasks('Started',this)">Started</div>
+        <div class="tf-chip" onclick="filterAtpSubtasks('Doing',this)">Doing</div>
+        <div class="tf-chip" onclick="filterAtpSubtasks('Done',this)">Done</div>
+        <div class="tf-chip" onclick="filterAtpSubtasks('On',this)">On Hold</div>
+      </div>
+      <div class="task-checklist" id="atp-subtask-list">
+        <div style="text-align:center;padding:16px 0;color:var(--text-3);font-size:13px">No tasks yet — type one below and press +</div>
+      </div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="atp-subtask-input" placeholder="Type a task and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();atpAddSubtask();}"/>
+        <select class="task-status-select" id="atp-subtask-status">
+          <option value="Active">Active</option>
+          <option value="Started">Started</option>
+          <option value="Doing">Doing</option>
+          <option value="Done">Done</option>
+          <option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="atpAddSubtask()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- ALL DELIVERABLES -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>🏗️ All Deliverables</span>
+        <span id="atp-deliv-count" style="font-size:11px;font-weight:700;color:var(--accent)"></span>
+      </div>
+      <div class="task-checklist" id="atp-deliv-list">
+        <div style="text-align:center;padding:16px 0;color:var(--text-3);font-size:13px">No deliverables yet — type one below and press +</div>
+      </div>
+      <div class="task-add-row">
+        <input class="task-add-input" id="atp-deliv-input" placeholder="Deliverable name and press Enter or +" onkeydown="if(event.key==='Enter'){event.preventDefault();atpAddDeliv();}"/>
+        <select class="task-status-select" id="atp-deliv-status">
+          <option value="Active">Active</option>
+          <option value="Started">Started</option>
+          <option value="Doing">Doing</option>
+          <option value="Done">Done</option>
+          <option value="On">On Hold</option>
+        </select>
+        <button class="btn btn-primary" style="padding:7px 16px" onclick="atpAddDeliv()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="detail-section" style="margin-top:4px">
+      <div class="detail-section-title">📝 Notes</div>
+      <textarea id="atp-notes" class="note-box" placeholder="Add internal notes, follow-up reminders, or anything about this task…"></textarea>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="display:flex;gap:8px;padding-top:12px;padding-bottom:20px">
+      <button class="btn btn-secondary" onclick="closeAddTaskPanel()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="addTask()">💾 Save Task</button>
+    </div>
+
+  </div>
+</div>
+
 <!-- PROJECT DETAIL PANEL -->
 <div class="detail-panel" id="project-detail-panel">
   <div class="detail-panel-header">
@@ -2088,20 +2611,159 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   </div>
 </div>
 
+<!-- INVOICE DETAIL PANEL -->
+<div class="detail-panel" id="invoice-detail-panel">
+  <div class="detail-panel-header">
+    <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🧾</div>
+    <div style="flex:1;min-width:0">
+      <input id="idp-id" class="detail-name-input" placeholder="INV-###" style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.5px;color:var(--accent)"/>
+      <input id="idp-client" class="detail-sub-input" placeholder="Client name"/>
+    </div>
+    <select id="idp-status" class="form-control" style="width:130px;font-size:12px;font-weight:600;padding:5px 8px;flex-shrink:0">
+      <option>Draft</option><option>Sent</option><option>Paid</option><option>Overdue</option>
+    </select>
+    <button class="icon-btn" onclick="closeDetailPanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+
+    <!-- FINANCIALS -->
+    <div class="detail-section">
+      <div class="detail-section-title">💰 Invoice Details</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <div class="detail-field-label">💵 Amount ($)</div>
+          <input id="idp-amount" class="detail-field-value form-control" type="number" placeholder="0"/>
+        </div>
+        <div class="detail-field">
+          <div class="detail-field-label">📅 Issue Date</div>
+          <input id="idp-issued" class="detail-field-value form-control" type="date"/>
+        </div>
+        <div class="detail-field">
+          <div class="detail-field-label">⏰ Due Date</div>
+          <input id="idp-due" class="detail-field-value form-control" type="date"/>
+        </div>
+        <div class="detail-field">
+          <div class="detail-field-label">🏷️ Status</div>
+          <div id="idp-status-display" style="padding:6px 0;font-weight:700"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENT EMAIL -->
+    <div class="detail-section" style="margin-top:16px">
+      <div class="detail-section-title">📧 Client Email</div>
+      <input id="idp-email" class="form-control" type="email" placeholder="client@email.com"/>
+    </div>
+
+    <!-- NOTES -->
+    <div class="detail-section" style="margin-top:16px">
+      <div class="detail-section-title">📝 Notes / Payment Terms</div>
+      <textarea id="idp-notes" class="note-box" placeholder="Payment due within 30 days. Bank transfer preferred…" style="min-height:100px"></textarea>
+    </div>
+
+    <!-- SAVE + DELETE -->
+    <div class="detail-save-bar" style="margin-top:20px;justify-content:space-between">
+      <button class="btn btn-danger" onclick="deleteInvoiceFromPanel()" style="gap:6px">🗑️ Delete</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="detail-save-confirm" id="idp-save-confirm">✓ Saved!</span>
+        <button class="btn btn-secondary btn-sm" onclick="emailInvoice(_iid())" style="gap:6px">📧 Email Invoice</button>
+        <button class="btn btn-primary btn-sm" onclick="saveInvoiceDetail()">💾 Save Changes</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EMAIL INVOICE MODAL -->
+<div class="modal-overlay" id="email-inv-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:18px">📧</div>
+        <div>
+          <div class="modal-title">Email Invoice</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:1px">Preview and send via your mail app</div>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="closeModal('email-inv-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">To (Client Email) *</label>
+        <input class="form-control" id="email-inv-to" type="email" placeholder="client@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input class="form-control" id="email-inv-subject" type="text"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message Body</label>
+        <textarea class="form-control" id="email-inv-body" rows="12" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;resize:vertical;min-height:240px"></textarea>
+      </div>
+      <div style="background:var(--bg-elevated);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:8px">
+        <span style="font-size:15px">💡</span>
+        <span>Clicking <strong style="color:var(--text-2)">"Open in Mail App"</strong> will open your default email client (Gmail, Outlook, Apple Mail, etc.) with this message pre-filled and ready to send.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('email-inv-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="sendEmailInvoice()" style="gap:8px">📧 Open in Mail App</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL PROPOSAL MODAL -->
+<div class="modal-overlay" id="email-proposal-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:18px">📋</div>
+        <div>
+          <div class="modal-title">Email Proposal</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:1px">Preview and send via your mail app</div>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="closeModal('email-proposal-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">To (Client Email) *</label>
+        <input class="form-control" id="email-prop-to" type="email" placeholder="client@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input class="form-control" id="email-prop-subject" type="text"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message Body</label>
+        <textarea class="form-control" id="email-prop-body" rows="14" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;resize:vertical;min-height:280px"></textarea>
+      </div>
+      <div style="background:var(--bg-elevated);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:8px">
+        <span style="font-size:15px">💡</span>
+        <span>Clicking <strong style="color:var(--text-2)">"Open in Mail App"</strong> will open your default email client with this proposal pre-filled and ready to send.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('email-proposal-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="sendEmailProposal()" style="gap:8px">📧 Open in Mail App</button>
+    </div>
+  </div>
+</div>
+
 <!-- FAB -->
 <div class="fab" id="fab">
   <div class="fab-actions" id="fab-actions">
-    <div class="fab-action" onclick="openModal('add-client-modal')"><div class="fab-action-label">New Client</div><div class="fab-action-btn">👤</div></div>
-    <div class="fab-action" onclick="openModal('add-lead-modal')"><div class="fab-action-label">New Lead</div><div class="fab-action-btn">🎯</div></div>
+    <div class="fab-action" onclick="openAddClientPanel()"><div class="fab-action-label">New Client</div><div class="fab-action-btn">👤</div></div>
+    <div class="fab-action" onclick="openAddLeadPanel()"><div class="fab-action-label">New Lead</div><div class="fab-action-btn">🎯</div></div>
     <div class="fab-action" onclick="openModal('add-project-modal')"><div class="fab-action-label">New Project</div><div class="fab-action-btn">🗂️</div></div>
-    <div class="fab-action" onclick="openModal('add-task-modal')"><div class="fab-action-label">New Task</div><div class="fab-action-btn">✅</div></div>
+    <div class="fab-action" onclick="openAddTaskPanel()"><div class="fab-action-label">New Task</div><div class="fab-action-btn">✅</div></div>
     <div class="fab-action" onclick="openModal('add-invoice-modal')"><div class="fab-action-label">New Invoice</div><div class="fab-action-btn">🧾</div></div>
   </div>
   <button class="fab-main" id="fab-main" onclick="toggleFab()">+</button>
 </div>
 <script>
 // ===================== DATA =====================
-const clientsData = [
+let clientsData = [
   {id:1,fname:'Sarah',lname:'Johnson',company:'TechFlow Inc.',email:'sarah@techflow.com',phone:'+1 555-0101',industry:'Tech',status:'Active',value:48000,paid:36000,owed:12000},
   {id:2,fname:'Marcus',lname:'Rivera',company:'Nexus Branding',email:'marcus@nexus.com',phone:'+1 555-0102',industry:'E-Commerce',status:'Active',value:24000,paid:20000,owed:4000},
   {id:3,fname:'Emily',lname:'Chen',company:'Luxe Interiors',email:'emily@luxe.com',phone:'+1 555-0103',industry:'Hospitality',status:'Working On It',value:18000,paid:9000,owed:9000},
@@ -2111,7 +2773,7 @@ const clientsData = [
   {id:7,fname:'Aisha',lname:'Williams',company:'GrowthPath',email:'aisha@growthpath.com',phone:'+1 555-0107',industry:'Finance',status:'Lead',value:15000,paid:0,owed:15000},
   {id:8,fname:'Kevin',lname:'Park',company:'BrightSpace Academy',email:'kevin@brightspace.com',phone:'+1 555-0108',industry:'Education',status:'Active',value:9600,paid:6400,owed:3200},
 ];
-const leadsData = [
+let leadsData = [
   {id:1,name:'Sarah Johnson',company:'Apex Digital',email:'sarah@apexdigital.com',source:'Website',value:12000,stage:'New Lead',assigned:'AK'},
   {id:2,name:'Daniel Torres',company:'Summit Realty',email:'daniel@summit.com',source:'Referral',value:8500,stage:'Contacted',assigned:'MJ'},
   {id:3,name:'Olivia Kim',company:'Bloom Wellness',email:'olivia@bloom.com',source:'Social Media',value:6200,stage:'Contacted',assigned:'SL'},
@@ -2123,7 +2785,7 @@ const leadsData = [
   {id:9,name:'Nina Patel',company:'Clarity Finance',email:'nina@clarity.com',source:'Website',value:31000,stage:'Closed Lost',assigned:'AK'},
   {id:10,name:'Ben Osei',company:'Zenith Architects',email:'ben@zenith.com',source:'Social Media',value:16000,stage:'New Lead',assigned:'MJ'},
 ];
-const projectsData = [
+let projectsData = [
   {id:1,name:'E-Commerce Rebrand',client:'TechFlow Inc.',status:'In Progress',progress:72,budget:22000,deadline:'2026-05-30',team:['AK','MJ']},
   {id:2,name:'Homepage Redesign',client:'Nexus Branding',status:'Revisions',progress:90,budget:8500,deadline:'2026-05-15',team:['MJ','DK']},
   {id:3,name:'SEO Campaign Q2',client:'Luxe Interiors',status:'In Progress',progress:45,budget:4800,deadline:'2026-06-30',team:['SL']},
@@ -2131,31 +2793,33 @@ const projectsData = [
   {id:5,name:'Social Media Pack',client:'Urban Eats Co.',status:'Completed',progress:100,budget:3200,deadline:'2026-04-28',team:['MJ']},
   {id:6,name:'Google Ads Setup',client:'Apex Digital',status:'Waiting on Assets',progress:30,budget:2400,deadline:'2026-05-20',team:['SL','AK']},
 ];
-const tasksData = [
-  {id:1,title:'Finalize homepage wireframes',project:'Homepage Redesign',priority:'🔴 High',assigned:'MJ',due:'2026-05-06',status:'In Progress'},
-  {id:2,title:'Write product descriptions for TechFlow shop',project:'E-Commerce Rebrand',priority:'🟡 Medium',assigned:'AK',due:'2026-05-12',status:'To Do'},
-  {id:3,title:'Set up Google Analytics tracking',project:'SEO Campaign Q2',priority:'🔴 High',assigned:'SL',due:'2026-05-08',status:'In Progress'},
-  {id:4,title:'Create brand color palette',project:'E-Commerce Rebrand',priority:'🟡 Medium',assigned:'MJ',due:'2026-05-14',status:'Review'},
-  {id:5,title:'QA checkout flow on staging',project:'E-Commerce Rebrand',priority:'🔴 High',assigned:'DK',due:'2026-05-09',status:'To Do'},
-  {id:6,title:'Keyword research for Luxe Interiors',project:'SEO Campaign Q2',priority:'🟢 Low',assigned:'SL',due:'2026-05-20',status:'Done'},
-  {id:7,title:'Upload project assets to Drive',project:'Social Media Pack',priority:'🟢 Low',assigned:'MJ',due:'2026-05-10',status:'Done'},
-  {id:8,title:'Client call prep — Apex Digital',project:'Google Ads Setup',priority:'🔴 High',assigned:'AK',due:'2026-05-08',status:'To Do'},
+let tasksData = [
+  {id:1,title:'Finalize homepage wireframes',client:'Homepage Redesign',priority:'🔴 High',assigned:'MJ',due:'2026-05-06',stage:'Started'},
+  {id:2,title:'Write product descriptions',client:'E-Commerce Rebrand',priority:'🟡 Medium',assigned:'AK',due:'2026-05-12',stage:'New'},
+  {id:3,title:'Set up Google Analytics',client:'SEO Campaign Q2',priority:'🔴 High',assigned:'SL',due:'2026-05-08',stage:'Started'},
+  {id:4,title:'Create brand color palette',client:'E-Commerce Rebrand',priority:'🟡 Medium',assigned:'MJ',due:'2026-05-14',stage:'Review'},
+  {id:5,title:'QA checkout flow on staging',client:'E-Commerce Rebrand',priority:'🔴 High',assigned:'DK',due:'2026-05-09',stage:'Built Out'},
+  {id:6,title:'Keyword research for Luxe Interiors',client:'SEO Campaign Q2',priority:'🟢 Low',assigned:'SL',due:'2026-05-20',stage:'Done'},
+  {id:7,title:'Upload project assets to Drive',client:'Social Media Pack',priority:'🟢 Low',assigned:'MJ',due:'2026-05-10',stage:'Done'},
+  {id:8,title:'Client call prep — Apex Digital',client:'Google Ads Setup',priority:'🔴 High',assigned:'AK',due:'2026-05-08',stage:'New'},
 ];
-const invoicesData = [
-  {id:'INV-084',client:'Nexus Branding',amount:4200,status:'Paid',issued:'2026-04-01',due:'2026-04-30'},
-  {id:'INV-083',client:'TechFlow Inc.',amount:8500,status:'Overdue',issued:'2026-03-15',due:'2026-04-15'},
-  {id:'INV-082',client:'Luxe Interiors',amount:4800,status:'Sent',issued:'2026-04-10',due:'2026-05-10'},
-  {id:'INV-081',client:'Stride Health',amount:3200,status:'Paid',issued:'2026-04-05',due:'2026-04-25'},
-  {id:'INV-080',client:'Urban Eats Co.',amount:3200,status:'Paid',issued:'2026-03-01',due:'2026-03-31'},
-  {id:'INV-079',client:'TechFlow Inc.',amount:8500,status:'Overdue',issued:'2026-03-01',due:'2026-03-31'},
-  {id:'INV-078',client:'Apex Digital',amount:2400,status:'Draft',issued:'2026-04-28',due:'2026-05-28'},
-  {id:'INV-077',client:'BrightSpace Academy',amount:3200,status:'Sent',issued:'2026-04-20',due:'2026-05-20'},
+let invoicesData = [
+  {id:'INV-084',client:'Nexus Branding',email:'billing@nexusbranding.com',amount:4200,status:'Paid',issued:'2026-04-01',due:'2026-04-30'},
+  {id:'INV-083',client:'TechFlow Inc.',email:'accounts@techflowinc.com',amount:8500,status:'Overdue',issued:'2026-03-15',due:'2026-04-15'},
+  {id:'INV-082',client:'Luxe Interiors',email:'finance@luxeinteriors.com',amount:4800,status:'Sent',issued:'2026-04-10',due:'2026-05-10'},
+  {id:'INV-081',client:'Stride Health',email:'billing@stridehealth.io',amount:3200,status:'Paid',issued:'2026-04-05',due:'2026-04-25'},
+  {id:'INV-080',client:'Urban Eats Co.',amount:3200,email:'pay@urbaneats.co',status:'Paid',issued:'2026-03-01',due:'2026-03-31'},
+  {id:'INV-079',client:'TechFlow Inc.',email:'accounts@techflowinc.com',amount:8500,status:'Overdue',issued:'2026-03-01',due:'2026-03-31'},
+  {id:'INV-078',client:'Apex Digital',email:'finance@apexdigital.com',amount:2400,status:'Draft',issued:'2026-04-28',due:'2026-05-28'},
+  {id:'INV-077',client:'BrightSpace Academy',email:'billing@brightspaceacademy.com',amount:3200,status:'Sent',issued:'2026-04-20',due:'2026-05-20'},
 ];
-const leadStages=['Prospect','New Lead','Contacted','Proposal Sent','Follow Up','Negotiation','Closed Won','Closed Lost'];
+let proposalsData = [];
+const leadStages=['Prospects','New Lead','Contacted','Proposal Sent','Follow Up','Negotiation'];
 const projStatuses=['Not Started','In Progress','Waiting on Assets','Revisions','Completed'];
+var taskStages=['New','Started','Built Out','Review','Done','On Hold'];
 const stageColors={
-  'Prospect':'badge-warning','New Lead':'badge-info','Contacted':'badge-accent','Proposal Sent':'badge-warning',
-  'Follow Up':'badge-warning','Negotiation':'badge-accent','Closed Won':'badge-success','Closed Lost':'badge-danger'
+  'Prospects':'badge-warning','New Lead':'badge-info','Contacted':'badge-accent','Proposal Sent':'badge-warning',
+  'Follow Up':'badge-warning','Negotiation':'badge-accent'
 };
 const statusColors={
   'Lead':'badge-info','Active':'badge-success','Working On It':'badge-accent',
@@ -2167,15 +2831,79 @@ const statusColors={
 let currentPage='dashboard';
 let fabOpen=false;
 let calYear=2026,calMonth=4; // 0-indexed May
-const calEvents={
-  '2026-5-10':['Discovery Call — Apex Digital'],
-  '2026-5-11':['SEO Strategy Review'],
-  '2026-5-14':['Project Kickoff — TechFlow'],
-  '2026-5-16':['Brand Review Presentation'],
-  '2026-5-8':['Deadline: Wireframes'],
-  '2026-5-20':['Google Ads Delivery'],
-  '2026-5-25':['Monthly Team Sync'],
-};
+let calEventsData=[
+  {id:1,title:'Discovery Call — Apex Digital',date:'2026-5-10',time:'10:00',duration:'1 hour',type:'Client Meeting',notes:'Discuss project scope and timeline.'},
+  {id:2,title:'SEO Strategy Review',date:'2026-5-11',time:'14:00',duration:'1 hour',type:'Team Meeting',notes:''},
+  {id:3,title:'Project Kickoff — TechFlow',date:'2026-5-14',time:'09:00',duration:'2 hours',type:'Client Meeting',notes:'Intro call with dev and design leads.'},
+  {id:4,title:'Brand Review Presentation',date:'2026-5-16',time:'13:00',duration:'1.5 hours',type:'Client Meeting',notes:''},
+  {id:5,title:'Deadline: Wireframes',date:'2026-5-8',time:'17:00',duration:'30 min',type:'Deadline',notes:'Final wireframes due to Luxe Interiors.'},
+  {id:6,title:'Google Ads Delivery',date:'2026-5-20',time:'12:00',duration:'1 hour',type:'Deadline',notes:''},
+  {id:7,title:'Monthly Team Sync',date:'2026-5-25',time:'10:00',duration:'1 hour',type:'Team Meeting',notes:'Review Q2 targets and assign Q3 tasks.'},
+];
+let _calEvNextId=8;
+function _calEvColor(type){return type==='Deadline'?'var(--danger)':type==='Team Meeting'?'var(--info)':type==='Other'?'var(--success)':'var(--accent)';}
+function _calEvBg(type){return type==='Deadline'?'var(--danger-soft)':type==='Team Meeting'?'var(--info-soft)':type==='Other'?'var(--success-soft)':'var(--accent-soft)';}
+function _calEvForDate(key){return calEventsData.filter(function(e){return e.date===key;});}
+// ===================== PERSISTENCE =====================
+function saveData(){
+  try{
+    localStorage.setItem('acrm_clients',JSON.stringify(clientsData));
+    localStorage.setItem('acrm_leads',JSON.stringify(leadsData));
+    localStorage.setItem('acrm_projects',JSON.stringify(projectsData));
+    localStorage.setItem('acrm_tasks',JSON.stringify(tasksData));
+    localStorage.setItem('acrm_invoices',JSON.stringify(invoicesData));
+    localStorage.setItem('acrm_client_tasks',JSON.stringify(clientTasks));
+    localStorage.setItem('acrm_lead_tasks',JSON.stringify(leadTasks));
+    localStorage.setItem('acrm_project_tasks',JSON.stringify(projectTasks));
+    localStorage.setItem('acrm_client_projects',JSON.stringify(clientProjects));
+    localStorage.setItem('acrm_lead_projects',JSON.stringify(leadProjects));
+    localStorage.setItem('acrm_client_notes',JSON.stringify(clientNotes));
+    localStorage.setItem('acrm_lead_notes',JSON.stringify(leadNotes));
+    localStorage.setItem('acrm_notepad',JSON.stringify(notepadPages));
+    localStorage.setItem('acrm_fl_tasks',JSON.stringify(flTasks));
+    localStorage.setItem('acrm_fl_notes',flNotesData||'');
+    localStorage.setItem('acrm_fl_key',flApiKey||'');
+    localStorage.setItem('acrm_invoice_notes',JSON.stringify(invoiceNotes));
+  }catch(e){console.warn('saveData:',e);}
+  // refresh dashboard stats whenever any data changes
+  if(typeof renderDashboard==='function')renderDashboard();
+}
+function loadData(){
+  function tryParse(key,fallback){try{var v=localStorage.getItem(key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
+  var lc=tryParse('acrm_clients',null);if(lc&&lc.length)clientsData=lc;
+  var ll=tryParse('acrm_leads',null);if(ll&&ll.length)leadsData=ll;
+  var lp=tryParse('acrm_projects',null);if(lp)projectsData=lp;
+  var lt=tryParse('acrm_tasks',null);if(lt)tasksData=lt;
+  var li=tryParse('acrm_invoices',null);if(li&&li.length)invoicesData=li;
+  var lct=tryParse('acrm_client_tasks',null);if(lct)clientTasks=lct;
+  var llt=tryParse('acrm_lead_tasks',null);if(llt)leadTasks=llt;
+  var lpt=tryParse('acrm_project_tasks',null);if(lpt)projectTasks=lpt;
+  var lcp=tryParse('acrm_client_projects',null);if(lcp)clientProjects=lcp;
+  var llp=tryParse('acrm_lead_projects',null);if(llp)leadProjects=llp;
+  var lcn=tryParse('acrm_client_notes',null);if(lcn)clientNotes=lcn;
+  var lln=tryParse('acrm_lead_notes',null);if(lln)leadNotes=lln;
+  var lnp=tryParse('acrm_notepad',null);if(lnp&&lnp.length)notepadPages=lnp;
+  var lft=tryParse('acrm_fl_tasks',null);if(lft)flTasks=lft;
+  var lfn=localStorage.getItem('acrm_fl_notes');if(lfn!==null)flNotesData=lfn;
+  var lfk=localStorage.getItem('acrm_fl_key');if(lfk)flApiKey=lfk;
+  var lin=tryParse('acrm_invoice_notes',null);if(lin)invoiceNotes=lin;
+}
+// ---- Confirm Delete Modal ----
+var _cdCallback=null;
+function confirmDelete(msg,fn){
+  _cdCallback=fn;
+  var el=document.getElementById('cd-msg');
+  if(el)el.textContent=msg||'Are you sure? This cannot be undone.';
+  document.getElementById('confirm-delete-overlay').classList.add('open');
+}
+function confirmDeleteOk(){
+  document.getElementById('confirm-delete-overlay').classList.remove('open');
+  if(_cdCallback){_cdCallback();_cdCallback=null;}
+}
+function confirmDeleteCancel(){
+  document.getElementById('confirm-delete-overlay').classList.remove('open');
+  _cdCallback=null;
+}
 // ===================== ROUTING =====================
 function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -2191,17 +2919,17 @@ function navigate(page){
   document.getElementById('profileDropdown').classList.remove('open');
   closeFab();
   // init page
+  if(page==='dashboard')setTimeout(renderDashboard,50);
   if(page==='clients')renderClients();
   if(page==='leads')renderLeads();
   if(page==='projects')renderProjects();
-  if(page==='tasks')renderTasksPage();
+  if(page==='tasks'){renderTasksPage();}
   if(page==='invoices')renderInvoices();
   if(page==='calendar')renderCalendar();
   if(page==='notepad')initNotepad();
   if(page==='findleads'){renderFLTasks();var ki=document.getElementById('fl-apikey');if(ki&&flApiKey)ki.value=flApiKey;}
-  if(page==='phonebook')renderPhonebook();
+  if(page==='phonebook'){_pbAlpha='ALL';_pbStatus='All';_pbSearch='';renderPhonebook();}
   if(page==='analytics')setTimeout(initAnalyticsCharts,100);
-  if(page==='seo')setTimeout(initSeoChart,100);
   // on mobile close sidebar
   if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('mobile-open');
 }
@@ -2333,6 +3061,187 @@ function switchSettings(el,panel){
   el.classList.add('active');
   document.getElementById('settings-'+panel)?.classList.add('active');
 }
+// ===================== RENDER DASHBOARD =====================
+function renderDashboard(){
+  var now=new Date();
+  var todayStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+  // Greeting
+  var hr=now.getHours();
+  var greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  var gEl=document.getElementById('dash-greeting');
+  if(gEl)gEl.textContent=greet+', Akoni 👋';
+
+  // ---- INVOICES ----
+  var revenueYTD=0,revenueMonth=0,amtOwed=0,amtPaid=0;
+  var curYear=now.getFullYear(),curMonth=now.getMonth()+1;
+  (invoicesData||[]).forEach(function(inv){
+    var amount=inv.amount||0;
+    if(inv.status==='Paid'){
+      amtPaid+=amount;
+      // issued year
+      if(inv.issued){
+        var parts=inv.issued.split('-');
+        var iy=parseInt(parts[0]),im=parseInt(parts[1]);
+        if(iy===curYear)revenueYTD+=amount;
+        if(iy===curYear&&im===curMonth)revenueMonth+=amount;
+      }
+    }
+    if(inv.status==='Overdue'||inv.status==='Sent')amtOwed+=amount;
+  });
+  _setEl('dash-revenue-ytd','$'+_fmtNum(revenueYTD));
+  _setEl('dash-revenue-month','$'+_fmtNum(revenueMonth));
+  _setEl('dash-amount-owed','$'+_fmtNum(amtOwed));
+  _setEl('dash-amount-paid','$'+_fmtNum(amtPaid));
+  // trends
+  var overdueInvCount=(invoicesData||[]).filter(function(i){return i.status==='Overdue';}).length;
+  _setTrend('dash-trend-owed',overdueInvCount>0?overdueInvCount+' overdue':'All clear','danger');
+  _setTrend('dash-trend-paid',amtPaid>0?'+'+_fmtNum(amtPaid)+' collected':'No payments','success');
+  _setTrend('dash-trend-ytd',revenueYTD>0?'This year':'','up');
+  _setTrend('dash-trend-month',revenueMonth>0?'This month':'','up');
+
+  // ---- CLIENTS ----
+  var activeClients=0,closedClients=0;
+  (clientsData||[]).forEach(function(c){
+    if(c.status==='Active'||c.status==='Working On It')activeClients++;
+    if(c.status==='Closed')closedClients++;
+  });
+  _setEl('dash-active-clients',activeClients);
+  _setEl('dash-closed-clients',closedClients);
+  _setTrend('dash-trend-clients',activeClients+' active','up');
+  _setTrend('dash-trend-closed',closedClients+' total','neutral');
+
+  // ---- LEADS ----
+  var activeLeads=(leadsData||[]).filter(function(l){return l.stage!=='Closed Won'&&l.stage!=='Closed Lost';}).length;
+  _setEl('dash-leads-pipeline',activeLeads);
+  _setTrend('dash-trend-leads',activeLeads+' in pipeline','up');
+
+  // ---- PROJECTS ----
+  var projInProgress=0,projCompleted=0,projNotStarted=0,projWaiting=0,projActive=0;
+  (projectsData||[]).forEach(function(p){
+    if(p.status==='In Progress'){projInProgress++;projActive++;}
+    else if(p.status==='Completed')projCompleted++;
+    else if(p.status==='Not Started'){projNotStarted++;projActive++;}
+    else{projWaiting++;projActive++;} // Waiting on Assets, Revisions, etc.
+  });
+  _setEl('dash-projects-active',projActive);
+  _setTrend('dash-trend-projects',projInProgress+' in progress','up');
+  // production chart legend
+  _setEl('dash-prod-inprogress',projInProgress);
+  _setEl('dash-prod-completed',projCompleted);
+  _setEl('dash-prod-notstarted',projNotStarted);
+  _setEl('dash-prod-waiting',projWaiting);
+  // update chart data live
+  if(charts.production){
+    charts.production.data.datasets[0].data=[projInProgress,projCompleted,projNotStarted,projWaiting];
+    charts.production.update('none');
+  }
+
+  // ---- TASKS ----
+  var tasksDone=0,tasksOverdue=0;
+  (tasksData||[]).forEach(function(t){
+    if(t.stage==='Done')tasksDone++;
+    else if(t.due&&t.due<todayStr)tasksOverdue++;
+  });
+  _setEl('dash-tasks-completed',tasksDone);
+  _setEl('dash-tasks-overdue',tasksOverdue);
+  _setTrend('dash-trend-tasks-done',tasksDone+' done','success');
+  _setTrend('dash-trend-overdue',tasksOverdue>0?tasksOverdue+' overdue':'All clear',tasksOverdue>0?'danger':'success');
+
+  // ---- UPCOMING MEETINGS ----
+  var mtgEl=document.getElementById('dash-meetings');
+  if(mtgEl){
+    var upcoming=(calEventsData||[])
+      .filter(function(ev){
+        return _calDateKey(ev.date)>=_calDateKey(todayStr);
+      })
+      .sort(function(a,b){return _calDateKey(a.date)-_calDateKey(b.date)||a.time.localeCompare(b.time);})
+      .slice(0,5);
+    var MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    if(upcoming.length===0){
+      mtgEl.innerHTML='<div style="color:var(--text-3);font-size:13px;padding:12px 0">No upcoming events</div>';
+    } else {
+      var todayKey=_calDateKey(todayStr);
+      var tomorrowKey=todayKey+1;
+      mtgEl.innerHTML=upcoming.map(function(ev){
+        var parts=ev.date.split('-');
+        var ey=parseInt(parts[0]),em=parseInt(parts[1]),ed=parseInt(parts[2]);
+        var evKey=_calDateKey(ev.date);
+        var label=evKey===todayKey?'<span class="badge badge-accent">Today</span>':evKey===tomorrowKey?'<span class="badge badge-gray">Tomorrow</span>':'<span class="badge badge-gray">'+MONTHS[em-1]+' '+ed+'</span>';
+        var bg=_calEvBg(ev.type);
+        var clr=_calEvColor(ev.type);
+        var t12=_to12h(ev.time);
+        return '<div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-sm);cursor:pointer" onclick="openEditEvent('+ev.id+')">'
+          +'<div style="background:'+bg+';color:'+clr+';padding:6px 10px;border-radius:var(--radius-sm);text-align:center;min-width:44px"><div style="font-size:18px;font-weight:800;line-height:1">'+ed+'</div><div style="font-size:9px;letter-spacing:.5px">'+MONTHS[em-1]+'</div></div>'
+          +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+ev.title+'</div><div style="font-size:12px;color:var(--text-2)">'+t12+' · '+ev.type+(ev.duration?' · '+ev.duration:'')+'</div></div>'
+          +label+'</div>';
+      }).join('');
+    }
+  }
+
+  // ---- ACTIVITY FEED (dynamic) ----
+  var afEl=document.getElementById('activity-feed');
+  if(afEl){
+    var entries=[];
+    // Overdue invoices
+    (invoicesData||[]).forEach(function(inv){
+      if(inv.status==='Overdue')entries.push({dot:'danger',text:'Payment overdue from <strong>'+inv.client+'</strong> — $'+_fmtNum(inv.amount)+' pending',time:'Overdue'});
+    });
+    // Paid invoices
+    (invoicesData||[]).forEach(function(inv){
+      if(inv.status==='Paid')entries.push({dot:'success',text:'Invoice <strong>'+inv.id+'</strong> paid by '+inv.client+' — <strong>$'+_fmtNum(inv.amount)+'</strong>',time:inv.issued||''});
+    });
+    // Completed projects
+    (projectsData||[]).forEach(function(p){
+      if(p.status==='Completed')entries.push({dot:'success',text:'Project <strong>"'+p.name+'"</strong> marked Completed ✅',time:p.deadline||''});
+    });
+    // Overdue tasks
+    (tasksData||[]).forEach(function(t){
+      if(t.stage!=='Done'&&t.due&&t.due<todayStr)entries.push({dot:'warning',text:'Task <strong>"'+t.title+'"</strong> is overdue',time:'Overdue'});
+    });
+    // Recent leads
+    if((leadsData||[]).length){
+      var last=leadsData[leadsData.length-1];
+      entries.push({dot:'',text:'New lead <strong>'+last.name+'</strong> from '+last.company+' added',time:'Recent'});
+    }
+    // Trim to 6
+    entries=entries.slice(0,6);
+    if(entries.length===0){
+      afEl.innerHTML='<div style="color:var(--text-3);font-size:13px;padding:12px 0">No recent activity</div>';
+    } else {
+      afEl.innerHTML=entries.map(function(e){
+        return '<div class="activity-item"><div class="activity-dot'+(e.dot?' '+e.dot:'')+'"></div><div class="activity-content"><div class="activity-text">'+e.text+'</div><div class="activity-time">'+e.time+'</div></div></div>';
+      }).join('');
+    }
+  }
+}
+// helpers for renderDashboard
+function _setEl(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
+function _setTrend(id,label,type){
+  var el=document.getElementById(id);if(!el)return;
+  el.textContent=label;
+  el.className='stat-trend';
+  if(type==='up'||type==='success')el.classList.add('trend-up');
+  else if(type==='danger'||type==='down')el.classList.add('trend-down');
+}
+function _fmtNum(n){
+  if(n>=1000000)return (n/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+  if(n>=1000)return (n/1000).toFixed(1).replace(/\.0$/,'')+'K';
+  return n.toString();
+}
+function _calDateKey(dateStr){
+  // converts '2026-5-15' or '2026-05-15' to integer YYYYMMDD for comparison
+  if(!dateStr)return 0;
+  var p=dateStr.split('-');
+  return parseInt(p[0])*10000+parseInt(p[1])*100+parseInt(p[2]);
+}
+function _to12h(time24){
+  if(!time24)return '';
+  var p=time24.split(':');
+  var h=parseInt(p[0]),m=parseInt(p[1]||0);
+  var ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  return h+':'+(m<10?'0':'')+m+' '+ampm;
+}
 // ===================== RENDER CLIENTS =====================
 function renderClients(filter='',status=''){
   const tbody=document.getElementById('clients-tbody');
@@ -2356,57 +3265,299 @@ function renderClients(filter='',status=''){
 }
 function filterClients(v){renderClients(v);}
 function filterClientsByStatus(v){renderClients('',v);}
-function deleteClient(id){if(confirm('Remove this client?')){const i=clientsData.findIndex(c=>c.id===id);if(i>-1){clientsData.splice(i,1);renderClients();}}}
+function deleteClient(id){
+  var c=clientsData.find(function(x){return x.id===id;});
+  var name=c?c.fname+' '+c.lname:'this client';
+  confirmDelete('Delete '+name+'? This cannot be undone.',function(){
+    var i=clientsData.findIndex(function(x){return x.id===id;});
+    if(i>-1){clientsData.splice(i,1);saveData();renderClients();showToast('Client deleted','success');}
+  });
+}
+var _acpTasks=[];
+var _acpProjects=[];
+var _acpTaskFilter='all';
+var _acpStatusMap={Active:'ts-active',Started:'ts-started',Doing:'ts-doing',Done:'ts-done',On:'ts-on'};
+var _acpStatusLabel={Active:'Active',Started:'Started',Doing:'Doing',Done:'Done',On:'On Hold'};
+
+function openAddClientPanel(){
+  ['acp-fname','acp-lname','acp-company','acp-email','acp-phone','acp-website','acp-address','acp-tags','acp-notes'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  var valEl=document.getElementById('acp-value');if(valEl)valEl.value='';
+  var paidEl=document.getElementById('acp-paid');if(paidEl)paidEl.value='';
+  var owedEl=document.getElementById('acp-owed');if(owedEl)owedEl.textContent='$0';
+  var stEl=document.getElementById('acp-status');if(stEl)stEl.value='Lead';
+  var indEl=document.getElementById('acp-industry');if(indEl)indEl.selectedIndex=0;
+  _acpTasks=[];_acpProjects=[];_acpTaskFilter='all';
+  _acpRenderTasks();_acpRenderProjects();
+  var fc=document.querySelectorAll('#acp-task-filters .tf-chip');
+  fc.forEach(function(c,i){c.classList.toggle('active',i===0);});
+  openPanel('add-client-panel');
+}
+function closeAddClientPanel(){
+  var p=document.getElementById('add-client-panel');
+  if(p)p.classList.remove('open');
+  document.getElementById('detail-overlay').classList.remove('open');
+}
+function acpRecalcOwed(){
+  var v=parseFloat(document.getElementById('acp-value').value)||0;
+  var p=parseFloat(document.getElementById('acp-paid').value)||0;
+  var owed=Math.max(0,v-p);
+  document.getElementById('acp-owed').textContent='$'+owed.toLocaleString();
+}
+function acpAddTask(){
+  var inp=document.getElementById('acp-task-input');
+  var sel=document.getElementById('acp-task-status');
+  var title=inp.value.trim();if(!title)return;
+  _acpTasks.push({id:Date.now(),title:title,status:sel.value,done:false});
+  inp.value='';sel.value='Active';
+  _acpRenderTasks();
+}
+function acpAddProject(){
+  var inp=document.getElementById('acp-proj-input');
+  var sel=document.getElementById('acp-proj-status');
+  var title=inp.value.trim();if(!title)return;
+  _acpProjects.push({id:Date.now(),title:title,status:sel.value,done:false});
+  inp.value='';sel.value='Active';
+  _acpRenderProjects();
+}
+function acpDeleteTask(id){_acpTasks=_acpTasks.filter(function(t){return t.id!==id;});_acpRenderTasks();}
+function acpDeleteProject(id){_acpProjects=_acpProjects.filter(function(p){return p.id!==id;});_acpRenderProjects();}
+function acpToggleTask(id){var t=_acpTasks.find(function(x){return x.id===id;});if(t){t.done=!t.done;if(t.done)t.status='Done';else t.status='Active';}_acpRenderTasks();}
+function filterAcpTasks(f,el){
+  _acpTaskFilter=f;
+  document.querySelectorAll('#acp-task-filters .tf-chip').forEach(function(c){c.classList.remove('active');});
+  if(el)el.classList.add('active');
+  _acpRenderTasks();
+}
+function _acpRenderTasks(){
+  var list=document.getElementById('acp-task-list');
+  var count=document.getElementById('acp-task-count');
+  var tasks=_acpTaskFilter==='all'?_acpTasks:_acpTasks.filter(function(t){return t.status===_acpTaskFilter;});
+  var done=_acpTasks.filter(function(t){return t.done;}).length;
+  if(count)count.textContent=_acpTasks.length+'/'+done+' DONE';
+  if(!list)return;
+  if(!tasks.length){list.innerHTML='<div style="text-align:center;padding:20px 0;color:var(--text-3);font-size:12px">No tasks yet — type one below and press <strong>+</strong></div>';return;}
+  list.innerHTML=tasks.map(function(t){
+    var sc=_acpStatusMap[t.status]||'ts-active';
+    var sl=_acpStatusLabel[t.status]||t.status;
+    return '<div class="task-check-item'+(t.done?' done-task':'')+'">'+
+      '<div class="task-check-cb'+(t.done?' checked':'')+'" onclick="acpToggleTask('+t.id+')">'+(t.done?'<svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="1.5" fill="none"/></svg>':'')+'</div>'+
+      '<span class="task-check-title">'+t.title+'</span>'+
+      '<button class="task-status-pill '+sc+'">'+sl+'</button>'+
+      '<button class="task-del-btn" onclick="acpDeleteTask('+t.id+')" style="opacity:1">✕</button>'+
+      '</div>';
+  }).join('');
+}
+function _acpRenderProjects(){
+  var list=document.getElementById('acp-proj-list');
+  var count=document.getElementById('acp-proj-count');
+  if(count)count.textContent=_acpProjects.length?_acpProjects.length+' total':'';
+  if(!list)return;
+  if(!_acpProjects.length){list.innerHTML='<div style="text-align:center;padding:20px 0;color:var(--text-3);font-size:12px">No tasks yet — type one below and press <strong>+</strong></div>';return;}
+  list.innerHTML=_acpProjects.map(function(p){
+    var sc=_acpStatusMap[p.status]||'ts-active';
+    var sl=_acpStatusLabel[p.status]||p.status;
+    return '<div class="task-check-item">'+
+      '<div class="task-check-cb" style="border-radius:4px"></div>'+
+      '<span class="task-check-title">'+p.title+'</span>'+
+      '<button class="task-status-pill '+sc+'">'+sl+'</button>'+
+      '<button class="task-del-btn" onclick="acpDeleteProject('+p.id+')" style="opacity:1">✕</button>'+
+      '</div>';
+  }).join('');
+}
 function addClient(){
   const c={
     id:Date.now(),
-    fname:document.getElementById('client-fname').value||'New',
-    lname:document.getElementById('client-lname').value||'Client',
-    company:document.getElementById('client-company').value||'—',
-    email:document.getElementById('client-email').value||'—',
-    phone:document.getElementById('client-phone').value||'—',
-    industry:document.getElementById('client-industry').value,
-    status:document.getElementById('client-status').value,
-    value:+document.getElementById('client-value').value||0,
-    paid:+document.getElementById('client-paid').value||0,
-    owed:0
+    fname:document.getElementById('acp-fname').value||'New',
+    lname:document.getElementById('acp-lname').value||'Client',
+    company:document.getElementById('acp-company').value||'—',
+    email:document.getElementById('acp-email').value||'—',
+    phone:document.getElementById('acp-phone').value||'—',
+    website:document.getElementById('acp-website').value||'—',
+    address:document.getElementById('acp-address').value||'—',
+    tags:document.getElementById('acp-tags').value||'',
+    notes:document.getElementById('acp-notes').value||'',
+    industry:document.getElementById('acp-industry').value,
+    status:document.getElementById('acp-status').value,
+    value:+document.getElementById('acp-value').value||0,
+    paid:+document.getElementById('acp-paid').value||0,
+    owed:0,
+    tasks:_acpTasks.slice(),
+    projects:_acpProjects.slice()
   };
   c.owed=Math.max(0,c.value-c.paid);
   clientsData.unshift(c);
-  closeModal('add-client-modal');
+  // Auto-add a task card for this new client in the first task column
+  tasksData.unshift({id:Date.now(),title:'New client: '+c.fname+' '+c.lname,client:c.company!=='—'?c.company:c.fname+' '+c.lname,priority:'🟡 Medium',assigned:'AK',due:'',stage:taskStages[0]||'New'});
+  saveData();
+  closeAddClientPanel();
   navigate('clients');
   showToast('Client added successfully!','success');
 }
 // ===================== RENDER LEADS =====================
 function renderLeads(){
   const board=document.getElementById('leads-board');
-  board.innerHTML=leadStages.map(stage=>{
+  board.innerHTML=leadStages.map((stage,idx)=>{
     const cards=leadsData.filter(l=>l.stage===stage);
-    const isProspect=stage==='Prospect';
-    const colStyle=isProspect?'border:2px solid rgba(245,158,11,.4);background:rgba(245,158,11,.04)':'';
-    const headerStyle=isProspect?'background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.3)':'';
-    const titleStyle=isProspect?'color:#f59e0b;font-size:13px;font-weight:700':'';
-    const icon=isProspect?'⭐ ':'';
-    return `<div class="kanban-col" data-stage="${stage}" style="${colStyle}">
-      <div class="kanban-col-header" style="${headerStyle}">
-        <span class="kanban-col-title" style="${titleStyle}">${icon}${stage}</span>
+    return `<div class="kanban-col" data-stage="${stage}">
+      <div class="kanban-col-header" style="gap:6px">
+        <span class="kanban-col-title" id="lsh-${idx}" style="flex:1;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Click to rename" onclick="startKanbanEdit('lead',${idx},this)">${stage}</span>
         <span class="kanban-col-count">${cards.length}</span>
+        <button onclick="deleteKanbanCol('lead',${idx})" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px;padding:0 2px;line-height:1;transition:color var(--transition)" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--text-3)'" title="Delete column">✕</button>
       </div>
       <div class="kanban-cards" id="leads-col-${stage.replace(/\s/g,'_')}" ondragover="dragOver(event)" ondrop="dropLead(event,'${stage}')">
-        ${cards.map(l=>`<div class="kanban-card" draggable="true" data-id="${l.id}" ondragstart="dragStart(event,${l.id},'lead')" onclick="openLeadDetail(${l.id})" style="${isProspect?'border-left:3px solid #f59e0b':''}">
-          <div class="kanban-card-title">${l.name}</div>
-          <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${l.company} · ${l.source||'Google Maps'}</div>
+        ${cards.map(l=>`<div class="kanban-card" draggable="true" data-id="${l.id}" ondragstart="dragStart(event,${l.id},'lead')" onclick="openLeadDetail(${l.id})" style="position:relative">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+            <div class="kanban-card-title" style="margin-bottom:0;flex:1">${l.name}</div>
+            <div style="position:relative;flex-shrink:0" onclick="event.stopPropagation()">
+              <button class="icon-btn" style="width:24px;height:24px;font-size:14px;color:var(--text-3);padding:0" onclick="toggleLeadMenu(${l.id},this)">⋯</button>
+              <div id="lead-menu-${l.id}" style="display:none;position:absolute;top:28px;right:0;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;min-width:130px;box-shadow:var(--shadow);z-index:300">
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;color:var(--danger);transition:background var(--transition)" onmouseover="this.style.background='var(--danger-soft)'" onmouseout="this.style.background=''" onclick="confirmDeleteLead(${l.id})">🗑 Delete Lead</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-2);margin:6px 0 8px">${l.company} · ${l.source||'Google Maps'}</div>
           <div class="kanban-card-meta">
             <span class="badge badge-success" style="font-size:10px">$${(l.value/1000).toFixed(0)}K</span>
             <div class="avatar avatar-sm" style="width:20px;height:20px;font-size:8px">${l.assigned}</div>
             ${(leadTasks[l.id]||[]).length?`<span style="font-size:10px;color:var(--text-3)">📋 ${(leadTasks[l.id]||[]).filter(t=>t.status==='Done').length}/${(leadTasks[l.id]||[]).length}</span>`:''}
           </div>
-          ${isProspect?`<button class="btn btn-secondary btn-sm" style="margin-top:8px;width:100%;font-size:11px" onclick="event.stopPropagation();promoteProspect(${l.id})">→ Move to New Lead</button>`:''}
-          ${stage==='Closed Won'?'<button class="btn btn-primary btn-sm w-full mt-2" style="margin-top:8px;width:100%" onclick="event.stopPropagation();convertLead('+l.id+')">→ Convert to Client</button>':''}
+          ${stage==='Prospects'?'<button class="btn btn-primary btn-sm w-full mt-2" style="margin-top:8px;width:100%" onclick="event.stopPropagation();convertLead('+l.id+')">→ Convert to Client</button>':''}
         </div>`).join('')}
       </div>
     </div>`;
-  }).join('');
+  }).join('')+`<div style="display:flex;align-items:flex-start;padding-top:2px">
+    <button onclick="addKanbanCol('lead')" style="min-width:44px;height:38px;background:var(--bg-elevated);border:1px dashed var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text-3);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-3)'" title="Add column">+</button>
+  </div>`;
+}
+// ===== KANBAN COLUMN MENU =====
+function toggleKanbanColMenu(menuId,btn){
+  var menu=document.getElementById(menuId);
+  if(!menu)return;
+  var isOpen=menu.classList.contains('open');
+  closeAllDropdowns();
+  if(!isOpen){
+    // populate delete list
+    var type=menuId.startsWith('lead')?'lead':menuId.startsWith('task')?'task':'project';
+    var arr=type==='lead'?leadStages:type==='task'?taskStages:projStatuses;
+    var listId=type==='lead'?'lead-col-delete-list':type==='task'?'task-col-delete-list':'proj-col-delete-list';
+    var list=document.getElementById(listId);
+    if(list){
+      list.innerHTML=arr.map(function(name,idx){
+        return '<div class="dropdown-item" style="color:var(--danger)" onclick="deleteKanbanCol(\''+type+'\','+idx+');closeAllDropdowns()">🗑 '+name+'</div>';
+      }).join('');
+    }
+    menu.classList.add('open');
+    setTimeout(function(){
+      function outside(e){if(!menu.contains(e.target)&&e.target!==btn){closeAllDropdowns();document.removeEventListener('click',outside);}}
+      document.addEventListener('click',outside);
+    },0);
+  }
+}
+function closeAllDropdowns(){
+  document.querySelectorAll('.dropdown-menu').forEach(function(m){m.classList.remove('open');});
+}
+// ===== KANBAN COLUMN EDIT / ADD / DELETE =====
+function startKanbanEdit(type,idx,el){
+  var arr=type==='lead'?leadStages:type==='task'?taskStages:projStatuses;
+  var current=arr[idx];
+  var input=document.createElement('input');
+  input.value=current;
+  input.style.cssText='background:var(--bg-input);border:1px solid var(--accent);border-radius:4px;color:var(--text-1);font-size:12px;font-weight:600;font-family:inherit;outline:none;padding:2px 6px;width:100%;min-width:0';
+  el.replaceWith(input);
+  input.focus();input.select();
+  function save(){
+    var newName=input.value.trim();
+    if(newName&&newName!==current){
+      if(type==='lead'){
+        leadStages[idx]=newName;
+        leadsData.forEach(function(l){if(l.stage===current)l.stage=newName;});
+        saveData();renderLeads();
+      } else if(type==='task'){
+        taskStages[idx]=newName;
+        tasksData.forEach(function(t){if(t.stage===current)t.stage=newName;});
+        saveData();renderTasksPage();
+      } else {
+        projStatuses[idx]=newName;
+        projectsData.forEach(function(p){if(p.status===current)p.status=newName;});
+        saveData();renderProjects();renderProjectsList();
+      }
+    } else {
+      if(type==='lead')renderLeads();
+      else if(type==='task')renderTasksPage();
+      else renderProjects();
+    }
+  }
+  input.addEventListener('blur',save);
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){e.preventDefault();input.blur();}
+    if(e.key==='Escape'){input.removeEventListener('blur',save);type==='lead'?renderLeads():renderProjects();}
+  });
+}
+function addKanbanCol(type){
+  var name=prompt('New column name:');
+  if(!name||!name.trim())return;
+  name=name.trim();
+  if(type==='lead'){
+    if(leadStages.indexOf(name)===-1){leadStages.push(name);renderLeads();}
+    else showToast('Column already exists','danger');
+  } else if(type==='task'){
+    if(taskStages.indexOf(name)===-1){taskStages.push(name);renderTasksPage();}
+    else showToast('Column already exists','danger');
+  } else {
+    if(projStatuses.indexOf(name)===-1){projStatuses.push(name);renderProjects();}
+    else showToast('Column already exists','danger');
+  }
+}
+function deleteKanbanCol(type,idx){
+  var arr=type==='lead'?leadStages:type==='task'?taskStages:projStatuses;
+  var name=arr[idx];
+  var count=type==='lead'
+    ?leadsData.filter(function(l){return l.stage===name;}).length
+    :type==='task'
+    ?tasksData.filter(function(t){return t.stage===name;}).length
+    :projectsData.filter(function(p){return p.status===name;}).length;
+  var msg='Delete "'+name+'" column?'+(count?' '+count+' item(s) will move to the first column.':'');
+  confirmDelete(msg,function(){
+    if(type==='lead'){
+      var fallback=leadStages[idx===0?1:0]||'New Lead';
+      leadsData.forEach(function(l){if(l.stage===name)l.stage=fallback;});
+      leadStages.splice(idx,1);
+      saveData();renderLeads();
+    } else if(type==='task'){
+      var fallback=taskStages[idx===0?1:0]||'New';
+      tasksData.forEach(function(t){if(t.stage===name)t.stage=fallback;});
+      taskStages.splice(idx,1);
+      saveData();renderTasksPage();
+    } else {
+      var fallback=projStatuses[idx===0?1:0]||'Not Started';
+      projectsData.forEach(function(p){if(p.status===name)p.status=fallback;});
+      projStatuses.splice(idx,1);
+      saveData();renderProjects();renderProjectsList();
+    }
+  });
+}
+function toggleLeadMenu(id,btn){
+  var menu=document.getElementById('lead-menu-'+id);
+  if(!menu)return;
+  var isOpen=menu.style.display==='block';
+  // close all open menus first
+  document.querySelectorAll('[id^="lead-menu-"]').forEach(function(m){m.style.display='none';});
+  menu.style.display=isOpen?'none':'block';
+  if(!isOpen){
+    function closeMenu(e){if(!menu.contains(e.target)&&e.target!==btn){menu.style.display='none';document.removeEventListener('click',closeMenu);}}
+    setTimeout(function(){document.addEventListener('click',closeMenu);},0);
+  }
+}
+function confirmDeleteLead(id){
+  document.querySelectorAll('[id^="lead-menu-"]').forEach(function(m){m.style.display='none';});
+  var lead=leadsData.find(function(l){return l.id===id;});
+  var name=lead?lead.name:'this lead';
+  confirmDelete('Delete "'+name+'\"? This cannot be undone.',function(){
+    var i=leadsData.findIndex(function(l){return l.id===id;});
+    if(i>-1){leadsData.splice(i,1);saveData();renderLeads();showToast('Lead deleted','success');}
+  });
 }
 let dragId=null,dragType=null;
 function dragStart(e,id,type){dragId=id;dragType=type;e.currentTarget.classList.add('dragging');}
@@ -2416,7 +3567,7 @@ function dropLead(e,stage){
   document.querySelectorAll('.kanban-card.dragging').forEach(c=>c.classList.remove('dragging'));
   if(dragType==='lead'){
     const lead=leadsData.find(l=>l.id===dragId);
-    if(lead){lead.stage=stage;renderLeads();}
+    if(lead){lead.stage=stage;saveData();renderLeads();}
   }
 }
 function convertLead(id){
@@ -2424,25 +3575,122 @@ function convertLead(id){
   if(!lead)return;
   clientsData.unshift({id:Date.now(),fname:lead.name.split(' ')[0],lname:lead.name.split(' ').slice(1).join(' '),company:lead.company,email:lead.email,phone:'—',industry:'Tech',status:'Active',value:lead.value,paid:0,owed:lead.value});
   leadsData.splice(leadsData.indexOf(lead),1);
+  saveData();
   renderLeads();
   showToast('Lead converted to client!','success');
 }
+var _alpTasks=[];
+var _alpProjects=[];
+var _alpTaskFilter='all';
+
+function openAddLeadPanel(){
+  ['alp-name','alp-company','alp-email','alp-phone','alp-notes'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  var valEl=document.getElementById('alp-value');if(valEl)valEl.value='';
+  var stEl=document.getElementById('alp-stage');if(stEl)stEl.value='Prospects';
+  var srcEl=document.getElementById('alp-source');if(srcEl)srcEl.selectedIndex=0;
+  var asEl=document.getElementById('alp-assigned');if(asEl)asEl.selectedIndex=0;
+  _alpTasks=[];_alpProjects=[];_alpTaskFilter='all';
+  _alpRenderTasks();_alpRenderProjects();
+  document.querySelectorAll('#alp-task-filters .tf-chip').forEach(function(c,i){c.classList.toggle('active',i===0);});
+  openPanel('add-lead-panel');
+}
+function closeAddLeadPanel(){
+  var p=document.getElementById('add-lead-panel');
+  if(p)p.classList.remove('open');
+  document.getElementById('detail-overlay').classList.remove('open');
+}
+function alpAddTask(){
+  var inp=document.getElementById('alp-task-input');
+  var sel=document.getElementById('alp-task-status');
+  var title=inp.value.trim();if(!title)return;
+  _alpTasks.push({id:Date.now(),title:title,status:sel.value,done:false});
+  inp.value='';sel.value='Active';_alpRenderTasks();
+}
+function alpAddProject(){
+  var inp=document.getElementById('alp-proj-input');
+  var sel=document.getElementById('alp-proj-status');
+  var title=inp.value.trim();if(!title)return;
+  _alpProjects.push({id:Date.now(),title:title,status:sel.value,done:false});
+  inp.value='';sel.value='Active';_alpRenderProjects();
+}
+function alpDeleteTask(id){_alpTasks=_alpTasks.filter(function(t){return t.id!==id;});_alpRenderTasks();}
+function alpDeleteProject(id){_alpProjects=_alpProjects.filter(function(p){return p.id!==id;});_alpRenderProjects();}
+function alpToggleTask(id){var t=_alpTasks.find(function(x){return x.id===id;});if(t){t.done=!t.done;t.status=t.done?'Done':'Active';}_alpRenderTasks();}
+function filterAlpTasks(f,el){
+  _alpTaskFilter=f;
+  document.querySelectorAll('#alp-task-filters .tf-chip').forEach(function(c){c.classList.remove('active');});
+  if(el)el.classList.add('active');
+  _alpRenderTasks();
+}
+function _alpRenderTasks(){
+  var list=document.getElementById('alp-task-list');
+  var count=document.getElementById('alp-task-count');
+  var tasks=_alpTaskFilter==='all'?_alpTasks:_alpTasks.filter(function(t){return t.status===_alpTaskFilter;});
+  var done=_alpTasks.filter(function(t){return t.done;}).length;
+  if(count)count.textContent=_alpTasks.length+'/'+done+' DONE';
+  if(!list)return;
+  if(!tasks.length){list.innerHTML='<div style="text-align:center;padding:20px 0;color:var(--text-3);font-size:12px">No tasks yet — type one below and press <strong>+</strong></div>';return;}
+  var sm=_acpStatusMap||{Active:'ts-active',Started:'ts-started',Doing:'ts-doing',Done:'ts-done',On:'ts-on'};
+  var sl=_acpStatusLabel||{Active:'Active',Started:'Started',Doing:'Doing',Done:'Done',On:'On Hold'};
+  list.innerHTML=tasks.map(function(t){
+    return '<div class="task-check-item'+(t.done?' done-task':'')+'">'+
+      '<div class="task-check-cb'+(t.done?' checked':'')+'" onclick="alpToggleTask('+t.id+')">'+(t.done?'<svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="1.5" fill="none"/></svg>':'')+'</div>'+
+      '<span class="task-check-title">'+t.title+'</span>'+
+      '<button class="task-status-pill '+(sm[t.status]||'ts-active')+'">'+( sl[t.status]||t.status)+'</button>'+
+      '<button class="task-del-btn" onclick="alpDeleteTask('+t.id+')" style="opacity:1">✕</button>'+
+      '</div>';
+  }).join('');
+}
+function _alpRenderProjects(){
+  var list=document.getElementById('alp-proj-list');
+  var count=document.getElementById('alp-proj-count');
+  if(count)count.textContent=_alpProjects.length?_alpProjects.length+' total':'';
+  if(!list)return;
+  if(!_alpProjects.length){list.innerHTML='<div style="text-align:center;padding:20px 0;color:var(--text-3);font-size:12px">No tasks yet — type one below and press <strong>+</strong></div>';return;}
+  var sm=_acpStatusMap||{Active:'ts-active',Started:'ts-started',Doing:'ts-doing',Done:'ts-done',On:'ts-on'};
+  var sl=_acpStatusLabel||{Active:'Active',Started:'Started',Doing:'Doing',Done:'Done',On:'On Hold'};
+  list.innerHTML=_alpProjects.map(function(p){
+    return '<div class="task-check-item">'+
+      '<div class="task-check-cb" style="border-radius:4px"></div>'+
+      '<span class="task-check-title">'+p.title+'</span>'+
+      '<button class="task-status-pill '+(sm[p.status]||'ts-active')+'">'+(sl[p.status]||p.status)+'</button>'+
+      '<button class="task-del-btn" onclick="alpDeleteProject('+p.id+')" style="opacity:1">✕</button>'+
+      '</div>';
+  }).join('');
+}
 function addLead(){
-  const l={id:Date.now(),name:document.getElementById('lead-name').value||'New Lead',company:document.getElementById('lead-company').value||'—',email:document.getElementById('lead-email').value||'—',source:document.getElementById('lead-source').value,value:+document.getElementById('lead-value').value||0,stage:document.getElementById('lead-stage').value,assigned:'AK'};
+  const l={
+    id:Date.now(),
+    name:document.getElementById('alp-name').value||'New Lead',
+    company:document.getElementById('alp-company').value||'—',
+    email:document.getElementById('alp-email').value||'—',
+    phone:document.getElementById('alp-phone').value||'—',
+    source:document.getElementById('alp-source').value,
+    assigned:document.getElementById('alp-assigned').value,
+    value:+document.getElementById('alp-value').value||0,
+    stage:document.getElementById('alp-stage').value,
+    notes:document.getElementById('alp-notes').value||'',
+    tasks:_alpTasks.slice(),
+    projects:_alpProjects.slice()
+  };
   leadsData.unshift(l);
-  closeModal('add-lead-modal');
+  saveData();
+  closeAddLeadPanel();
   navigate('leads');
   showToast('Lead added!','success');
 }
 // ===================== RENDER PROJECTS =====================
 function renderProjects(){
   const board=document.getElementById('projects-kanban');
-  board.innerHTML=projStatuses.map(status=>{
+  board.innerHTML=projStatuses.map((status,idx)=>{
     const cards=projectsData.filter(p=>p.status===status);
     return `<div class="kanban-col">
-      <div class="kanban-col-header">
-        <span class="kanban-col-title">${status}</span>
+      <div class="kanban-col-header" style="gap:6px">
+        <span class="kanban-col-title" id="psh-${idx}" style="flex:1;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Click to rename" onclick="startKanbanEdit('project',${idx},this)">${status}</span>
         <span class="kanban-col-count">${cards.length}</span>
+        <button onclick="deleteKanbanCol('project',${idx})" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px;padding:0 2px;line-height:1;transition:color var(--transition)" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--text-3)'" title="Delete column">✕</button>
       </div>
       <div class="kanban-cards">
         ${cards.map(p=>`<div class="kanban-card" style="cursor:pointer" onclick="openProjectDetail(${p.id})">
@@ -2458,6 +3706,9 @@ function renderProjects(){
       </div>
     </div>`;
   }).join('');
++`<div style="display:flex;align-items:flex-start;padding-top:2px">
+    <button onclick="addKanbanCol('project')" style="min-width:44px;height:38px;background:var(--bg-elevated);border:1px dashed var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text-3);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-3)'" title="Add column">+</button>
+  </div>`;
 }
 function renderProjectsList(){
   const tbody=document.getElementById('projects-list-tbody');
@@ -2487,44 +3738,287 @@ function renderGantt(){
 function addProject(){
   const p={id:Date.now(),name:document.getElementById('proj-name').value||'New Project',client:document.getElementById('proj-client').value||'—',status:document.getElementById('proj-status').value,progress:0,budget:+document.getElementById('proj-budget').value||0,deadline:document.getElementById('proj-deadline').value||'2026-12-31',team:['AK']};
   projectsData.unshift(p);
+  saveData();
   closeModal('add-project-modal');
   navigate('projects');
   showToast('Project created!','success');
 }
 // ===================== RENDER TASKS PAGE =====================
 function renderTasksPage(){
-  const tbody=document.getElementById('tasks-tbody');
-  tbody.innerHTML=tasksData.map(t=>`<tr>
-    <td><div style="font-size:13px;font-weight:500">${t.title}</div></td>
-    <td style="font-size:12px;color:var(--text-2)">${t.project}</td>
-    <td style="font-size:13px">${t.priority}</td>
-    <td><div class="avatar avatar-sm" style="width:24px;height:24px;font-size:9px">${t.assigned}</div></td>
-    <td style="font-size:12px;color:${new Date(t.due)<new Date()?'var(--danger)':'var(--text-2)'}">${t.due}</td>
-    <td><span class="badge ${statusColors[t.status]||'badge-gray'} badge-dot">${t.status}</span></td>
-    <td><button class="btn btn-ghost btn-sm" onclick="deleteTask(${t.id})">🗑</button></td>
-  </tr>`).join('');
+  var board=document.getElementById('tasks-board');
+  if(!board)return;
+  board.innerHTML=taskStages.map(function(stage,idx){
+    var cards=tasksData.filter(function(t){return t.stage===stage;});
+    return '<div class="kanban-col" data-stage="'+stage+'">'+
+      '<div class="kanban-col-header" style="gap:6px">'+
+        '<span class="kanban-col-title" id="tsh-'+idx+'" style="flex:1;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Click to rename" onclick="startKanbanEdit(\'task\','+idx+',this)">'+stage+'</span>'+
+        '<span class="kanban-col-count">'+cards.length+'</span>'+
+        '<button onclick="deleteKanbanCol(\'task\','+idx+')" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px;padding:0 2px;line-height:1;transition:color var(--transition)" onmouseover="this.style.color=\'var(--danger)\'" onmouseout="this.style.color=\'var(--text-3)\'" title="Delete column">✕</button>'+
+      '</div>'+
+      '<div class="kanban-cards" id="tasks-col-'+stage.replace(/\s/g,'_')+'" ondragover="dragOver(event)" ondrop="dropTask(event,\''+stage+'\')">'+
+        (cards.length?cards.map(function(t){
+          var overdue=t.due&&new Date(t.due)<new Date()&&stage!=='Done';
+          var prioColor=t.priority&&t.priority.includes('🔴')?'var(--danger)':t.priority&&t.priority.includes('🟡')?'var(--warning)':'var(--success)';
+          return '<div class="kanban-card" draggable="true" data-id="'+t.id+'" ondragstart="dragStart(event,'+t.id+',\'task\')" style="position:relative">'+
+            '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px">'+
+              '<div class="kanban-card-title" style="margin-bottom:0;flex:1;font-size:13px;font-weight:600">'+t.title+'</div>'+
+              '<div onclick="event.stopPropagation()" style="position:relative;flex-shrink:0">'+
+                '<button class="icon-btn" style="width:22px;height:22px;font-size:14px;color:var(--text-3);padding:0" onclick="toggleTaskMenu('+t.id+',this)">⋯</button>'+
+                '<div id="task-menu-'+t.id+'" style="display:none;position:absolute;top:26px;right:0;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;min-width:130px;box-shadow:var(--shadow);z-index:300">'+
+                  '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;color:var(--danger)" onmouseover="this.style.background=\'var(--danger-soft)\'" onmouseout="this.style.background=\'\'" onclick="deleteTask('+t.id+')">🗑 Delete</div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+            '<div style="font-size:11px;color:var(--text-2);margin-bottom:8px">'+( t.client||'General')+'</div>'+
+            '<div class="kanban-card-meta">'+
+              '<span style="font-size:11px;font-weight:700;color:'+prioColor+'">'+( t.priority||'')+'</span>'+
+              '<div class="avatar avatar-sm" style="width:20px;height:20px;font-size:8px">'+t.assigned+'</div>'+
+              (t.due?'<span style="font-size:10px;color:'+(overdue?'var(--danger)':'var(--text-3)')+'">📅 '+t.due.slice(5)+'</span>':'')+'</div>'+
+          '</div>';
+        }).join(''):'<div style="text-align:center;padding:20px 0;color:var(--text-3);font-size:12px">No tasks yet</div>')+
+      '</div>'+
+    '</div>';
+  }).join('')+
+  '<div style="display:flex;align-items:flex-start;padding-top:2px">'+
+    '<button onclick="addKanbanCol(\'task\')" style="min-width:44px;height:38px;background:var(--bg-elevated);border:1px dashed var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text-3);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--transition)" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text-3)\'" title="Add column">+</button>'+
+  '</div>';
 }
-function deleteTask(id){const i=tasksData.findIndex(t=>t.id===id);if(i>-1){tasksData.splice(i,1);renderTasksPage();}}
+function toggleTaskMenu(id,btn){
+  var menu=document.getElementById('task-menu-'+id);
+  if(!menu)return;
+  var isOpen=menu.style.display==='block';
+  document.querySelectorAll('[id^="task-menu-"]').forEach(function(m){m.style.display='none';});
+  menu.style.display=isOpen?'none':'block';
+  if(!isOpen){
+    function closeMenu(e){if(!menu.contains(e.target)&&e.target!==btn){menu.style.display='none';document.removeEventListener('click',closeMenu);}}
+    setTimeout(function(){document.addEventListener('click',closeMenu);},0);
+  }
+}
+function dropTask(e,stage){
+  e.preventDefault();
+  document.querySelectorAll('.kanban-card.dragging').forEach(function(c){c.classList.remove('dragging');});
+  if(dragType==='task'){
+    var t=tasksData.find(function(x){return x.id===dragId;});
+    if(t){t.stage=stage;saveData();renderTasksPage();}
+  }
+  dragId=null;dragType=null;
+}
+function deleteTask(id){
+  document.querySelectorAll('[id^="task-menu-"]').forEach(function(m){m.style.display='none';});
+  var t=tasksData.find(function(x){return x.id===id;});
+  confirmDelete('Delete'+(t?' "'+t.title+'"':' task')+'? This cannot be undone.',function(){
+    var i=tasksData.findIndex(function(x){return x.id===id;});
+    if(i>-1){tasksData.splice(i,1);saveData();renderTasksPage();}
+  });
+}
+var _atpOpen=false;
+var _atpSubtasks=[];
+var _atpDelivs=[];
+function openAddTaskPanel(prefillClient){
+  var p=document.getElementById('add-task-panel');
+  if(p){
+    document.getElementById('atp-title').value='';
+    document.getElementById('atp-client').value=prefillClient||'';
+    document.getElementById('atp-assigned').value='AK';
+    document.getElementById('atp-priority').value='🟡 Medium';
+    document.getElementById('atp-due').value='';
+    var notesEl=document.getElementById('atp-notes');if(notesEl)notesEl.value='';
+    var sel=document.getElementById('atp-stage');
+    sel.innerHTML=taskStages.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join('');
+    sel.value=taskStages[0]||'New';
+    _atpSubtasks=[];_atpDelivs=[];
+    renderAtpSubtasks('all');renderAtpDelivs();
+    document.getElementById('atp-subtask-input').value='';
+    document.getElementById('atp-deliv-input').value='';
+    var statusEl=document.getElementById('atp-status');if(statusEl)statusEl.value='Active';
+    var hoursEl=document.getElementById('atp-hours');if(hoursEl)hoursEl.value='';
+    var startEl=document.getElementById('atp-start');if(startEl)startEl.value='';
+    var tagsEl=document.getElementById('atp-tags');if(tagsEl)tagsEl.value='';
+    openPanel('add-task-panel');
+  }
+}
+function atpAddSubtask(){
+  var inp=document.getElementById('atp-subtask-input');
+  var txt=inp.value.trim();if(!txt)return;
+  var status=document.getElementById('atp-subtask-status').value;
+  _atpSubtasks.push({id:Date.now(),title:txt,status:status,done:false});
+  inp.value='';
+  renderAtpSubtasks('all');
+  // reset filter chips to All
+  document.querySelectorAll('#atp-subtask-filters .tf-chip').forEach(function(c,i){c.classList.toggle('active',i===0);});
+  _atpSubtaskUpdateCount();
+}
+function _atpSubtaskUpdateCount(){
+  var done=_atpSubtasks.filter(function(s){return s.done;}).length;
+  var el=document.getElementById('atp-subtask-count');
+  if(el)el.textContent=_atpSubtasks.length+'/'+done+' DONE';
+}
+function renderAtpSubtasks(filter){
+  var list=document.getElementById('atp-subtask-list');
+  if(!list)return;
+  var shown=filter==='all'?_atpSubtasks:_atpSubtasks.filter(function(s){return s.status===filter;});
+  if(shown.length===0){list.innerHTML='<div style="text-align:center;padding:16px 0;color:var(--text-3);font-size:13px">No sub-tasks yet — type one below and press +</div>';return;}
+  var stClass={Active:'ts-active',Started:'ts-started',Doing:'ts-doing',Done:'ts-done',On:'ts-on'};
+  list.innerHTML=shown.map(function(s){
+    return '<div class="task-check-item'+(s.done?' done-task':'')+'" id="atpst-'+s.id+'">'+
+      '<div class="task-check-cb'+(s.done?' checked':'')+'" onclick="atpToggleSt('+s.id+')"></div>'+
+      '<span class="task-check-title">'+s.title+'</span>'+
+      '<button class="task-status-pill '+(stClass[s.status]||'ts-active')+'" onclick="atpCycleSt('+s.id+')">'+s.status+'</button>'+
+      '<button class="task-del-btn" onclick="atpDelSt('+s.id+')">✕</button>'+
+    '</div>';
+  }).join('');
+  _atpSubtaskUpdateCount();
+}
+function filterAtpSubtasks(f,el){
+  document.querySelectorAll('#atp-subtask-filters .tf-chip').forEach(function(c){c.classList.remove('active');});
+  if(el)el.classList.add('active');
+  renderAtpSubtasks(f);
+}
+function atpToggleSt(id){var s=_atpSubtasks.find(function(x){return x.id===id;});if(s){s.done=!s.done;renderAtpSubtasks('all');document.querySelectorAll('#atp-subtask-filters .tf-chip').forEach(function(c,i){c.classList.toggle('active',i===0);});}}
+function atpCycleSt(id){var s=_atpSubtasks.find(function(x){return x.id===id;});if(!s)return;var sts=['Active','Started','Doing','Done','On'];s.status=sts[(sts.indexOf(s.status)+1)%sts.length];renderAtpSubtasks('all');}
+function atpDelSt(id){_atpSubtasks=_atpSubtasks.filter(function(x){return x.id!==id;});renderAtpSubtasks('all');}
+// Deliverables
+function atpAddDeliv(){
+  var inp=document.getElementById('atp-deliv-input');
+  var txt=inp.value.trim();if(!txt)return;
+  var status=document.getElementById('atp-deliv-status').value;
+  _atpDelivs.push({id:Date.now(),title:txt,status:status,done:false});
+  inp.value='';renderAtpDelivs();
+}
+function renderAtpDelivs(){
+  var list=document.getElementById('atp-deliv-list');if(!list)return;
+  var cnt=document.getElementById('atp-deliv-count');
+  if(_atpDelivs.length===0){
+    list.innerHTML='<div style="text-align:center;padding:16px 0;color:var(--text-3);font-size:13px">No deliverables yet — type one below and press +</div>';
+    if(cnt)cnt.textContent='';return;
+  }
+  var stClass={Active:'ts-active',Started:'ts-started',Doing:'ts-doing',Done:'ts-done',On:'ts-on'};
+  list.innerHTML=_atpDelivs.map(function(s){
+    return '<div class="task-check-item'+(s.done?' done-task':'')+'" id="atpdv-'+s.id+'">'+
+      '<div class="task-check-cb'+(s.done?' checked':'')+'" onclick="atpToggleDv('+s.id+')"></div>'+
+      '<span class="task-check-title">'+s.title+'</span>'+
+      '<button class="task-status-pill '+(stClass[s.status]||'ts-active')+'" onclick="atpCycleDv('+s.id+')">'+s.status+'</button>'+
+      '<button class="task-del-btn" onclick="atpDelDv('+s.id+')">✕</button>'+
+    '</div>';
+  }).join('');
+  var done=_atpDelivs.filter(function(x){return x.done;}).length;
+  if(cnt)cnt.textContent=_atpDelivs.length+'/'+done+' DONE';
+}
+function atpToggleDv(id){var s=_atpDelivs.find(function(x){return x.id===id;});if(s){s.done=!s.done;renderAtpDelivs();}}
+function atpCycleDv(id){var s=_atpDelivs.find(function(x){return x.id===id;});if(!s)return;var sts=['Active','Started','Doing','Done','On'];s.status=sts[(sts.indexOf(s.status)+1)%sts.length];renderAtpDelivs();}
+function atpDelDv(id){_atpDelivs=_atpDelivs.filter(function(x){return x.id!==id;});renderAtpDelivs();}
 function addTask(){
-  tasksData.unshift({id:Date.now(),title:document.getElementById('task-title').value||'New Task',project:'General',priority:document.getElementById('task-priority').value,assigned:'AK',due:document.getElementById('task-due').value||'2026-06-01',status:document.getElementById('task-status').value});
-  closeModal('add-task-modal');
+  var title=document.getElementById('atp-title').value.trim()||'New Task';
+  var notes=(document.getElementById('atp-notes')||{}).value||'';
+  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+  var t={id:Date.now(),title:title,client:g('atp-client')||'General',priority:g('atp-priority'),assigned:g('atp-assigned')||'AK',due:g('atp-due'),stage:g('atp-stage')||taskStages[0],status:g('atp-status')||'Active',hours:g('atp-hours'),start:g('atp-start'),tags:g('atp-tags'),notes:notes,subtasks:_atpSubtasks.slice(),deliverables:_atpDelivs.slice()};
+  tasksData.unshift(t);
+  saveData();
+  closeAddTaskPanel();
   navigate('tasks');
   showToast('Task added!','success');
 }
 // ===================== RENDER INVOICES =====================
 function renderInvoices(){
   const tbody=document.getElementById('invoices-tbody');
-  tbody.innerHTML=invoicesData.map(inv=>`<tr>
+  tbody.innerHTML=invoicesData.map(inv=>`<tr style="cursor:pointer" onclick="openInvoiceDetail('${inv.id}')">
     <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">${inv.id}</td>
     <td style="font-weight:500">${inv.client}</td>
     <td style="font-weight:700">$${inv.amount.toLocaleString()}</td>
     <td><span class="badge ${statusColors[inv.status]||'badge-gray'} badge-dot">${inv.status}</span></td>
     <td style="font-size:12px;color:var(--text-2)">${inv.issued}</td>
     <td style="font-size:12px;color:${new Date(inv.due)<new Date()&&inv.status!=='Paid'?'var(--danger)':'var(--text-2)'}">${inv.due}</td>
-    <td><div class="flex gap-1"><button class="btn btn-ghost btn-sm">👁 View</button><button class="btn btn-ghost btn-sm">📥 PDF</button>${inv.status!=='Paid'?'<button class="btn btn-secondary btn-sm">💌 Remind</button>':''}</div></td>
+    <td onclick="event.stopPropagation()"><div class="flex gap-1">
+      <button class="btn btn-ghost btn-sm" onclick="openInvoiceDetail('${inv.id}')">✏️ Edit</button>
+      <button class="btn btn-ghost btn-sm" style="color:var(--info)" onclick="emailInvoice('${inv.id}')">📧 Email</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmDelete('Delete ${inv.id}?',function(){var i=invoicesData.findIndex(function(x){return x.id=='${inv.id}'});if(i>-1){invoicesData.splice(i,1);saveData();renderInvoices();}showToast('Invoice deleted','success');})">🗑</button>
+    </div></td>
   </tr>`).join('');
 }
-function addInvoice(){closeModal('add-invoice-modal');showToast('Invoice sent!','success');}
+function emailInvoice(invId){
+  var inv=invoicesData.find(function(x){return x.id==invId;});
+  if(!inv)return;
+  var notes=typeof invoiceNotes!=='undefined'&&invoiceNotes[invId]?invoiceNotes[invId]:'Payment is due within 30 days. Thank you for your business.';
+  var body=[
+    'Hi '+inv.client+',',
+    '',
+    'Please find your invoice details below:',
+    '',
+    '─────────────────────────────────',
+    'Invoice #:    '+inv.id,
+    'Amount Due:   $'+Number(inv.amount).toLocaleString(),
+    'Issue Date:   '+(inv.issued||'—'),
+    'Due Date:     '+(inv.due||'—'),
+    '─────────────────────────────────',
+    '',
+    notes,
+    '',
+    'If you have any questions, please don\'t hesitate to reach out.',
+    '',
+    'Best regards,',
+    'Akoni Kessler',
+    'Agency OS'
+  ].join('\n');
+  var modal=document.getElementById('email-inv-modal');
+  modal.dataset.invId=invId;
+  var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val;};
+  set('email-inv-to',inv.email||'');
+  set('email-inv-subject','Invoice '+inv.id+' — $'+Number(inv.amount).toLocaleString()+' Due '+inv.due);
+  set('email-inv-body',body);
+  openModal('email-inv-modal');
+}
+
+function sendEmailInvoice(){
+  var to=document.getElementById('email-inv-to').value.trim();
+  var subject=document.getElementById('email-inv-subject').value.trim();
+  var body=document.getElementById('email-inv-body').value;
+  if(!to){showToast('Please enter a client email address','warning');document.getElementById('email-inv-to').focus();return;}
+  // Save email back to invoice record and flip status to Sent if Draft
+  var modal=document.getElementById('email-inv-modal');
+  var invId=modal.dataset.invId;
+  var inv=invoicesData.find(function(x){return x.id==invId;});
+  if(inv){
+    inv.email=to;
+    if(inv.status==='Draft'){inv.status='Sent';}
+    saveData();
+    renderInvoices();
+  }
+  // Open user's default mail client with pre-filled message
+  var mailtoLink='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  window.location.href=mailtoLink;
+  closeModal('email-inv-modal');
+  showToast('Opening your mail app…','success');
+}
+
+function addInvoice(){
+  var clientSel=document.getElementById('invoice-client');
+  var clientName=clientSel&&clientSel.selectedIndex>0?clientSel.options[clientSel.selectedIndex].text:'Unknown Client';
+  var email=(document.getElementById('invoice-email')||{}).value||'';
+  var due=(document.getElementById('invoice-due')||{}).value||'';
+  // Compute next invoice ID
+  var maxId=0;
+  invoicesData.forEach(function(x){var n=parseInt((x.id||'').replace('INV-',''));if(n>maxId)maxId=n;});
+  var newId='INV-'+(maxId+1);
+  // Tally line item totals
+  var total=0;
+  (document.getElementById('invoice-items')||{querySelectorAll:function(){return [];}}).querySelectorAll('div[style*="grid"]').forEach(function(row){
+    var inputs=row.querySelectorAll('input[type="number"]');
+    var qty=parseFloat((inputs[0]||{}).value||0)||0;
+    var rate=parseFloat((inputs[1]||{}).value||0)||0;
+    total+=qty*rate;
+  });
+  var today=new Date().toISOString().split('T')[0];
+  var newInv={id:newId,client:clientName,email:email.trim(),amount:total||0,status:'Draft',issued:today,due:due};
+  invoicesData.unshift(newInv);
+  saveData();
+  renderInvoices();
+  closeModal('add-invoice-modal');
+  if(email.trim()){
+    setTimeout(function(){emailInvoice(newId);},300);
+  } else {
+    showToast('Invoice created! Add an email to send it.','success');
+  }
+}
 
 function populateInvoiceFromClient(clientId){
   if(!clientId)return;
@@ -2558,6 +4052,124 @@ function populateProposalFromClient(clientId){
   set('proposal-contact',(c.fname||'')+' '+(c.lname||''));
   set('proposal-phone',c.phone||'');
   set('proposal-company',c.company||'');
+}
+
+function _getProposalFormData(){
+  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+  var clientSel=document.getElementById('proposal-client');
+  var clientName=clientSel&&clientSel.selectedIndex>0?clientSel.options[clientSel.selectedIndex].text:'Unknown Client';
+  // Collect scope items
+  var items=[];
+  (document.getElementById('proposal-items')||{querySelectorAll:function(){return [];}}).querySelectorAll('input.form-control').forEach(function(inp){
+    if(inp.value.trim())items.push(inp.value.trim());
+  });
+  return {
+    client:clientName,
+    email:g('proposal-email'),
+    contact:g('proposal-contact'),
+    company:g('proposal-company'),
+    title:g('proposal-title')||'Project Proposal',
+    validUntil:g('proposal-valid'),
+    type:g('proposal-type'),
+    budget:g('proposal-budget')||(document.querySelector('#add-proposal-modal input[type="number"]')||{}).value||'',
+    timeline:g('proposal-timeline')||(document.querySelector('#add-proposal-modal input[placeholder*="week"]')||{}).value||'',
+    message:g('proposal-message')||(document.querySelector('#add-proposal-modal textarea')||{}).value||'',
+    terms:g('proposal-terms')||(document.querySelectorAll('#add-proposal-modal textarea')[1]||{}).value||'',
+    items:items
+  };
+}
+
+function saveProposalDraft(){
+  var d=_getProposalFormData();
+  var newId='PROP-'+(proposalsData.length+1);
+  proposalsData.unshift({id:newId,client:d.client,email:d.email,title:d.title,status:'Draft',created:new Date().toISOString().split('T')[0],validUntil:d.validUntil});
+  saveData();
+  closeModal('add-proposal-modal');
+  showToast('Proposal saved as draft','success');
+}
+
+function sendProposal(){
+  var d=_getProposalFormData();
+  var newId='PROP-'+(proposalsData.length+1);
+  proposalsData.unshift({id:newId,client:d.client,email:d.email,title:d.title,status:'Sent',created:new Date().toISOString().split('T')[0],validUntil:d.validUntil});
+  saveData();
+  closeModal('add-proposal-modal');
+  // Build email preview
+  var scopeLines=d.items.length>0?d.items.map(function(s,i){return '  '+(i+1)+'. '+s;}).join('\n'):'  (No deliverables listed)';
+  var body=[
+    'Hi '+(d.contact||d.client)+',',
+    '',
+    d.message||'Thank you for considering us. Please find our project proposal below.',
+    '',
+    '═══════════════════════════════════',
+    'PROPOSAL: '+d.title,
+    (d.company?'Company:    '+d.company:''),
+    'Project Type: '+d.type,
+    (d.budget?'Est. Budget:  $'+Number(d.budget).toLocaleString():''),
+    (d.timeline?'Timeline:     '+d.timeline:''),
+    (d.validUntil?'Valid Until:  '+d.validUntil:''),
+    '═══════════════════════════════════',
+    '',
+    'SCOPE OF WORK:',
+    scopeLines,
+    '',
+    (d.terms?'TERMS & CONDITIONS:\n'+d.terms:''),
+    '',
+    'We look forward to working with you. Please reply to this email or call us to discuss next steps.',
+    '',
+    'Best regards,',
+    'Akoni Kessler',
+    'Agency OS'
+  ].filter(function(l){return l!==false&&l!==undefined;}).join('\n').replace(/\n{3,}/g,'\n\n');
+  var modal=document.getElementById('email-proposal-modal');
+  modal.dataset.propId=newId;
+  var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val;};
+  set('email-prop-to',d.email);
+  set('email-prop-subject','Proposal: '+d.title+(d.validUntil?' — Valid Until '+d.validUntil:''));
+  set('email-prop-body',body);
+  setTimeout(function(){openModal('email-proposal-modal');},300);
+}
+
+function emailProposal(propId){
+  var p=proposalsData.find(function(x){return x.id==propId;});
+  if(!p)return;
+  var modal=document.getElementById('email-proposal-modal');
+  modal.dataset.propId=propId;
+  var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val;};
+  set('email-prop-to',p.email||'');
+  set('email-prop-subject','Proposal: '+p.title+(p.validUntil?' — Valid Until '+p.validUntil:''));
+  // Minimal re-send body when emailing from list
+  var body=[
+    'Hi '+p.client+',',
+    '',
+    'Please find your project proposal attached. Reference: '+p.id,
+    '',
+    'Proposal Title: '+p.title,
+    (p.validUntil?'Valid Until:   '+p.validUntil:''),
+    '',
+    'Please reply to discuss next steps.',
+    '',
+    'Best regards,',
+    'Akoni Kessler',
+    'Agency OS'
+  ].join('\n');
+  set('email-prop-body',body);
+  openModal('email-proposal-modal');
+}
+
+function sendEmailProposal(){
+  var to=document.getElementById('email-prop-to').value.trim();
+  var subject=document.getElementById('email-prop-subject').value.trim();
+  var body=document.getElementById('email-prop-body').value;
+  if(!to){showToast('Please enter a client email address','warning');document.getElementById('email-prop-to').focus();return;}
+  var modal=document.getElementById('email-proposal-modal');
+  var propId=modal.dataset.propId;
+  var p=proposalsData.find(function(x){return x.id==propId;});
+  if(p){p.email=to;if(p.status==='Draft')p.status='Sent';saveData();}
+  var mailtoLink='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  window.location.href=mailtoLink;
+  closeModal('email-proposal-modal');
+  showToast('Opening your mail app…','success');
 }
 
 function proposalHandleLogo(file){
@@ -2646,13 +4258,17 @@ function flToggleTask(id,done){
 }
 
 function flDeleteTask(id){
-  flTasks=flTasks.filter(function(t){return t.id!==id;});
-  renderFLTasks();
+  confirmDelete('Delete this task?',function(){
+    flTasks=flTasks.filter(function(t){return t.id!==id;});
+    saveData();
+    renderFLTasks();
+  });
 }
 
 function saveFLData(){
   var n=document.getElementById('fl-notes');
   if(n)flNotesData=n.value;
+  saveData();
   var msg=document.getElementById('fl-saved-msg');
   if(msg){msg.style.display='block';setTimeout(function(){msg.style.display='none';},2000);}
 }
@@ -2690,6 +4306,7 @@ function saveProspectAsLead(){
   };
   leadsData.unshift(newLead);
   leadNotes[newLead.id]='📍 Found on Google Maps\nWebsite: '+get('pp-website')+'\nIndustry: '+get('pp-industry')+'\n\n'+get('pp-notes');
+  saveData();
   // clear form
   ['pp-name','pp-address','pp-phone','pp-website','pp-email','pp-value','pp-notes'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.value='';
@@ -2719,6 +4336,7 @@ function saveAsProspect(){
   };
   leadsData.unshift(newProspect);
   leadNotes[newProspect.id]='📍 Found via Google Maps Search\nWebsite: '+get('pp-website')+'\nIndustry: '+get('pp-industry')+'\nAddress: '+get('pp-address')+'\n\n'+get('pp-notes');
+  saveData();
   ['pp-name','pp-address','pp-phone','pp-website','pp-email','pp-value','pp-notes'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.value='';
   });
@@ -2777,8 +4395,14 @@ function addNotepadPage(){
 
 function deleteNotepadPage(idx){
   if(notepadPages.length<=1)return;
+  var pname=notepadPages[idx]?notepadPages[idx].title:'this page';
+  confirmDelete('Delete "'+pname+'"? This cannot be undone.',function(){_doDeleteNotepadPage(idx);});
+}
+function _doDeleteNotepadPage(idx){
+  if(notepadPages.length<=1)return;
   notepadPages.splice(idx,1);
   notepadCurrent=Math.min(notepadCurrent,notepadPages.length-1);
+  saveData();
   loadNotepadPage(notepadCurrent);
 }
 
@@ -2795,6 +4419,7 @@ function notepadInput(){
     var ampm=now.getHours()>=12?'PM':'AM';
     var el=document.getElementById('notepad-saved');
     if(el)el.textContent='Saved '+h+':'+m+' '+ampm;
+    saveData();
     renderNotepadSidebar();
   },1000);
 }
@@ -2913,53 +4538,337 @@ function redrawAttachedNotes(type, id){
 }
 
 // ===================== RENDER CALENDAR =====================
+var calView='month';
+var calFocusDate=new Date();
+
+function setCalView(view,tabEl){
+  calView=view;
+  document.querySelectorAll('#cal-view-tabs .tab').forEach(function(t){t.classList.remove('active');});
+  if(tabEl)tabEl.classList.add('active');
+  renderCalendar();
+}
+function calNav(dir){
+  if(calView==='month'){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}}
+  else if(calView==='week'){calFocusDate=new Date(calFocusDate);calFocusDate.setDate(calFocusDate.getDate()+(dir*7));}
+  else{calFocusDate=new Date(calFocusDate);calFocusDate.setDate(calFocusDate.getDate()+dir);}
+  renderCalendar();
+}
+function goToday(){
+  var t=new Date();calMonth=t.getMonth();calYear=t.getFullYear();calFocusDate=new Date(t);
+  renderCalendar();
+}
+function _calEvKey(y,m,d){return y+'-'+(m+1)+'-'+d;}
+function _calIsToday(date){var t=new Date();return date.getDate()===t.getDate()&&date.getMonth()===t.getMonth()&&date.getFullYear()===t.getFullYear();}
+
 function renderCalendar(){
-  const el=document.getElementById('cal-grid');
-  const title=document.getElementById('cal-title');
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  title.textContent=`${months[calMonth]} ${calYear}`;
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const daysInPrev=new Date(calYear,calMonth,0).getDate();
-  const today=new Date();
-  const headers=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  let html=headers.map(d=>`<div class="cal-day-header">${d}</div>`).join('');
-  // prev month
-  for(let i=firstDay-1;i>=0;i--){
-    const d=daysInPrev-i;
-    html+=`<div class="cal-day other-month"><div class="cal-date">${d}</div></div>`;
-  }
-  // current month
-  for(let d=1;d<=daysInMonth;d++){
-    const isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
-    const key=`${calYear}-${calMonth+1}-${d}`;
-    const events=calEvents[key]||[];
-    const evHtml=events.slice(0,2).map(e=>`<div class="cal-event" style="background:var(--accent-soft);color:var(--accent)">${e}</div>`).join('');
-    html+=`<div class="cal-day${isToday?' today':''}"><div class="cal-date">${d}</div>${evHtml}</div>`;
-  }
-  // next month fill
-  const total=firstDay+daysInMonth;
-  const remaining=(7-total%7)%7;
-  for(let d=1;d<=remaining;d++){
-    html+=`<div class="cal-day other-month"><div class="cal-date">${d}</div></div>`;
-  }
+  if(calView==='month')_renderCalMonth();
+  else if(calView==='week')_renderCalWeek();
+  else _renderCalDay();
+  renderEventsList();
+}
+
+function renderEventsList(){
+  var el=document.getElementById('cal-events-list');
+  var countEl=document.getElementById('cal-events-count');
+  if(!el)return;
+  var sorted=calEventsData.slice().sort(function(a,b){
+    var pa=a.date.split('-'),pb=b.date.split('-');
+    var da=new Date(parseInt(pa[0]),parseInt(pa[1])-1,parseInt(pa[2]));
+    var db=new Date(parseInt(pb[0]),parseInt(pb[1])-1,parseInt(pb[2]));
+    return da-db;
+  });
+  if(countEl)countEl.textContent=sorted.length+' event'+(sorted.length!==1?'s':'');
+  if(!sorted.length){el.innerHTML='<div style="color:var(--text-3);font-size:13px;text-align:center;padding:24px 0">No events scheduled</div>';return;}
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var wdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var today=new Date();
+  // Group by date
+  var groups={};var groupOrder=[];
+  sorted.forEach(function(ev){if(!groups[ev.date]){groups[ev.date]=[];groupOrder.push(ev.date);}groups[ev.date].push(ev);});
+  var html='';
+  groupOrder.forEach(function(key){
+    var parts=key.split('-');
+    var d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+    var isPast=d<new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    var isToday=d.getDate()===today.getDate()&&d.getMonth()===today.getMonth()&&d.getFullYear()===today.getFullYear();
+    var dateLabel=wdays[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+    html+='<div style="margin-bottom:14px">';
+    html+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:'+(isToday?'var(--accent)':isPast?'var(--text-3)':'var(--text-2)')+';margin-bottom:6px">'+(isToday?'⬤ TODAY — ':'')+dateLabel+'</div>';
+    groups[key].forEach(function(ev){
+      var col=isPast?'var(--text-2)':_calEvColor(ev.type);
+      var bg=isPast?'var(--bg-elevated)':_calEvBg(ev.type);
+      var border=isPast?'var(--border)':_calEvColor(ev.type);
+      html+='<div onclick="openEditEvent('+ev.id+')" style="background:'+bg+';color:'+col+';border-left:3px solid '+border+';border-radius:0 6px 6px 0;padding:7px 10px;font-size:12px;margin-bottom:4px;line-height:1.4;cursor:pointer;transition:opacity .15s" onmouseenter="this.style.opacity=\'.8\'" onmouseleave="this.style.opacity=\'1\'">'
+        +'<div style="font-weight:600">'+ev.title+'</div>'
+        +(ev.time?'<div style="font-size:11px;margin-top:2px;opacity:.8">'+ev.time+(ev.duration?' · '+ev.duration:'')+'</div>':'')
+        +'</div>';
+    });
+    html+='</div>';
+  });
   el.innerHTML=html;
 }
-function changeMonth(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
-function goToday(){calMonth=new Date().getMonth();calYear=new Date().getFullYear();renderCalendar();}
+
+function _renderCalMonth(){
+  var el=document.getElementById('cal-grid');
+  var title=document.getElementById('cal-title');
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  title.textContent=months[calMonth]+' '+calYear;
+  el.className='cal-grid';
+  var firstDay=new Date(calYear,calMonth,1).getDay();
+  var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  var daysInPrev=new Date(calYear,calMonth,0).getDate();
+  var today=new Date();
+  var headers=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var html=headers.map(function(d){return '<div class="cal-day-header">'+d+'</div>';}).join('');
+  for(var i=firstDay-1;i>=0;i--){html+='<div class="cal-day other-month"><div class="cal-date">'+(daysInPrev-i)+'</div></div>';}
+  for(var d=1;d<=daysInMonth;d++){
+    var isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    var key=_calEvKey(calYear,calMonth,d);
+    var events=_calEvForDate(key);
+    var evHtml=events.slice(0,2).map(function(e){
+      return '<div class="cal-event" onclick="event.stopPropagation();openEditEvent('+e.id+')" style="background:'+_calEvBg(e.type)+';color:'+_calEvColor(e.type)+';cursor:pointer">'+e.title+'</div>';
+    }).join('');
+    if(events.length>2)evHtml+='<div class="cal-event" style="background:var(--bg-hover);color:var(--text-3)">+' +(events.length-2)+' more</div>';
+    html+='<div class="cal-day'+(isToday?' today':'')+'" onclick="openNewEventOnDate(\''+key+'\')"><div class="cal-date">'+d+'</div>'+evHtml+'</div>';
+  }
+  var total=firstDay+daysInMonth;
+  var remaining=(7-total%7)%7;
+  for(var d=1;d<=remaining;d++){html+='<div class="cal-day other-month"><div class="cal-date">'+d+'</div></div>';}
+  el.innerHTML=html;
+}
+
+function _renderCalWeek(){
+  var el=document.getElementById('cal-grid');
+  var title=document.getElementById('cal-title');
+  // get start of week (Sunday)
+  var focus=new Date(calFocusDate);
+  var startOfWeek=new Date(focus);
+  startOfWeek.setDate(focus.getDate()-focus.getDay());
+  var days=[];
+  for(var i=0;i<7;i++){var d=new Date(startOfWeek);d.setDate(startOfWeek.getDate()+i);days.push(d);}
+  var endOfWeek=days[6];
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  title.textContent=months[startOfWeek.getMonth()]+' '+startOfWeek.getDate()+' – '+months[endOfWeek.getMonth()]+' '+endOfWeek.getDate()+', '+endOfWeek.getFullYear();
+  el.className='';
+  var wdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var hours=[];for(var h=7;h<=20;h++)hours.push(h);
+  // build header row
+  var hdrHtml='<div style="display:flex;border-bottom:1px solid var(--border-light);margin-bottom:0">';
+  hdrHtml+='<div style="width:52px;min-width:52px;flex-shrink:0"></div>';
+  hdrHtml+='<div style="flex:1;display:flex;gap:1px">';
+  days.forEach(function(d){
+    var isToday=_calIsToday(d);
+    hdrHtml+='<div class="cal-day-col-header'+(isToday?' is-today':'')+'" style="flex:1;text-align:center;padding:8px 4px;border-left:1px solid var(--border-light)">'
+      +'<div class="cal-day-col-hwday">'+wdays[d.getDay()]+'</div>'
+      +'<div class="cal-day-col-hdate">'+d.getDate()+'</div>'
+      +'</div>';
+  });
+  hdrHtml+='</div></div>';
+  // all-day events strip
+  var adHtml='<div style="display:flex;border-bottom:1px solid var(--border)">';
+  adHtml+='<div style="width:52px;min-width:52px;font-size:9px;color:var(--text-3);display:flex;align-items:center;justify-content:flex-end;padding-right:6px;flex-shrink:0">ALL DAY</div>';
+  adHtml+='<div style="flex:1;display:flex;gap:1px">';
+  days.forEach(function(d){
+    var key=_calEvKey(d.getFullYear(),d.getMonth(),d.getDate());
+    var evs=_calEvForDate(key);
+    var inner=evs.map(function(e){return '<div class="cal-ev-block" onclick="openEditEvent('+e.id+')" style="cursor:pointer;background:'+_calEvBg(e.type)+';color:'+_calEvColor(e.type)+'">'+e.title+'</div>';}).join('');
+    adHtml+='<div class="cal-allday-strip" style="flex:1;border-left:1px solid var(--border-light)">'+inner+'</div>';
+  });
+  adHtml+='</div></div>';
+  // time grid
+  var gridHtml='<div class="cal-time-grid">';
+  gridHtml+='<div class="cal-time-col">';
+  hours.forEach(function(h){gridHtml+='<div class="cal-time-label">'+(h>12?h-12:h)+(h>=12?'pm':'am')+'</div>';});
+  gridHtml+='</div>';
+  gridHtml+='<div class="cal-days-wrap">';
+  days.forEach(function(d){
+    var isToday=_calIsToday(d);
+    gridHtml+='<div class="cal-day-col"'+(isToday?' style="background:rgba(var(--accent-rgb),.03)"':'')+'>';
+    hours.forEach(function(h){gridHtml+='<div class="cal-hour-cell"></div>';});
+    gridHtml+='</div>';
+  });
+  gridHtml+='</div></div>';
+  el.innerHTML=hdrHtml+adHtml+gridHtml;
+}
+
+function _renderCalDay(){
+  var el=document.getElementById('cal-grid');
+  var title=document.getElementById('cal-title');
+  var d=calFocusDate;
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var wdays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  title.textContent=wdays[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+  el.className='';
+  var isToday=_calIsToday(d);
+  var key=_calEvKey(d.getFullYear(),d.getMonth(),d.getDate());
+  var evs=_calEvForDate(key);
+  var hours=[];for(var h=7;h<=20;h++)hours.push(h);
+  var hdrHtml='<div class="cal-day-col-header'+(isToday?' is-today':'')+'" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border-light)">'
+    +'<div class="cal-day-col-hdate" style="font-size:28px">'+d.getDate()+'</div>'
+    +'<div><div class="cal-day-col-hwday">'+wdays[d.getDay()].toUpperCase()+'</div><div style="font-size:12px;color:var(--text-2)">'+months[d.getMonth()]+' '+d.getFullYear()+'</div></div>'
+    +(evs.length?'<div style="margin-left:auto;display:flex;flex-wrap:wrap;gap:4px">'+evs.map(function(e){return '<div class="cal-ev-block" onclick="openEditEvent('+e.id+')" style="font-size:11px;cursor:pointer;background:'+_calEvBg(e.type)+';color:'+_calEvColor(e.type)+'">'+e.title+'</div>';}).join('')+'</div>':'')
+    +'</div>';
+  var gridHtml='<div class="cal-time-grid">';
+  gridHtml+='<div class="cal-time-col">';
+  hours.forEach(function(h){gridHtml+='<div class="cal-time-label">'+(h>12?h-12:h)+(h>=12?'pm':'am')+'</div>';});
+  gridHtml+='</div>';
+  gridHtml+='<div class="cal-days-wrap"><div class="cal-day-col" style="'+(isToday?'background:rgba(var(--accent-rgb),.03)':'')+'border-left:none">';
+  hours.forEach(function(h){gridHtml+='<div class="cal-hour-cell"></div>';});
+  gridHtml+='</div></div></div>';
+  el.innerHTML=hdrHtml+gridHtml;
+}
+
+function changeMonth(dir){calNav(dir);}
+
+function _calDateToKey(dateStr){
+  // Converts "2026-05-14" (input[type=date]) to "2026-5-14"
+  if(!dateStr)return '';
+  var p=dateStr.split('-');return parseInt(p[0])+'-'+parseInt(p[1])+'-'+parseInt(p[2]);
+}
+function _calKeyToInputDate(key){
+  // Converts "2026-5-14" to "2026-05-14"
+  if(!key)return '';
+  var p=key.split('-');return p[0]+'-'+String(p[1]).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');
+}
+function openNewEventOnDate(key){
+  var d=_calKeyToInputDate(key);
+  var now=new Date();
+  document.getElementById('aem-title').value='';
+  document.getElementById('aem-date').value=d;
+  document.getElementById('aem-time').value=String(now.getHours()).padStart(2,'0')+':00';
+  document.getElementById('aem-duration').value='1 hour';
+  document.getElementById('aem-type').value='Client Meeting';
+  document.getElementById('aem-notes').value='';
+  openModal('add-event-modal');
+}
+function addCalEvent(){
+  var title=document.getElementById('aem-title').value.trim();
+  if(!title){showToast('Please enter an event title','warning');return;}
+  var dateKey=_calDateToKey(document.getElementById('aem-date').value);
+  if(!dateKey){showToast('Please select a date','warning');return;}
+  calEventsData.push({
+    id:_calEvNextId++,
+    title:title,
+    date:dateKey,
+    time:document.getElementById('aem-time').value,
+    duration:document.getElementById('aem-duration').value,
+    type:document.getElementById('aem-type').value,
+    notes:document.getElementById('aem-notes').value
+  });
+  closeModal('add-event-modal');
+  renderCalendar();
+  showToast('Event created!','success');
+}
+function openEditEvent(id){
+  var ev=calEventsData.find(function(e){return e.id===id;});
+  if(!ev)return;
+  document.getElementById('eem-title').value=ev.title;
+  document.getElementById('eem-date').value=_calKeyToInputDate(ev.date);
+  document.getElementById('eem-time').value=ev.time||'';
+  document.getElementById('eem-duration').value=ev.duration||'1 hour';
+  document.getElementById('eem-type').value=ev.type||'Client Meeting';
+  document.getElementById('eem-notes').value=ev.notes||'';
+  document.getElementById('edit-event-modal').dataset.evId=id;
+  openModal('edit-event-modal');
+}
+function saveEditEvent(){
+  var id=parseInt(document.getElementById('edit-event-modal').dataset.evId);
+  var ev=calEventsData.find(function(e){return e.id===id;});
+  if(!ev)return;
+  var title=document.getElementById('eem-title').value.trim();
+  if(!title){showToast('Please enter an event title','warning');return;}
+  ev.title=title;
+  ev.date=_calDateToKey(document.getElementById('eem-date').value)||ev.date;
+  ev.time=document.getElementById('eem-time').value;
+  ev.duration=document.getElementById('eem-duration').value;
+  ev.type=document.getElementById('eem-type').value;
+  ev.notes=document.getElementById('eem-notes').value;
+  closeModal('edit-event-modal');
+  renderCalendar();
+  showToast('Event updated!','success');
+}
+function deleteCalEvent(){
+  var id=parseInt(document.getElementById('edit-event-modal').dataset.evId);
+  confirmDelete('Delete this event? This cannot be undone.',function(){
+    calEventsData=calEventsData.filter(function(e){return e.id!==id;});
+    closeModal('edit-event-modal');
+    renderCalendar();
+    showToast('Event deleted','success');
+  });
+}
 // ===================== RENDER PHONEBOOK =====================
 function renderPhonebook(){
   const grid=document.getElementById('phonebook-grid');
-  const all=[...clientsData,...leadsData.map(l=>({id:l.id,fname:l.name.split(' ')[0],lname:l.name.split(' ').slice(1).join(' '),company:l.company,email:l.email,phone:'—',status:'Lead',industry:'—'}))];
-  grid.innerHTML=all.slice(0,16).map(c=>`<div class="card card-sm card-accent-hover" style="cursor:pointer">
-    <div class="flex items-center gap-3 mb-3">
-      <div class="avatar avatar-lg">${(c.fname||'?')[0]}${(c.lname||'')[0]||''}</div>
-      <div class="min-w-0"><div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.fname} ${c.lname}</div><div style="font-size:12px;color:var(--text-2)">${c.company}</div></div>
-    </div>
-    <div style="font-size:12px;color:var(--text-2);margin-bottom:4px">📧 ${c.email}</div>
-    <div style="font-size:12px;color:var(--text-2);margin-bottom:8px">📞 ${c.phone||'—'}</div>
-    <div class="flex gap-1"><button class="btn btn-secondary btn-sm flex-1">📧 Email</button><button class="btn btn-secondary btn-sm flex-1">📞 Call</button></div>
-  </div>`).join('');
+  const clients=clientsData.map(c=>({...c,_type:'client'}));
+  const leads=leadsData.map(l=>({
+    id:l.id,_type:'lead',
+    fname:l.name.split(' ')[0],
+    lname:l.name.split(' ').slice(1).join(' '),
+    company:l.company,email:l.email,
+    phone:l.phone||'—',status:l.stage||'Lead',industry:'—'
+  }));
+  const all=[...clients,...leads];
+  if(!all.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:var(--text-3);font-size:13px">No contacts yet — add a client or lead to get started.</div>';
+    return;
+  }
+  grid.innerHTML=all.map(c=>{
+    const initials=(c.fname||'?')[0].toUpperCase()+((c.lname||'')[0]||'').toUpperCase();
+    const typeBadge=c._type==='client'
+      ?`<span class="badge badge-success" style="font-size:10px">${c.status||'Active'}</span>`
+      :`<span class="badge badge-info" style="font-size:10px">${c.status||'Lead'}</span>`;
+    const onclick=c._type==='client'?`openClientDetail(${c.id})`:`openLeadDetail(${c.id})`;
+    return `<div class="card card-sm" data-name="${(c.fname||'').toUpperCase()}" data-status="${(c.status||'').toLowerCase()}" style="cursor:pointer;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--border)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''" onclick="${onclick}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="avatar avatar-lg" style="background:linear-gradient(135deg,var(--accent),#7c3aed);flex-shrink:0">${initials}</div>
+        <div style="min-width:0;flex:1">
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.fname} ${c.lname}</div>
+          <div style="font-size:12px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.company||'—'}</div>
+        </div>
+        ${typeBadge}
+      </div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📧 ${c.email||'—'}</div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:12px">📞 ${c.phone||'—'}</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-secondary btn-sm" style="flex:1" onclick="event.stopPropagation();window.location='mailto:${c.email}'">📧 Email</button>
+        <button class="btn btn-secondary btn-sm" style="flex:1" onclick="event.stopPropagation();window.location='tel:${c.phone}'">📞 Call</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();${onclick}" style="padding:5px 8px;color:var(--accent)">→</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+var _pbAlpha='ALL';
+var _pbStatus='All';
+var _pbSearch='';
+
+function pbSetAlpha(letter,el){
+  _pbAlpha=letter;
+  document.querySelectorAll('.pb-alpha-btn').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  _pbApplyFilters();
+}
+function pbSetStatus(status,el){
+  _pbStatus=status;
+  document.querySelectorAll('.pb-status-btn').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  _pbApplyFilters();
+}
+function filterPhonebook(q){
+  _pbSearch=(q||'').toLowerCase().trim();
+  _pbApplyFilters();
+}
+function _pbApplyFilters(){
+  var grid=document.getElementById('phonebook-grid');
+  if(!grid)return;
+  grid.querySelectorAll('.card').forEach(function(card){
+    var name=(card.dataset.name||'').toUpperCase();
+    var status=(card.dataset.status||'').toLowerCase();
+    var text=card.textContent.toLowerCase();
+    var alphaOk=_pbAlpha==='ALL'||name.startsWith(_pbAlpha);
+    var statusOk=_pbStatus==='All'||status===_pbStatus.toLowerCase();
+    var searchOk=!_pbSearch||text.includes(_pbSearch);
+    card.style.display=(alphaOk&&statusOk&&searchOk)?'':'none';
+  });
 }
 // ===================== TOAST =====================
 function showToast(msg,type='info'){
@@ -3048,6 +4957,7 @@ var leadProjects={};
 var clientNotes={};
 var leadNotes={};
 var projectNotes={};
+var invoiceNotes={};
 var OPEN_CLIENT_ID=null;
 var OPEN_LEAD_ID=null;
 var OPEN_PROJECT_ID=null;
@@ -3090,10 +5000,13 @@ function openClientDetail(rawId){
     set('cdp-name',(c.fname||'')+' '+(c.lname||''));
     set('cdp-company',c.company||'');
     set('cdp-status',c.status||'Active');
+    set('cdp-status-body',c.status||'Active');
     set('cdp-email',c.email||'');
     set('cdp-phone',c.phone||'');
     set('cdp-website',c.website||'');
     set('cdp-industry',c.industry||'');
+    set('cdp-address',c.address||'');
+    set('cdp-tags',c.tags||'');
     set('cdp-value',c.value||0);
     set('cdp-paid',c.paid||0);
     recalcOwed();
@@ -3195,6 +5108,7 @@ function saveProjectDetail(){
   var bar=document.getElementById('pdp-progress-bar');
   if(bar){bar.style.width=p.progress+'%';bar.className='progress-bar'+(p.progress===100?' success':'');}
   var sb=document.getElementById('pdp-status-badge');if(sb)sb.textContent=p.status;
+  saveData();
   var conf=document.getElementById('pdp-save-confirm');
   conf.classList.add('show');setTimeout(function(){conf.classList.remove('show');},2500);
   renderProjects();renderProjectsList();
@@ -3203,8 +5117,74 @@ function saveProjectDetail(){
 function saveProjectNotes(){
   var id=_pid();if(!id)return;
   projectNotes[id]=document.getElementById('pdp-notes').value;
+  saveData();
   var conf=document.getElementById('pdp-notes-confirm');
   conf.classList.add('show');setTimeout(function(){conf.classList.remove('show');},2500);
+}
+
+// ── invoice panel ──────────────────────────────────────────
+function _ipanel(){return document.getElementById('invoice-detail-panel');}
+function _iid(){return _ipanel().dataset.eid;}
+
+function openInvoiceDetail(invId){
+  var ip=_ipanel();
+  ip.dataset.eid=invId;
+  var inv=invoicesData.find(function(x){return x.id==invId;});
+  if(!inv)return;
+  openPanel('invoice-detail-panel');
+  var set=function(eid,val){var el=document.getElementById(eid);if(el)el.value=val;};
+  set('idp-id',inv.id);
+  set('idp-client',inv.client);
+  set('idp-email',inv.email||'');
+  set('idp-amount',inv.amount);
+  set('idp-issued',inv.issued);
+  set('idp-due',inv.due);
+  set('idp-notes',invoiceNotes[invId]||'');
+  var sel=document.getElementById('idp-status');
+  if(sel)sel.value=inv.status;
+  var disp=document.getElementById('idp-status-display');
+  if(disp){
+    var cls={Paid:'badge-success',Sent:'badge-accent',Overdue:'badge-danger',Draft:'badge-gray'};
+    disp.innerHTML='<span class="badge '+(cls[inv.status]||'badge-gray')+' badge-dot">'+inv.status+'</span>';
+  }
+  var conf=document.getElementById('idp-save-confirm');if(conf)conf.classList.remove('show');
+}
+
+function saveInvoiceDetail(){
+  var id=_iid();if(!id)return;
+  var inv=invoicesData.find(function(x){return x.id==id;});if(!inv)return;
+  var get=function(eid){var el=document.getElementById(eid);return el?el.value.trim():'';};
+  inv.id=get('idp-id')||inv.id;
+  inv.client=get('idp-client')||inv.client;
+  inv.email=get('idp-email')||inv.email||'';
+  inv.amount=parseFloat(get('idp-amount'))||inv.amount;
+  inv.issued=get('idp-issued')||inv.issued;
+  inv.due=get('idp-due')||inv.due;
+  inv.status=document.getElementById('idp-status').value||inv.status;
+  invoiceNotes[id]=get('idp-notes');
+  // update status badge display
+  var disp=document.getElementById('idp-status-display');
+  if(disp){
+    var cls={Paid:'badge-success',Sent:'badge-accent',Overdue:'badge-danger',Draft:'badge-gray'};
+    disp.innerHTML='<span class="badge '+(cls[inv.status]||'badge-gray')+' badge-dot">'+inv.status+'</span>';
+  }
+  saveData();
+  renderInvoices();
+  var conf=document.getElementById('idp-save-confirm');
+  if(conf){conf.classList.add('show');setTimeout(function(){conf.classList.remove('show');},2500);}
+}
+
+function deleteInvoiceFromPanel(){
+  var id=_iid();if(!id)return;
+  var inv=invoicesData.find(function(x){return x.id==id;});
+  var label=inv?inv.id:'this invoice';
+  confirmDelete('Delete '+label+'? This cannot be undone.',function(){
+    var i=invoicesData.findIndex(function(x){return x.id==id;});
+    if(i>-1){invoicesData.splice(i,1);saveData();}
+    closeDetailPanel();
+    renderInvoices();
+    showToast('Invoice deleted','success');
+  });
 }
 
 function addProjectTask(){
@@ -3240,9 +5220,11 @@ function toggleProjectTask(projId,taskId,done){
 }
 
 function deleteProjectTask(projId,taskId){
-  if(!projectTasks[projId])return;
-  projectTasks[projId]=projectTasks[projId].filter(function(t){return t.id!==taskId;});
-  redrawProjectTasks(projId);
+  confirmDelete('Delete this task? This cannot be undone.',function(){
+    if(!projectTasks[projId])return;
+    projectTasks[projId]=projectTasks[projId].filter(function(t){return t.id!==taskId;});
+    saveData(); redrawProjectTasks(projId);
+  });
 }
 
 // ── save ──────────────────────────────────────────────────
@@ -3253,15 +5235,19 @@ function saveClientDetail(){
   c.fname=parts[0]||c.fname;
   c.lname=parts.slice(1).join(' ')||c.lname;
   c.company=document.getElementById('cdp-company').value.trim()||c.company;
-  c.status=document.getElementById('cdp-status').value;
+  c.status=document.getElementById('cdp-status-body').value||document.getElementById('cdp-status').value;
+  document.getElementById('cdp-status').value=c.status;
   c.email=document.getElementById('cdp-email').value.trim();
   c.phone=document.getElementById('cdp-phone').value.trim();
   c.website=document.getElementById('cdp-website').value.trim();
   c.industry=document.getElementById('cdp-industry').value;
+  c.address=document.getElementById('cdp-address').value.trim();
+  c.tags=document.getElementById('cdp-tags').value.trim();
   c.value=parseFloat(document.getElementById('cdp-value').value)||0;
   c.paid=parseFloat(document.getElementById('cdp-paid').value)||0;
   c.owed=Math.max(0,c.value-c.paid);
   document.getElementById('cdp-avatar').textContent=(c.fname||'?')[0]+((c.lname||'')[0]||'');
+  saveData();
   var conf=document.getElementById('cdp-save-confirm');
   conf.classList.add('show'); setTimeout(function(){conf.classList.remove('show');},2500);
   renderClients();
@@ -3270,6 +5256,7 @@ function saveClientDetail(){
 function saveClientNotes(){
   var id=_cid(); if(!id)return;
   clientNotes[id]=document.getElementById('cdp-notes').value;
+  saveData();
   var conf=document.getElementById('cdp-notes-confirm');
   conf.classList.add('show'); setTimeout(function(){conf.classList.remove('show');},2500);
 }
@@ -3294,6 +5281,7 @@ function saveLeadDetail(){
   l.value=parseFloat(document.getElementById('ldp-value').value)||0;
   var initials=(l.name||'?').split(' ').map(function(w){return w[0];}).join('').slice(0,2);
   document.getElementById('ldp-avatar').textContent=initials||'?';
+  saveData();
   var conf=document.getElementById('ldp-save-confirm');
   conf.classList.add('show'); setTimeout(function(){conf.classList.remove('show');},2500);
   renderLeads();
@@ -3319,9 +5307,9 @@ function setLeadStageFromPanel(id,stage,el){
 // ── panel open/close ──────────────────────────────────────
 function openPanel(panelId){
   document.getElementById('detail-overlay').classList.add('open');
-  document.getElementById('client-detail-panel').classList.remove('open');
-  document.getElementById('lead-detail-panel').classList.remove('open');
-  document.getElementById('project-detail-panel').classList.remove('open');
+  ['client-detail-panel','lead-detail-panel','project-detail-panel','invoice-detail-panel','add-client-panel','add-lead-panel','add-task-panel'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.classList.remove('open');
+  });
   document.getElementById(panelId).classList.add('open');
   document.getElementById('notif-panel').classList.remove('open');
   document.getElementById('profileDropdown').classList.remove('open');
@@ -3332,7 +5320,15 @@ function closeDetailPanel(){
   _cpanel().classList.remove('open'); _cpanel().dataset.eid='';
   _lpanel().classList.remove('open'); _lpanel().dataset.eid='';
   _ppanel().classList.remove('open'); _ppanel().dataset.eid='';
+  var ip=document.getElementById('invoice-detail-panel');if(ip){ip.classList.remove('open');ip.dataset.eid='';}
   var pp=document.getElementById('prospect-panel');if(pp)pp.classList.remove('open');
+  var acp=document.getElementById('add-client-panel');if(acp)acp.classList.remove('open');
+  var alp=document.getElementById('add-lead-panel');if(alp)alp.classList.remove('open');
+  var atp=document.getElementById('add-task-panel');if(atp)atp.classList.remove('open');
+}
+function closeAddTaskPanel(){
+  var p=document.getElementById('add-task-panel');if(p)p.classList.remove('open');
+  document.getElementById('detail-overlay').classList.remove('open');
 }
 
 function resetFilterChips(containerId){
@@ -3396,6 +5392,7 @@ function addClientProject(){
   var sel=document.getElementById('cdp-proj-status');
   clientProjects[id].push({id:Date.now(),title:text,status:sel?sel.value:'Active',done:false});
   input.value='';
+  saveData();
   redrawClientProjects(id);
 }
 
@@ -3409,6 +5406,7 @@ function addLeadProject(){
   var sel=document.getElementById('ldp-proj-status');
   leadProjects[id].push({id:Date.now(),title:text,status:sel?sel.value:'Active',done:false});
   input.value='';
+  saveData();
   redrawLeadProjects(id);
 }
 
@@ -3460,6 +5458,7 @@ function addClientTask(){
   if(!clientTasks[id])clientTasks[id]=[];
   clientTasks[id].push({id:Date.now(),title:text,status:'Active',done:false});
   input.value='';
+  saveData();
   redrawClientTasks(id);
 }
 
@@ -3472,32 +5471,35 @@ function addLeadTask(){
   if(!leadTasks[id])leadTasks[id]=[];
   leadTasks[id].push({id:Date.now(),title:text,status:'Active',done:false});
   input.value='';
+  saveData();
   redrawLeadTasks(id);
   renderLeads();
 }
 
 function deleteDetailTask(type,taskId){
-  if(type==='client'){
-    var id=OPEN_CLIENT_ID; if(!id)return;
-    clientTasks[id]=(clientTasks[id]||[]).filter(function(t){return t.id!==taskId;});
-    redrawClientTasks();
-  } else if(type==='client-proj'){
-    var id=window._openClientId||OPEN_CLIENT_ID; if(!id)return;
-    clientProjects[id]=(clientProjects[id]||[]).filter(function(t){return t.id!==taskId;});
-    redrawClientProjects(id);
-  } else if(type==='lead-proj'){
-    var id=window._openLeadId||OPEN_LEAD_ID; if(!id)return;
-    leadProjects[id]=(leadProjects[id]||[]).filter(function(t){return t.id!==taskId;});
-    redrawLeadProjects(id);
-  } else if(type==='project'){
-    var id=window._openProjectId||OPEN_PROJECT_ID; if(!id)return;
-    projectTasks[id]=(projectTasks[id]||[]).filter(function(t){return t.id!==taskId;});
-    redrawProjectTasks(id);
-  } else {
-    var id=OPEN_LEAD_ID; if(!id)return;
-    leadTasks[id]=(leadTasks[id]||[]).filter(function(t){return t.id!==taskId;});
-    redrawLeadTasks(); renderLeads();
-  }
+  confirmDelete('Delete this item? This cannot be undone.',function(){
+    if(type==='client'){
+      var id=OPEN_CLIENT_ID; if(!id)return;
+      clientTasks[id]=(clientTasks[id]||[]).filter(function(t){return t.id!==taskId;});
+      saveData(); redrawClientTasks();
+    } else if(type==='client-proj'){
+      var id=window._openClientId||OPEN_CLIENT_ID; if(!id)return;
+      clientProjects[id]=(clientProjects[id]||[]).filter(function(t){return t.id!==taskId;});
+      saveData(); redrawClientProjects(id);
+    } else if(type==='lead-proj'){
+      var id=window._openLeadId||OPEN_LEAD_ID; if(!id)return;
+      leadProjects[id]=(leadProjects[id]||[]).filter(function(t){return t.id!==taskId;});
+      saveData(); redrawLeadProjects(id);
+    } else if(type==='project'){
+      var id=window._openProjectId||OPEN_PROJECT_ID; if(!id)return;
+      projectTasks[id]=(projectTasks[id]||[]).filter(function(t){return t.id!==taskId;});
+      saveData(); redrawProjectTasks(id);
+    } else {
+      var id=OPEN_LEAD_ID; if(!id)return;
+      leadTasks[id]=(leadTasks[id]||[]).filter(function(t){return t.id!==taskId;});
+      saveData(); redrawLeadTasks(); renderLeads();
+    }
+  });
 }
 
 function cycleTaskStatus(type,taskId){
@@ -3556,8 +5558,10 @@ function filterDetailTasks(type,filter,el){
 
 // ===================== INIT =====================
 document.addEventListener('DOMContentLoaded',function(){
+  loadData();
   renderClients();
   setTimeout(initDashboardCharts,200);
+  setTimeout(renderDashboard,300);
   // populate project client select
   var ps=document.getElementById('proj-client');
   if(ps){clientsData.forEach(function(c){var o=document.createElement('option');o.textContent=c.company;ps.appendChild(o);});}
