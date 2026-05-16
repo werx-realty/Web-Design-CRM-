@@ -3693,8 +3693,16 @@ function renderProjects(){
         <button onclick="deleteKanbanCol('project',${idx})" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px;padding:0 2px;line-height:1;transition:color var(--transition)" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--text-3)'" title="Delete column">✕</button>
       </div>
       <div class="kanban-cards">
-        ${cards.map(p=>`<div class="kanban-card" style="cursor:pointer" onclick="openProjectDetail(${p.id})">
-          <div class="kanban-card-title">${p.name}</div>
+        ${cards.map(p=>`<div class="kanban-card" style="cursor:pointer;position:relative" onclick="openProjectDetail(${p.id})">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px">
+            <div class="kanban-card-title" style="margin-bottom:0;flex:1;font-size:13px;font-weight:600">${p.name}</div>
+            <div onclick="event.stopPropagation()" style="position:relative;flex-shrink:0">
+              <button class="icon-btn" style="width:22px;height:22px;font-size:14px;color:var(--text-3);padding:0" onclick="toggleProjectMenu(${p.id},this)">⋯</button>
+              <div id="proj-menu-${p.id}" style="display:none;position:absolute;top:26px;right:0;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;min-width:130px;box-shadow:var(--shadow);z-index:300">
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;color:var(--danger)" onmouseover="this.style.background='var(--danger-soft)'" onmouseout="this.style.background=''" onclick="deleteProject(${p.id})">🗑 Delete</div>
+              </div>
+            </div>
+          </div>
           <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${p.client}</div>
           <div class="progress mb-2" style="margin-bottom:6px"><div class="progress-bar ${p.progress===100?'success':''}" style="width:${p.progress}%"></div></div>
           <div class="kanban-card-meta">
@@ -3709,6 +3717,25 @@ function renderProjects(){
 +`<div style="display:flex;align-items:flex-start;padding-top:2px">
     <button onclick="addKanbanCol('project')" style="min-width:44px;height:38px;background:var(--bg-elevated);border:1px dashed var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text-3);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-3)'" title="Add column">+</button>
   </div>`;
+}
+function toggleProjectMenu(id,btn){
+  var menu=document.getElementById('proj-menu-'+id);
+  if(!menu)return;
+  var isOpen=menu.style.display==='block';
+  document.querySelectorAll('[id^="proj-menu-"]').forEach(function(m){m.style.display='none';});
+  menu.style.display=isOpen?'none':'block';
+  if(!isOpen){
+    function closeMenu(e){if(!menu.contains(e.target)&&e.target!==btn){menu.style.display='none';document.removeEventListener('click',closeMenu);}}
+    setTimeout(function(){document.addEventListener('click',closeMenu);},0);
+  }
+}
+function deleteProject(id){
+  document.querySelectorAll('[id^="proj-menu-"]').forEach(function(m){m.style.display='none';});
+  var p=projectsData.find(function(x){return x.id===id;});
+  confirmDelete('Delete'+(p?' "'+p.name+'"':' project')+'? This cannot be undone.',function(){
+    var i=projectsData.findIndex(function(x){return x.id===id;});
+    if(i>-1){projectsData.splice(i,1);saveData();renderProjects();renderProjectsList();}
+  });
 }
 function renderProjectsList(){
   const tbody=document.getElementById('projects-list-tbody');
