@@ -2870,14 +2870,14 @@ function saveData(){
   updateNavBadges();
 }
 function updateNavBadges(){
-  // Leads: count only active (not Closed Won / Closed Lost)
-  var activeLeads=(leadsData||[]).filter(function(l){return l.stage!=='Closed Won'&&l.stage!=='Closed Lost';}).length;
+  // Leads: only count leads whose stage is an active board column (excludes Closed Won / Closed Lost)
+  var visibleLeads=(leadsData||[]).filter(function(l){return leadStages.indexOf(l.stage)>-1;}).length;
   var lb=document.getElementById('badge-leads');
-  if(lb){lb.textContent=activeLeads;lb.style.display=activeLeads>0?'':'none';}
-  // Tasks: count open tasks (not Done)
-  var openTasks=(tasksData||[]).filter(function(t){return t.stage!=='Done';}).length;
+  if(lb){lb.textContent=visibleLeads;lb.style.display=visibleLeads>0?'':'none';}
+  // Tasks: only count tasks whose stage is an active board column (excludes orphaned / deleted-column tasks)
+  var visibleTasks=(tasksData||[]).filter(function(t){return taskStages.indexOf(t.stage)>-1;}).length;
   var tb=document.getElementById('badge-tasks');
-  if(tb){tb.textContent=openTasks;tb.style.display=openTasks>0?'':'none';}
+  if(tb){tb.textContent=visibleTasks;tb.style.display=visibleTasks>0?'':'none';}
 }
 function loadData(){
   function tryParse(key,fallback){try{var v=localStorage.getItem(key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
