@@ -866,7 +866,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
           <div id="proj-col-delete-list"></div>
         </div>
       </div>
-      <button class="btn btn-primary" onclick="openModal('add-project-modal')">+ New Project</button>
+      <button class="btn btn-primary" onclick="openProjectPanel()">+ New Project</button>
     </div>
   </div>
   <div id="projects-kanban" class="kanban-board"></div>
@@ -1368,7 +1368,7 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       <div class="page-subtitle">Track recurring revenue from Server, CRM &amp; Office fees</div>
     </div>
     <div class="page-actions">
-      <button class="btn btn-primary" onclick="openModal('add-mfee-modal')">+ Add Fee Record</button>
+      <button class="btn btn-primary" onclick="openMfeeAddPanel()">+ Add Fee Record</button>
     </div>
   </div>
 
@@ -1508,17 +1508,25 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   </div>
 </div>
 
-<!-- ADD MONTHLY FEE RECORD MODAL -->
-<div class="modal-overlay" id="add-mfee-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Add Fee Record</div>
-      <button class="icon-btn" onclick="closeModal('add-mfee-modal')">✕</button>
+<!-- ADD MONTHLY FEE SLIDE PANEL -->
+<div class="detail-panel" id="add-mfee-panel">
+  <div class="detail-panel-header">
+    <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">💰</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">Add Fee Record</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px">Set up recurring fees for a client</div>
     </div>
-    <div class="modal-body">
+    <button class="icon-btn" onclick="closeMfeePanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <div class="detail-section">
+      <div class="detail-section-title">Client</div>
       <div class="form-group"><label class="form-label">Client Name *</label>
         <select class="form-control" id="mf-client"><option value="">Select client...</option></select>
       </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Fee Breakdown</div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">🖥 Server Fee</label>
           <select class="form-control" id="mf-server-fee" onchange="document.getElementById('mf-server-amt-row').style.display=this.value==='yes'?'':'none'">
@@ -1541,30 +1549,41 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
           <input class="form-control" type="date" id="mf-start-date"/>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Notes</label>
-        <textarea class="form-control" placeholder="Any notes about this fee arrangement..." rows="2" id="mf-notes"></textarea>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Notes</div>
+      <div class="form-group">
+        <textarea class="form-control" placeholder="Any notes about this fee arrangement..." rows="3" id="mf-notes"></textarea>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('add-mfee-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addMfeeRecord()">Save Fee Record</button>
-    </div>
+  </div>
+  <div style="padding:16px 22px;border-top:1px solid var(--border-light);display:flex;gap:10px;flex-shrink:0">
+    <button class="btn btn-secondary" style="flex:1" onclick="closeMfeePanel()">Cancel</button>
+    <button class="btn btn-primary" style="flex:2" onclick="addMfeeRecord()">Save Fee Record</button>
   </div>
 </div>
 
-<!-- EDIT MONTHLY FEE RECORD MODAL -->
-<div class="modal-overlay" id="edit-mfee-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Edit Fee Record</div>
-      <button class="icon-btn" onclick="closeModal('edit-mfee-modal')">✕</button>
+<!-- EDIT MONTHLY FEE SLIDE PANEL -->
+<div class="detail-panel" id="edit-mfee-panel">
+  <div class="detail-panel-header">
+    <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✏️</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">Edit Fee Record</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px" id="mf-edit-panel-subtitle">Update fee arrangement</div>
     </div>
-    <div class="modal-body">
-      <input type="hidden" id="mf-edit-id"/>
-      <input type="hidden" id="mf-edit-source"/>
+    <button class="icon-btn" onclick="closeMfeePanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <input type="hidden" id="mf-edit-id"/>
+    <input type="hidden" id="mf-edit-source"/>
+    <div class="detail-section">
+      <div class="detail-section-title">Client</div>
       <div class="form-group"><label class="form-label">Client Name</label>
         <input class="form-control" id="mf-edit-client" placeholder="Client name"/>
       </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Fee Breakdown</div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">🖥 Server Fee</label>
           <select class="form-control" id="mf-edit-server-fee" onchange="document.getElementById('mf-edit-server-amt-row').style.display=this.value==='yes'?'':'none'">
@@ -1587,14 +1606,17 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
           <input class="form-control" type="date" id="mf-edit-start-date"/>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Notes</label>
-        <textarea class="form-control" placeholder="Any notes..." rows="2" id="mf-edit-notes"></textarea>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Notes</div>
+      <div class="form-group">
+        <textarea class="form-control" placeholder="Any notes..." rows="3" id="mf-edit-notes"></textarea>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('edit-mfee-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveMfeeEdit()">Save Changes</button>
-    </div>
+  </div>
+  <div style="padding:16px 22px;border-top:1px solid var(--border-light);display:flex;gap:10px;flex-shrink:0">
+    <button class="btn btn-secondary" style="flex:1" onclick="closeMfeePanel()">Cancel</button>
+    <button class="btn btn-primary" style="flex:2" onclick="saveMfeeEdit()">Save Changes</button>
   </div>
 </div>
 
@@ -1818,23 +1840,38 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     </div>
   </div>
 </div>
-<div class="modal-overlay" id="add-project-modal">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title">New Project</div><button class="icon-btn" onclick="closeModal('add-project-modal')">✕</button></div>
-    <div class="modal-body">
+<!-- ADD PROJECT SLIDE PANEL -->
+<div class="detail-panel" id="add-project-panel">
+  <div class="detail-panel-header">
+    <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🗂️</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text-1)">New Project</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px">Fill in the details to create a project</div>
+    </div>
+    <button class="icon-btn" onclick="closeProjectPanel()" style="flex-shrink:0;font-size:16px">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <div class="detail-section">
+      <div class="detail-section-title">Project Info</div>
       <div class="form-group"><label class="form-label">Project Name *</label><input class="form-control" placeholder="Website Redesign" id="proj-name"/></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Details</div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">Client</label><select class="form-control" id="proj-client"><option>Select client...</option></select></div>
         <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="proj-status"><option>Not Started</option><option>In Progress</option><option>Waiting on Assets</option><option>Revisions</option><option>Completed</option></select></div>
         <div class="form-group"><label class="form-label">Budget ($)</label><input class="form-control" type="number" placeholder="10000" id="proj-budget"/></div>
         <div class="form-group"><label class="form-label">Deadline</label><input class="form-control" type="date" id="proj-deadline"/></div>
       </div>
-      <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" placeholder="Project scope and details..." rows="3"></textarea></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('add-project-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addProject()">Create Project</button>
+    <div class="detail-section">
+      <div class="detail-section-title">Description</div>
+      <div class="form-group"><textarea class="form-control" placeholder="Project scope and details..." rows="4" id="proj-desc"></textarea></div>
     </div>
+  </div>
+  <div style="padding:16px 22px;border-top:1px solid var(--border-light);display:flex;gap:10px;flex-shrink:0">
+    <button class="btn btn-secondary" style="flex:1" onclick="closeProjectPanel()">Cancel</button>
+    <button class="btn btn-primary" style="flex:2" onclick="addProject()">Create Project</button>
   </div>
 </div>
 <div class="modal-overlay" id="add-task-modal">
@@ -3051,11 +3088,11 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
 </div>
 
 <!-- FAB -->
-<div class="fab" id="fab">
-  <div class="fab-actions" id="fab-actions">
+<div class="fab" id="fab" style="display:none">
+  <div class="fab-actions" id="fab-actions" style="pointer-events:none">
     <div class="fab-action" onclick="openAddClientPanel()"><div class="fab-action-label">New Client</div><div class="fab-action-btn">👤</div></div>
     <div class="fab-action" onclick="openAddLeadPanel()"><div class="fab-action-label">New Lead</div><div class="fab-action-btn">🎯</div></div>
-    <div class="fab-action" onclick="openModal('add-project-modal')"><div class="fab-action-label">New Project</div><div class="fab-action-btn">🗂️</div></div>
+    <div class="fab-action" onclick="openProjectPanel()"><div class="fab-action-label">New Project</div><div class="fab-action-btn">🗂️</div></div>
     <div class="fab-action" onclick="openAddTaskPanel()"><div class="fab-action-label">New Task</div><div class="fab-action-btn">✅</div></div>
     <div class="fab-action" onclick="openModal('add-invoice-modal')"><div class="fab-action-label">New Invoice</div><div class="fab-action-btn">🧾</div></div>
   </div>
@@ -3227,18 +3264,37 @@ function confirmDeleteCancel(){
 }
 // ===================== ROUTING =====================
 function mfDel(id){
-  var r=monthlyFeesData.find(function(x){return x.id===id;});
+  var all=_mfBuildAllRecords();
+  var r=all.find(function(x){return String(x.id)===String(id);});
   var name=r?r.client:'this record';
+  var sid=String(id);
   confirmDelete('Delete fee record for '+name+'?',function(){
-    var i=monthlyFeesData.findIndex(function(x){return x.id===id;});
-    if(i>-1){monthlyFeesData.splice(i,1);saveData();renderMonthlyFees();showToast('Record deleted','success');}
+    if(sid.charAt(0)==='c'){
+      var cid=+sid.slice(1);
+      var c=(clientsData||[]).find(function(x){return x.id===cid;});
+      if(c){c.serverFee=false;c.serverAmount=0;c.crmFee=0;c.officeFee=0;c.feeDay=1;}
+    } else if(sid.charAt(0)==='l'){
+      var lid=+sid.slice(1);
+      var l=(leadsData||[]).find(function(x){return x.id===lid;});
+      if(l){l.serverFee=false;l.serverAmount=0;l.crmFee=0;l.officeFee=0;l.feeDay=1;}
+    } else {
+      var numId=+sid;
+      var i=monthlyFeesData.findIndex(function(x){return x.id===numId;});
+      if(i>-1)monthlyFeesData.splice(i,1);
+    }
+    saveData();renderMonthlyFees();showToast('Record deleted','success');
   });
 }
 function mfEdit(id){
-  var r=monthlyFeesData.find(function(x){return x.id===id;});
+  var all=_mfBuildAllRecords();
+  var r=all.find(function(x){return String(x.id)===String(id);});
   if(!r)return;
-  document.getElementById('mf-edit-id').value=id;
-  document.getElementById('mf-edit-source').value='manual';
+  // Find the row index in _mfRowMap so saveMfeeEdit can look it up
+  var rowIdx=-1;
+  Object.keys(_mfRowMap).forEach(function(k){if(String(_mfRowMap[k].id)===String(id))rowIdx=+k;});
+  if(rowIdx===-1)return;
+  document.getElementById('mf-edit-id').value=rowIdx;
+  document.getElementById('mf-edit-source').value=r._source||'manual';
   document.getElementById('mf-edit-client').value=r.client||'';
   var sf=r.serverFee?'yes':'no';
   document.getElementById('mf-edit-server-fee').value=sf;
@@ -3249,7 +3305,8 @@ function mfEdit(id){
   document.getElementById('mf-edit-fee-day').value=r.feeDay||1;
   document.getElementById('mf-edit-start-date').value=r.startDate||'';
   document.getElementById('mf-edit-notes').value=r.notes||'';
-  document.getElementById('edit-mfee-modal').classList.add('open');
+  var sub=document.getElementById('mf-edit-panel-subtitle');if(sub)sub.textContent='Editing: '+r.client;
+  openPanel('edit-mfee-panel');
 }
 
 function navigate(page){
@@ -3337,12 +3394,14 @@ document.addEventListener('click',e=>{
 function toggleFab(){
   fabOpen=!fabOpen;
   const btn=document.getElementById('fab-main');
+  const actions=document.getElementById('fab-actions');
   btn.style.transform=fabOpen?'rotate(45deg)':'rotate(0)';
+  actions.style.pointerEvents=fabOpen?'auto':'none';
   document.querySelectorAll('.fab-action').forEach((a,i)=>{
     setTimeout(()=>a.classList.toggle('show',fabOpen),fabOpen?i*50:0);
   });
 }
-function closeFab(){fabOpen=false;document.getElementById('fab-main').style.transform='rotate(0)';document.querySelectorAll('.fab-action').forEach(a=>a.classList.remove('show'));}
+function closeFab(){fabOpen=false;document.getElementById('fab-main').style.transform='rotate(0)';document.getElementById('fab-actions').style.pointerEvents='none';document.querySelectorAll('.fab-action').forEach(a=>a.classList.remove('show'));}
 // ===================== MODALS =====================
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -3732,7 +3791,7 @@ function renderMonthlyFees(){
         <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text-2);text-align:right;white-space:nowrap">$${_fmtNum(Math.round(yrAmt))}</td>
         <td style="padding:10px 12px;text-align:center"><span style="font-size:12px;font-weight:700;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:20px">${dayLabel}</span></td>
         <td style="padding:10px 12px;text-align:center;white-space:nowrap">${feeTags}</td>
-        <td><div class="flex gap-1"><button class="btn btn-ghost btn-sm" onclick="mfEdit(${r.id})">✏️ Edit</button><button class="btn btn-ghost btn-sm" onclick="mfDel(${r.id})">🗑</button></div></td>
+        <td style="padding:6px 12px"><div class="flex gap-1"><button class="btn btn-ghost btn-sm" data-mf-action="edit" data-mf-id="${r.id}">✏️ Edit</button><button class="btn btn-ghost btn-sm" data-mf-action="del" data-mf-id="${r.id}">🗑</button></div></td>
       </tr>`;
     }).join(''):'<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--text-3)">No fee records yet.</td></tr>';
   }
@@ -3757,7 +3816,7 @@ function addMfeeRecord(){
   if(!client||client==='Select client...'){showToast('Please select a client','warning');return;}
   monthlyFeesData.push({id:_mfNextId++,client,serverFee,serverAmount,crmFee,officeFee,feeDay,startDate,notes});
   saveData();
-  closeModal('add-mfee-modal');
+  closeMfeePanel();
   // reset modal
   ['mf-server-amt','mf-crm-fee','mf-office-fee','mf-fee-day','mf-notes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('mf-server-fee').value='no';
@@ -3821,7 +3880,8 @@ function editMfeeRecord(id){
   document.getElementById('mf-edit-fee-day').value=r.feeDay||1;
   document.getElementById('mf-edit-start-date').value=r.startDate||'';
   document.getElementById('mf-edit-notes').value=r.notes||'';
-  openModal('edit-mfee-modal');
+  var sub=document.getElementById('mf-edit-panel-subtitle');if(sub)sub.textContent='Editing: '+(r.client||'');
+  openPanel('edit-mfee-panel');
 }
 function saveMfeeEdit(){
   var rowIdx=+document.getElementById('mf-edit-id').value;
@@ -3855,7 +3915,7 @@ function saveMfeeEdit(){
     monthlyFeesData[idx].feeDay=day;monthlyFeesData[idx].startDate=sd;monthlyFeesData[idx].notes=notes;
   }
   saveData();
-  document.getElementById('edit-mfee-modal').classList.remove('open');
+  closeMfeePanel();
   renderMonthlyFees();
   showToast('Fee record updated!','success');
 }
@@ -4393,7 +4453,7 @@ function addProject(){
   const p={id:Date.now(),name:document.getElementById('proj-name').value||'New Project',client:document.getElementById('proj-client').value||'—',status:document.getElementById('proj-status').value,progress:0,budget:+document.getElementById('proj-budget').value||0,deadline:document.getElementById('proj-deadline').value||'2026-12-31',team:['AK']};
   projectsData.unshift(p);
   saveData();
-  closeModal('add-project-modal');
+  closeProjectPanel();
   navigate('projects');
   showToast('Project created!','success');
 }
@@ -5961,7 +6021,7 @@ function setLeadStageFromPanel(id,stage,el){
 // ── panel open/close ──────────────────────────────────────
 function openPanel(panelId){
   document.getElementById('detail-overlay').classList.add('open');
-  ['client-detail-panel','lead-detail-panel','project-detail-panel','invoice-detail-panel','add-client-panel','add-lead-panel','add-task-panel'].forEach(function(id){
+  ['client-detail-panel','lead-detail-panel','project-detail-panel','invoice-detail-panel','add-client-panel','add-lead-panel','add-task-panel','add-mfee-panel','edit-mfee-panel','add-project-panel'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.classList.remove('open');
   });
   document.getElementById(panelId).classList.add('open');
@@ -5979,9 +6039,49 @@ function closeDetailPanel(){
   var acp=document.getElementById('add-client-panel');if(acp)acp.classList.remove('open');
   var alp=document.getElementById('add-lead-panel');if(alp)alp.classList.remove('open');
   var atp=document.getElementById('add-task-panel');if(atp)atp.classList.remove('open');
+  var amp=document.getElementById('add-mfee-panel');if(amp)amp.classList.remove('open');
+  var emp=document.getElementById('edit-mfee-panel');if(emp)emp.classList.remove('open');
+  var app=document.getElementById('add-project-panel');if(app)app.classList.remove('open');
 }
 function closeAddTaskPanel(){
   var p=document.getElementById('add-task-panel');if(p)p.classList.remove('open');
+  document.getElementById('detail-overlay').classList.remove('open');
+}
+function openMfeeAddPanel(){
+  // Reset add form
+  ['mf-server-amt','mf-crm-fee','mf-office-fee','mf-fee-day','mf-notes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var sf=document.getElementById('mf-server-fee');if(sf)sf.value='no';
+  var sar=document.getElementById('mf-server-amt-row');if(sar)sar.style.display='none';
+  // Repopulate client dropdown
+  var sel=document.getElementById('mf-client');
+  if(sel){
+    while(sel.options.length>1)sel.remove(1);
+    (clientsData||[]).forEach(function(c){var o=document.createElement('option');o.textContent=c.company||(c.fname+' '+c.lname);o.value=o.textContent;sel.appendChild(o);});
+    (leadsData||[]).forEach(function(l){var o=document.createElement('option');o.textContent=l.company||l.name;o.value=o.textContent;sel.appendChild(o);});
+    sel.selectedIndex=0;
+  }
+  openPanel('add-mfee-panel');
+}
+function closeMfeePanel(){
+  var amp=document.getElementById('add-mfee-panel');if(amp)amp.classList.remove('open');
+  var emp=document.getElementById('edit-mfee-panel');if(emp)emp.classList.remove('open');
+  document.getElementById('detail-overlay').classList.remove('open');
+}
+function openProjectPanel(){
+  // Reset fields
+  ['proj-name','proj-budget','proj-deadline','proj-desc'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var st=document.getElementById('proj-status');if(st)st.selectedIndex=0;
+  // Populate client dropdown from live data
+  var sel=document.getElementById('proj-client');
+  if(sel){
+    while(sel.options.length>1)sel.remove(1);
+    (clientsData||[]).forEach(function(c){var o=document.createElement('option');o.textContent=c.company||(c.fname+' '+c.lname);o.value=o.textContent;sel.appendChild(o);});
+    sel.selectedIndex=0;
+  }
+  openPanel('add-project-panel');
+}
+function closeProjectPanel(){
+  var p=document.getElementById('add-project-panel');if(p)p.classList.remove('open');
   document.getElementById('detail-overlay').classList.remove('open');
 }
 
@@ -6248,6 +6348,16 @@ document.addEventListener('DOMContentLoaded',function(){
       closeFab();
     }
   });
+
+  // Monthly Fees table — edit / delete via capture-phase delegation (fires first, nothing can block it)
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('[data-mf-action]');
+    if(!btn)return;
+    var id=btn.getAttribute('data-mf-id');
+    var action=btn.getAttribute('data-mf-action');
+    if(action==='edit')mfEdit(id);
+    if(action==='del')mfDel(id);
+  },true);
 });
 </script>
 </body>
