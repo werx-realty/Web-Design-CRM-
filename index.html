@@ -520,6 +520,9 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
     <div class="nav-item" data-page="invoices">
       <span class="nav-icon">🧾</span><span class="nav-label">Invoices</span>
     </div>
+    <div class="nav-item" data-page="mfees">
+      <span class="nav-icon">💰</span><span class="nav-label">Monthly Fees</span>
+    </div>
     <div class="sidebar-section-title">TEAM</div>
     <div class="nav-item" data-page="chat">
       <span class="nav-icon">💬</span><span class="nav-label">Team Chat</span>
@@ -1357,6 +1360,244 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
   </div>
 </div>
 
+<!-- ===== MONTHLY FEES PAGE ===== -->
+<div class="page" id="page-mfees">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Monthly Fees</div>
+      <div class="page-subtitle">Track recurring revenue from Server, CRM &amp; Office fees</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="openModal('add-mfee-modal')">+ Add Fee Record</button>
+    </div>
+  </div>
+
+  <!-- TOP STATS ROW: [Two Gauges] [3 Fee Boxes] [Fee Type Chart] -->
+  <div style="display:grid;grid-template-columns:1.4fr auto 1.1fr;gap:16px;margin-bottom:16px;align-items:stretch">
+
+    <!-- LEFT: TWO GAUGES SIDE BY SIDE -->
+    <div class="card" style="position:relative;overflow:hidden;padding:20px">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 110%,rgba(139,92,246,.14) 0%,transparent 65%);pointer-events:none"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative">
+
+        <!-- GAUGE 1: Monthly -->
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:10px">Total Monthly</div>
+          <div style="position:relative;width:210px;height:210px">
+            <canvas id="mfees-gauge" width="210" height="210"></canvas>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;white-space:nowrap">
+              <div style="font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--text-1)" id="mfees-mrr-label">$0</div>
+              <div style="font-size:10px;color:var(--text-3)">per month</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;width:210px;margin-top:2px">
+            <span style="font-size:9px;color:var(--text-3)">$0</span>
+            <span style="font-size:9px;color:var(--text-3)" id="mfees-gauge-max">$5K</span>
+          </div>
+        </div>
+
+        <!-- GAUGE 2: Yearly -->
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:10px">Made Yearly So Far</div>
+          <div style="position:relative;width:210px;height:210px">
+            <canvas id="mfees-yearly-gauge" width="210" height="210"></canvas>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;white-space:nowrap">
+              <div style="font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--success)" id="mfees-yearly">$0</div>
+              <div style="font-size:10px;color:var(--text-3)" id="mfees-yearly-months">0 mo</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;width:210px;margin-top:2px">
+            <span style="font-size:9px;color:var(--text-3)">$0</span>
+            <span style="font-size:9px;color:var(--text-3)" id="mfees-yearly-gauge-max">$50K</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress bar under both -->
+      <div style="margin-top:16px;position:relative">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-bottom:5px">
+          <span>Yearly goal progress</span><span id="mfees-goal-pct">0%</span>
+        </div>
+        <div style="background:var(--border);border-radius:20px;height:5px;overflow:hidden">
+          <div id="mfees-goal-bar" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--success));border-radius:20px;transition:width .5s ease;width:0%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);margin-top:3px">
+          <span>$0</span><span id="mfees-goal-label">$50K goal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDLE: 3 FEE BOXES with monthly + yearly -->
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
+
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1;border-left:3px solid var(--accent);position:relative;overflow:hidden">
+        <div style="position:absolute;right:-10px;bottom:-10px;font-size:48px;opacity:.06">🖥</div>
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;letter-spacing:.6px;text-transform:uppercase">Server Fee</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+          <div style="font-size:26px;font-weight:900;color:var(--accent);letter-spacing:-1px" id="mfees-server-total">$0</div>
+          <div style="font-size:11px;color:var(--text-3)">/mo</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+          <div style="font-size:11px;color:var(--text-3)" id="mfees-server-count">0 clients</div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);opacity:.8" id="mfees-server-yearly">$0/yr</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1;border-left:3px solid var(--success);position:relative;overflow:hidden">
+        <div style="position:absolute;right:-10px;bottom:-10px;font-size:48px;opacity:.06">🗂</div>
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;letter-spacing:.6px;text-transform:uppercase">CRM Fee</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+          <div style="font-size:26px;font-weight:900;color:var(--success);letter-spacing:-1px" id="mfees-crm-total">$0</div>
+          <div style="font-size:11px;color:var(--text-3)">/mo</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+          <div style="font-size:11px;color:var(--text-3)" id="mfees-crm-count">0 clients</div>
+          <div style="font-size:12px;font-weight:700;color:var(--success);opacity:.8" id="mfees-crm-yearly">$0/yr</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1;border-left:3px solid var(--info);position:relative;overflow:hidden">
+        <div style="position:absolute;right:-10px;bottom:-10px;font-size:48px;opacity:.06">🏢</div>
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;letter-spacing:.6px;text-transform:uppercase">Office Fee</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+          <div style="font-size:26px;font-weight:900;color:var(--info);letter-spacing:-1px" id="mfees-office-total">$0</div>
+          <div style="font-size:11px;color:var(--text-3)">/mo</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+          <div style="font-size:11px;color:var(--text-3)" id="mfees-office-count">0 clients</div>
+          <div style="font-size:12px;font-weight:700;color:var(--info);opacity:.8" id="mfees-office-yearly">$0/yr</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: BY FEE TYPE CHART (big, fills card) -->
+    <div class="card" style="display:flex;flex-direction:column">
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">By Fee Type</div>
+      <div style="flex:1;min-height:0;position:relative">
+        <canvas id="mfees-type-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px">
+
+    <!-- BY CLIENT CHART -->
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:16px">By Client (Monthly)</div>
+      <div id="mfees-by-client" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+
+    <!-- CLIENTS PAYMENTS TABLE -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border-light);font-size:14px;font-weight:700">Client Payments</div>
+      <div style="overflow-y:auto;max-height:340px">
+        <table style="width:100%;border-collapse:collapse" id="mfees-table">
+          <thead><tr style="position:sticky;top:0;background:var(--bg-card)">
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:left;letter-spacing:.5px;text-transform:uppercase">Client</th>
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:right;letter-spacing:.5px;text-transform:uppercase">Monthly</th>
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:right;letter-spacing:.5px;text-transform:uppercase">Yearly</th>
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:center;letter-spacing:.5px;text-transform:uppercase">Pay Day</th>
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:center;letter-spacing:.5px;text-transform:uppercase">Fees</th>
+            <th style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-3);text-align:center;letter-spacing:.5px;text-transform:uppercase;width:72px">Actions</th>
+          </tr></thead>
+          <tbody id="mfees-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MONTHLY FEE RECORD MODAL -->
+<div class="modal-overlay" id="add-mfee-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Fee Record</div>
+      <button class="icon-btn" onclick="closeModal('add-mfee-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Client Name *</label>
+        <select class="form-control" id="mf-client"><option value="">Select client...</option></select>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">🖥 Server Fee</label>
+          <select class="form-control" id="mf-server-fee" onchange="document.getElementById('mf-server-amt-row').style.display=this.value==='yes'?'':'none'">
+            <option value="no">No</option><option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="form-group" id="mf-server-amt-row" style="display:none"><label class="form-label">Server Amount ($/mo)</label>
+          <input class="form-control" type="number" placeholder="150" id="mf-server-amt"/>
+        </div>
+        <div class="form-group"><label class="form-label">🗂 CRM Fee ($/mo)</label>
+          <input class="form-control" type="number" placeholder="99" id="mf-crm-fee"/>
+        </div>
+        <div class="form-group"><label class="form-label">🏢 Office Fee ($/mo)</label>
+          <input class="form-control" type="number" placeholder="0" id="mf-office-fee"/>
+        </div>
+        <div class="form-group"><label class="form-label">📅 Payment Day (1–31)</label>
+          <input class="form-control" type="number" placeholder="1" min="1" max="31" id="mf-fee-day"/>
+        </div>
+        <div class="form-group"><label class="form-label">🗓 Start Date</label>
+          <input class="form-control" type="date" id="mf-start-date"/>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label>
+        <textarea class="form-control" placeholder="Any notes about this fee arrangement..." rows="2" id="mf-notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('add-mfee-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addMfeeRecord()">Save Fee Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MONTHLY FEE RECORD MODAL -->
+<div class="modal-overlay" id="edit-mfee-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Fee Record</div>
+      <button class="icon-btn" onclick="closeModal('edit-mfee-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mf-edit-id"/>
+      <input type="hidden" id="mf-edit-source"/>
+      <div class="form-group"><label class="form-label">Client Name</label>
+        <input class="form-control" id="mf-edit-client" placeholder="Client name"/>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">🖥 Server Fee</label>
+          <select class="form-control" id="mf-edit-server-fee" onchange="document.getElementById('mf-edit-server-amt-row').style.display=this.value==='yes'?'':'none'">
+            <option value="no">No</option><option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="form-group" id="mf-edit-server-amt-row" style="display:none"><label class="form-label">Server Amount ($/mo)</label>
+          <input class="form-control" type="number" placeholder="150" id="mf-edit-server-amt"/>
+        </div>
+        <div class="form-group"><label class="form-label">🗂 CRM Fee ($/mo)</label>
+          <input class="form-control" type="number" placeholder="99" id="mf-edit-crm-fee"/>
+        </div>
+        <div class="form-group"><label class="form-label">🏢 Office Fee ($/mo)</label>
+          <input class="form-control" type="number" placeholder="0" id="mf-edit-office-fee"/>
+        </div>
+        <div class="form-group"><label class="form-label">📅 Payment Day (1–31)</label>
+          <input class="form-control" type="number" placeholder="1" min="1" max="31" id="mf-edit-fee-day"/>
+        </div>
+        <div class="form-group"><label class="form-label">🗓 Start Date</label>
+          <input class="form-control" type="date" id="mf-edit-start-date"/>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label>
+        <textarea class="form-control" placeholder="Any notes..." rows="2" id="mf-edit-notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('edit-mfee-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMfeeEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== SETTINGS PAGE ===== -->
 <div class="page" id="page-settings">
   <div class="page-header">
@@ -2047,6 +2288,36 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
       </div>
     </div>
 
+    <!-- MONTHLY FEES -->
+    <div class="detail-section">
+      <div class="detail-section-title">Monthly Fees</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🖥 Server Fee</div>
+          <select class="detail-edit-input" id="acp-server-fee" onchange="document.getElementById('acp-server-amt-row').style.display=this.value==='yes'?'':'none'">
+            <option value="no">No</option><option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="detail-info-item" id="acp-server-amt-row" style="display:none;grid-column:1/-1">
+          <div class="detail-info-label">🖥 Server Fee Amount ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="150" id="acp-server-amt"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🗂 CRM Fee ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="99" id="acp-crm-fee"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🏢 Office Fee ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="acp-office-fee"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📅 Fee Payment Date (monthly)</div>
+          <input type="number" class="detail-edit-input" placeholder="1" min="1" max="31" id="acp-fee-date" style="max-width:80px"/>
+          <span style="font-size:11px;color:var(--text-3);margin-top:4px">Day of month (1–31)</span>
+        </div>
+      </div>
+    </div>
+
     <!-- TAGS -->
     <div class="detail-section">
       <div class="detail-section-title">Tags</div>
@@ -2166,6 +2437,35 @@ select.detail-edit-input option{background:var(--bg-elevated);color:var(--text-1
             <option value="DK">Dev Kumar</option>
             <option value="SL">Sofia Lopez</option>
           </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONTHLY FEES -->
+    <div class="detail-section">
+      <div class="detail-section-title">Monthly Fees</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">🖥 Server Fee</div>
+          <select class="detail-edit-input" id="alp-server-fee" onchange="document.getElementById('alp-server-amt-row').style.display=this.value==='yes'?'':'none'">
+            <option value="no">No</option><option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="detail-info-item" id="alp-server-amt-row" style="display:none;grid-column:1/-1">
+          <div class="detail-info-label">🖥 Server Fee Amount ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="150" id="alp-server-amt"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🗂 CRM Fee ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="99" id="alp-crm-fee"/>
+        </div>
+        <div class="detail-info-item">
+          <div class="detail-info-label">🏢 Office Fee ($/mo)</div>
+          <input type="number" class="detail-edit-input" placeholder="0" id="alp-office-fee"/>
+        </div>
+        <div class="detail-info-item" style="grid-column:1/-1">
+          <div class="detail-info-label">📅 Fee Payment Date (day of month)</div>
+          <input type="number" class="detail-edit-input" placeholder="1" min="1" max="31" id="alp-fee-date" style="max-width:80px"/>
         </div>
       </div>
     </div>
@@ -2814,6 +3114,14 @@ let invoicesData = [
   {id:'INV-077',client:'BrightSpace Academy',email:'billing@brightspaceacademy.com',amount:3200,status:'Sent',issued:'2026-04-20',due:'2026-05-20'},
 ];
 let proposalsData = [];
+let monthlyFeesData = [
+  {id:1,client:'TechFlow Inc.',serverFee:true,serverAmount:150,crmFee:99,officeFee:200,feeDay:1,startDate:'2026-01-01',notes:''},
+  {id:2,client:'Nexus Branding',serverFee:false,serverAmount:0,crmFee:99,officeFee:0,feeDay:5,startDate:'2026-02-01',notes:''},
+  {id:3,client:'Luxe Interiors',serverFee:true,serverAmount:75,crmFee:99,officeFee:150,feeDay:10,startDate:'2026-01-01',notes:''},
+  {id:4,client:'Stride Health',serverFee:true,serverAmount:200,crmFee:99,officeFee:300,feeDay:15,startDate:'2026-03-01',notes:''},
+  {id:5,client:'BrightSpace Academy',serverFee:false,serverAmount:0,crmFee:99,officeFee:0,feeDay:20,startDate:'2026-04-01',notes:''},
+];
+let _mfNextId=6;
 const leadStages=['Prospects','New Lead','Contacted','Proposal Sent','Follow Up','Negotiation'];
 const projStatuses=['Not Started','In Progress','Waiting on Assets','Revisions','Completed'];
 var taskStages=['New','Started','Built Out','Review','Done','On Hold'];
@@ -2864,6 +3172,7 @@ function saveData(){
     localStorage.setItem('acrm_fl_notes',flNotesData||'');
     localStorage.setItem('acrm_fl_key',flApiKey||'');
     localStorage.setItem('acrm_invoice_notes',JSON.stringify(invoiceNotes));
+    localStorage.setItem('acrm_mfees',JSON.stringify(monthlyFeesData));
   }catch(e){console.warn('saveData:',e);}
   // refresh dashboard stats whenever any data changes
   if(typeof renderDashboard==='function')renderDashboard();
@@ -2898,6 +3207,7 @@ function loadData(){
   var lfn=localStorage.getItem('acrm_fl_notes');if(lfn!==null)flNotesData=lfn;
   var lfk=localStorage.getItem('acrm_fl_key');if(lfk)flApiKey=lfk;
   var lin=tryParse('acrm_invoice_notes',null);if(lin)invoiceNotes=lin;
+  var lmf=tryParse('acrm_mfees',null);if(lmf&&lmf.length)monthlyFeesData=lmf;
 }
 // ---- Confirm Delete Modal ----
 var _cdCallback=null;
@@ -2916,6 +3226,32 @@ function confirmDeleteCancel(){
   _cdCallback=null;
 }
 // ===================== ROUTING =====================
+function mfDel(id){
+  var r=monthlyFeesData.find(function(x){return x.id===id;});
+  var name=r?r.client:'this record';
+  confirmDelete('Delete fee record for '+name+'?',function(){
+    var i=monthlyFeesData.findIndex(function(x){return x.id===id;});
+    if(i>-1){monthlyFeesData.splice(i,1);saveData();renderMonthlyFees();showToast('Record deleted','success');}
+  });
+}
+function mfEdit(id){
+  var r=monthlyFeesData.find(function(x){return x.id===id;});
+  if(!r)return;
+  document.getElementById('mf-edit-id').value=id;
+  document.getElementById('mf-edit-source').value='manual';
+  document.getElementById('mf-edit-client').value=r.client||'';
+  var sf=r.serverFee?'yes':'no';
+  document.getElementById('mf-edit-server-fee').value=sf;
+  document.getElementById('mf-edit-server-amt-row').style.display=sf==='yes'?'':'none';
+  document.getElementById('mf-edit-server-amt').value=r.serverAmount||'';
+  document.getElementById('mf-edit-crm-fee').value=r.crmFee||'';
+  document.getElementById('mf-edit-office-fee').value=r.officeFee||'';
+  document.getElementById('mf-edit-fee-day').value=r.feeDay||1;
+  document.getElementById('mf-edit-start-date').value=r.startDate||'';
+  document.getElementById('mf-edit-notes').value=r.notes||'';
+  document.getElementById('edit-mfee-modal').classList.add('open');
+}
+
 function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -2931,6 +3267,7 @@ function navigate(page){
   closeFab();
   // init page
   if(page==='dashboard')setTimeout(renderDashboard,50);
+  if(page==='mfees')setTimeout(renderMonthlyFees,80);
   if(page==='clients')renderClients();
   if(page==='leads')renderLeads();
   if(page==='projects')renderProjects();
@@ -3253,6 +3590,275 @@ function _to12h(time24){
   h=h%12||12;
   return h+':'+(m<10?'0':'')+m+' '+ampm;
 }
+// ===================== MONTHLY FEES =====================
+var _mfGaugeChart=null,_mfYearlyGaugeChart=null,_mfTypeChart=null;
+function _mfBuildAllRecords(){
+  // Start with standalone monthlyFeesData records
+  var all=monthlyFeesData.map(function(r){return Object.assign({},r,{_source:'manual'});});
+  var usedNames=all.map(function(r){return r.client.toLowerCase();});
+  // Pull from clientsData where any fee is set
+  (clientsData||[]).forEach(function(c){
+    var name=c.company||(c.fname+' '+c.lname);
+    if(usedNames.indexOf(name.toLowerCase())>-1)return; // already covered
+    var hasFee=c.serverFee||c.crmFee>0||c.officeFee>0;
+    if(!hasFee)return;
+    all.push({id:'c'+c.id,client:name,serverFee:!!c.serverFee,serverAmount:c.serverAmount||0,crmFee:c.crmFee||0,officeFee:c.officeFee||0,feeDay:c.feeDay||1,startDate:null,notes:'',_source:'client'});
+    usedNames.push(name.toLowerCase());
+  });
+  // Pull from leadsData where any fee is set
+  (leadsData||[]).forEach(function(l){
+    var name=l.company||l.name;
+    if(usedNames.indexOf(name.toLowerCase())>-1)return;
+    var hasFee=l.serverFee||l.crmFee>0||l.officeFee>0;
+    if(!hasFee)return;
+    all.push({id:'l'+l.id,client:name,serverFee:!!l.serverFee,serverAmount:l.serverAmount||0,crmFee:l.crmFee||0,officeFee:l.officeFee||0,feeDay:l.feeDay||1,startDate:null,notes:'',_source:'lead'});
+    usedNames.push(name.toLowerCase());
+  });
+  return all;
+}
+function renderMonthlyFees(){
+  var data=_mfBuildAllRecords();
+  var now=new Date();
+  var curYear=now.getFullYear();
+  var monthsThisYear=now.getMonth()+1;
+
+  // Totals
+  var totalServer=0,serverCount=0,totalCrm=0,crmCount=0,totalOffice=0,officeCount=0;
+  var yearlyServer=0,yearlyCrm=0,yearlyOffice=0,yearlyTotal=0;
+  data.forEach(function(r){
+    // months active this year
+    var mStart=0;
+    if(r.startDate){var sd=new Date(r.startDate);if(sd.getFullYear()>=curYear)mStart=sd.getMonth();}
+    var mo=Math.max(0,monthsThisYear-mStart);
+    if(r.serverFee&&r.serverAmount>0){totalServer+=r.serverAmount;serverCount++;yearlyServer+=r.serverAmount*mo;}
+    if(r.crmFee>0){totalCrm+=r.crmFee;crmCount++;yearlyCrm+=r.crmFee*mo;}
+    if(r.officeFee>0){totalOffice+=r.officeFee;officeCount++;yearlyOffice+=r.officeFee*mo;}
+  });
+  yearlyTotal=yearlyServer+yearlyCrm+yearlyOffice;
+  var totalMRR=totalServer+totalCrm+totalOffice;
+  var goalAmt=50000;
+  var goalPct=Math.min(100,Math.round(yearlyTotal/goalAmt*100));
+
+  // Stat labels
+  _setEl('mfees-mrr-label','$'+_fmtNum(totalMRR));
+  _setEl('mfees-server-total','$'+_fmtNum(totalServer));
+  _setEl('mfees-server-count',serverCount+' client'+(serverCount!==1?'s':''));
+  _setEl('mfees-server-yearly','$'+_fmtNum(Math.round(yearlyServer))+'/yr');
+  _setEl('mfees-crm-total','$'+_fmtNum(totalCrm));
+  _setEl('mfees-crm-count',crmCount+' client'+(crmCount!==1?'s':''));
+  _setEl('mfees-crm-yearly','$'+_fmtNum(Math.round(yearlyCrm))+'/yr');
+  _setEl('mfees-office-total','$'+_fmtNum(totalOffice));
+  _setEl('mfees-office-count',officeCount+' client'+(officeCount!==1?'s':''));
+  _setEl('mfees-office-yearly','$'+_fmtNum(Math.round(yearlyOffice))+'/yr');
+  _setEl('mfees-yearly','$'+_fmtNum(Math.round(yearlyTotal)));
+  _setEl('mfees-yearly-months',monthsThisYear+' mo');
+  _setEl('mfees-goal-pct',goalPct+'%');
+  var gb=document.getElementById('mfees-goal-bar');if(gb)gb.style.width=goalPct+'%';
+  _setEl('mfees-goal-label','$'+(goalAmt/1000)+'K goal');
+
+  // --- GAUGE 1: Monthly MRR ---
+  var gaugeMax=Math.max(totalMRR*1.5,5000);
+  _setEl('mfees-gauge-max','$'+_fmtNum(Math.round(gaugeMax)));
+  var gCanvas=document.getElementById('mfees-gauge');
+  if(gCanvas){
+    if(_mfGaugeChart)_mfGaugeChart.destroy();
+    var fillPct=Math.min(1,totalMRR/gaugeMax);
+    _mfGaugeChart=new Chart(gCanvas,{type:'doughnut',data:{datasets:[{data:[fillPct,1-fillPct],backgroundColor:['rgba(139,92,246,1)','rgba(255,255,255,.06)'],borderWidth:0,circumference:360,rotation:0}]},options:{responsive:false,cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+  }
+
+  // --- GAUGE 2: Yearly total ---
+  var yearlyMax=Math.max(yearlyTotal*1.4,goalAmt);
+  _setEl('mfees-yearly-gauge-max','$'+_fmtNum(Math.round(yearlyMax)));
+  var gyCanvas=document.getElementById('mfees-yearly-gauge');
+  if(gyCanvas){
+    if(_mfYearlyGaugeChart)_mfYearlyGaugeChart.destroy();
+    var yFillPct=Math.min(1,yearlyTotal/yearlyMax);
+    _mfYearlyGaugeChart=new Chart(gyCanvas,{type:'doughnut',data:{datasets:[{data:[yFillPct,1-yFillPct],backgroundColor:['rgba(34,197,94,1)','rgba(255,255,255,.06)'],borderWidth:0,circumference:360,rotation:0}]},options:{responsive:false,cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+  }
+
+  // --- By-client bars ---
+  var bcEl=document.getElementById('mfees-by-client');
+  if(bcEl){
+    var maxMRR=Math.max(1,...data.map(function(r){return(r.serverFee?r.serverAmount:0)+r.crmFee+r.officeFee;}));
+    var colors=['var(--accent)','var(--success)','var(--info)','var(--warning)','#ec4899','var(--danger)'];
+    bcEl.innerHTML=data.length?data.map(function(r,i){
+      var mrr=(r.serverFee?r.serverAmount:0)+r.crmFee+r.officeFee;
+      var pct=Math.round(mrr/maxMRR*100);
+      var src=r._source==='client'?'<span style="font-size:9px;opacity:.5;margin-left:4px">client</span>':r._source==='lead'?'<span style="font-size:9px;opacity:.5;margin-left:4px">lead</span>':'';
+      return '<div style="margin-bottom:4px">'
+        +'<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">'
+        +'<span style="font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px">'+r.client+src+'</span>'
+        +'<span style="color:var(--text-2);font-weight:700;flex-shrink:0">$'+_fmtNum(mrr)+'</span></div>'
+        +'<div style="background:var(--border);border-radius:20px;height:7px;overflow:hidden">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+colors[i%colors.length]+';border-radius:20px;transition:width .4s ease"></div>'
+        +'</div></div>';
+    }).join(''):'<div style="color:var(--text-3);font-size:13px;padding:8px 0">No records yet. Add fee data to clients or leads to see them here.</div>';
+  }
+
+  // --- Donut: By Fee Type ---
+  var tcCanvas=document.getElementById('mfees-type-chart');
+  if(tcCanvas){
+    if(_mfTypeChart)_mfTypeChart.destroy();
+    _mfTypeChart=new Chart(tcCanvas,{
+      type:'doughnut',
+      data:{labels:['Server Fee','CRM Fee','Office Fee'],datasets:[{data:[totalServer||0.01,totalCrm||0.01,totalOffice||0.01],backgroundColor:['rgba(139,92,246,.9)','rgba(34,197,94,.9)','rgba(59,130,246,.9)'],borderWidth:0,hoverOffset:6}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{
+        legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.7)',font:{size:12},padding:14,boxWidth:12}},
+        tooltip:{backgroundColor:'rgba(20,20,26,.95)',callbacks:{label:function(ctx){return ' $'+_fmtNum(ctx.raw)+'/mo';}}}
+      }}
+    });
+  }
+
+  // --- Payments table ---
+  var tbody=document.getElementById('mfees-tbody');
+  if(tbody){
+    var ORD=['','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','18th','19th','20th','21st','22nd','23rd','24th','25th','26th','27th','28th','29th','30th','31st'];
+    _mfRowMap={};
+    tbody.innerHTML=data.length?data.map((r,i)=>{
+      _mfRowMap[i]=r;
+      const mrr=(r.serverFee?r.serverAmount:0)+r.crmFee+r.officeFee;
+      let mStart=0;if(r.startDate){const sd2=new Date(r.startDate);if(sd2.getFullYear()>=curYear)mStart=sd2.getMonth();}
+      const mo=Math.max(0,monthsThisYear-mStart);
+      const yrAmt=mrr*mo;
+      let feeTags='';
+      if(r.serverFee&&r.serverAmount>0)feeTags+='<span style="background:rgba(139,92,246,.18);color:var(--accent);font-size:10px;padding:2px 6px;border-radius:10px;margin-right:3px">Server</span>';
+      if(r.crmFee>0)feeTags+='<span style="background:rgba(34,197,94,.18);color:var(--success);font-size:10px;padding:2px 6px;border-radius:10px;margin-right:3px">CRM</span>';
+      if(r.officeFee>0)feeTags+='<span style="background:rgba(59,130,246,.18);color:var(--info);font-size:10px;padding:2px 6px;border-radius:10px">Office</span>';
+      const dayLabel=ORD[Math.min(31,r.feeDay||1)]||r.feeDay+'th';
+      const srcBadge=r._source==='client'?'<span style="font-size:9px;color:var(--accent);margin-left:4px;opacity:.6">client</span>':r._source==='lead'?'<span style="font-size:9px;color:var(--warning);margin-left:4px;opacity:.6">lead</span>':'';
+      return `<tr style="border-bottom:1px solid var(--border-light)">
+        <td style="padding:10px 12px;font-size:13px;font-weight:600;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.client}${srcBadge}</td>
+        <td style="padding:10px 12px;font-size:13px;font-weight:800;color:var(--success);text-align:right;white-space:nowrap">$${_fmtNum(mrr)}</td>
+        <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text-2);text-align:right;white-space:nowrap">$${_fmtNum(Math.round(yrAmt))}</td>
+        <td style="padding:10px 12px;text-align:center"><span style="font-size:12px;font-weight:700;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:20px">${dayLabel}</span></td>
+        <td style="padding:10px 12px;text-align:center;white-space:nowrap">${feeTags}</td>
+        <td><div class="flex gap-1"><button class="btn btn-ghost btn-sm" onclick="mfEdit(${r.id})">✏️ Edit</button><button class="btn btn-ghost btn-sm" onclick="mfDel(${r.id})">🗑</button></div></td>
+      </tr>`;
+    }).join(''):'<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--text-3)">No fee records yet.</td></tr>';
+  }
+
+  // Populate client dropdown (refresh every time)
+  var sel=document.getElementById('mf-client');
+  if(sel){
+    while(sel.options.length>1)sel.remove(1);
+    (clientsData||[]).forEach(function(c){var o=document.createElement('option');o.textContent=c.company||(c.fname+' '+c.lname);o.value=o.textContent;sel.appendChild(o);});
+    (leadsData||[]).forEach(function(l){var o=document.createElement('option');o.textContent=l.company||l.name;o.value=o.textContent;sel.appendChild(o);});
+  }
+}
+function addMfeeRecord(){
+  var client=document.getElementById('mf-client')?.value||'Unknown';
+  var serverFee=document.getElementById('mf-server-fee')?.value==='yes';
+  var serverAmount=+document.getElementById('mf-server-amt')?.value||0;
+  var crmFee=+document.getElementById('mf-crm-fee')?.value||0;
+  var officeFee=+document.getElementById('mf-office-fee')?.value||0;
+  var feeDay=Math.min(31,Math.max(1,+document.getElementById('mf-fee-day')?.value||1));
+  var startDate=document.getElementById('mf-start-date')?.value||new Date().toISOString().slice(0,10);
+  var notes=document.getElementById('mf-notes')?.value||'';
+  if(!client||client==='Select client...'){showToast('Please select a client','warning');return;}
+  monthlyFeesData.push({id:_mfNextId++,client,serverFee,serverAmount,crmFee,officeFee,feeDay,startDate,notes});
+  saveData();
+  closeModal('add-mfee-modal');
+  // reset modal
+  ['mf-server-amt','mf-crm-fee','mf-office-fee','mf-fee-day','mf-notes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('mf-server-fee').value='no';
+  document.getElementById('mf-server-amt-row').style.display='none';
+  // repopulate dropdown fresh next time
+  var sel=document.getElementById('mf-client');if(sel){while(sel.options.length>1)sel.remove(1);sel.selectedIndex=0;}
+  renderMonthlyFees();
+  showToast('Fee record added!','success');
+}
+function _mfFindRecord(id){
+  var sid=String(id);
+  if(sid.charAt(0)==='c'){
+    var cid=+sid.slice(1);
+    var c=(clientsData||[]).find(function(x){return x.id===cid;});
+    if(c)return {r:{id:sid,client:c.company||(c.fname+' '+c.lname),serverFee:!!c.serverFee,serverAmount:c.serverAmount||0,crmFee:c.crmFee||0,officeFee:c.officeFee||0,feeDay:c.feeDay||1,startDate:'',notes:'',_source:'client'},raw:c};
+  } else if(sid.charAt(0)==='l'){
+    var lid=+sid.slice(1);
+    var l=(leadsData||[]).find(function(x){return x.id===lid;});
+    if(l)return {r:{id:sid,client:l.company||l.name,serverFee:!!l.serverFee,serverAmount:l.serverAmount||0,crmFee:l.crmFee||0,officeFee:l.officeFee||0,feeDay:l.feeDay||1,startDate:'',notes:'',_source:'lead'},raw:l};
+  } else {
+    var numId=+sid;
+    var m=monthlyFeesData.find(function(x){return x.id===numId;});
+    if(m)return {r:m,raw:m};
+  }
+  return null;
+}
+function deleteMfeeRecord(id){
+  var found=_mfFindRecord(id);
+  var name=found?found.r.client:'this client';
+  confirmDelete('Delete fee record for '+name+'?',function(){
+    var sid=String(id);
+    if(sid.charAt(0)==='c'){
+      var cid=+sid.slice(1);
+      var c=(clientsData||[]).find(function(x){return x.id===cid;});
+      if(c){c.serverFee=false;c.serverAmount=0;c.crmFee=0;c.officeFee=0;c.feeDay=1;}
+    } else if(sid.charAt(0)==='l'){
+      var lid=+sid.slice(1);
+      var l=(leadsData||[]).find(function(x){return x.id===lid;});
+      if(l){l.serverFee=false;l.serverAmount=0;l.crmFee=0;l.officeFee=0;l.feeDay=1;}
+    } else {
+      var numId=+sid;
+      var i=monthlyFeesData.findIndex(function(x){return x.id===numId;});
+      if(i>-1)monthlyFeesData.splice(i,1);
+    }
+    saveData();renderMonthlyFees();
+  });
+}
+function editMfeeRecord(id){
+  var found=_mfFindRecord(id);
+  if(!found){showToast('Record not found','warning');return;}
+  var r=found.r;
+  document.getElementById('mf-edit-id').value=String(id);
+  document.getElementById('mf-edit-source').value=r._source||'manual';
+  document.getElementById('mf-edit-client').value=r.client||'';
+  var sf=r.serverFee?'yes':'no';
+  document.getElementById('mf-edit-server-fee').value=sf;
+  document.getElementById('mf-edit-server-amt-row').style.display=sf==='yes'?'':'none';
+  document.getElementById('mf-edit-server-amt').value=r.serverAmount||'';
+  document.getElementById('mf-edit-crm-fee').value=r.crmFee||'';
+  document.getElementById('mf-edit-office-fee').value=r.officeFee||'';
+  document.getElementById('mf-edit-fee-day').value=r.feeDay||1;
+  document.getElementById('mf-edit-start-date').value=r.startDate||'';
+  document.getElementById('mf-edit-notes').value=r.notes||'';
+  openModal('edit-mfee-modal');
+}
+function saveMfeeEdit(){
+  var rowIdx=+document.getElementById('mf-edit-id').value;
+  var r=_mfRowMap[rowIdx];
+  if(!r){showToast('Record not found','warning');return;}
+  var source=r._source||'manual';
+  var client=document.getElementById('mf-edit-client').value.trim();
+  if(!client){showToast('Client name is required','warning');return;}
+  var sf=document.getElementById('mf-edit-server-fee').value==='yes';
+  var sa=+document.getElementById('mf-edit-server-amt').value||0;
+  var crm=+document.getElementById('mf-edit-crm-fee').value||0;
+  var off=+document.getElementById('mf-edit-office-fee').value||0;
+  var day=Math.min(31,Math.max(1,+document.getElementById('mf-edit-fee-day').value||1));
+  var sd=document.getElementById('mf-edit-start-date').value||'';
+  var notes=document.getElementById('mf-edit-notes').value||'';
+  if(source==='client'){
+    var cid=+String(r.id).slice(1);
+    var c=(clientsData||[]).find(function(x){return x.id===cid;});
+    if(c){c.serverFee=sf;c.serverAmount=sa;c.crmFee=crm;c.officeFee=off;c.feeDay=day;}
+  }else if(source==='lead'){
+    var lid=+String(r.id).slice(1);
+    var l=(leadsData||[]).find(function(x){return x.id===lid;});
+    if(l){l.serverFee=sf;l.serverAmount=sa;l.crmFee=crm;l.officeFee=off;l.feeDay=day;}
+  }else{
+    var numId=+String(r.id);
+    var idx=monthlyFeesData.findIndex(function(x){return x.id===numId;});
+    if(idx===-1){showToast('Record not found','warning');return;}
+    monthlyFeesData[idx].client=client;
+    monthlyFeesData[idx].serverFee=sf;monthlyFeesData[idx].serverAmount=sa;
+    monthlyFeesData[idx].crmFee=crm;monthlyFeesData[idx].officeFee=off;
+    monthlyFeesData[idx].feeDay=day;monthlyFeesData[idx].startDate=sd;monthlyFeesData[idx].notes=notes;
+  }
+  saveData();
+  document.getElementById('edit-mfee-modal').classList.remove('open');
+  renderMonthlyFees();
+  showToast('Fee record updated!','success');
+}
 // ===================== RENDER CLIENTS =====================
 function renderClients(filter='',status=''){
   const tbody=document.getElementById('clients-tbody');
@@ -3395,7 +4001,12 @@ function addClient(){
     paid:+document.getElementById('acp-paid').value||0,
     owed:0,
     tasks:_acpTasks.slice(),
-    projects:_acpProjects.slice()
+    projects:_acpProjects.slice(),
+    serverFee:document.getElementById('acp-server-fee')?.value==='yes',
+    serverAmount:+document.getElementById('acp-server-amt')?.value||0,
+    crmFee:+document.getElementById('acp-crm-fee')?.value||0,
+    officeFee:+document.getElementById('acp-office-fee')?.value||0,
+    feeDay:+document.getElementById('acp-fee-date')?.value||1
   };
   c.owed=Math.max(0,c.value-c.paid);
   clientsData.unshift(c);
@@ -3684,7 +4295,12 @@ function addLead(){
     stage:document.getElementById('alp-stage').value,
     notes:document.getElementById('alp-notes').value||'',
     tasks:_alpTasks.slice(),
-    projects:_alpProjects.slice()
+    projects:_alpProjects.slice(),
+    serverFee:document.getElementById('alp-server-fee')?.value==='yes',
+    serverAmount:+document.getElementById('alp-server-amt')?.value||0,
+    crmFee:+document.getElementById('alp-crm-fee')?.value||0,
+    officeFee:+document.getElementById('alp-office-fee')?.value||0,
+    feeDay:+document.getElementById('alp-fee-date')?.value||1
   };
   leadsData.unshift(l);
   saveData();
